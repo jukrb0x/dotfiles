@@ -6,6 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # If you come from bash you might have to change your $PATH.
+# basic PATHs
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 
@@ -88,14 +89,24 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
-
+#
 # export MANPATH="/usr/local/man:$MANPATH"
 # homebrew
 export PATH="/opt/homebrew/bin:$PATH"
-# flutter
+# android sdk
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH="$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
+# flutter sdk
 export PATH="$HOME/dev/sdk/flutter/bin:$PATH"
 export PUB_HOSTED_URL=https://pub.flutter-io.cn
 export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+
+# ruby
+# set homebrew ruby as priority
+if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
+  export PATH=/opt/homebrew/opt/ruby/bin:$PATH
+  export PATH=`gem environment gemdir`/bin:$PATH
+fi
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -118,12 +129,15 @@ fi
 # For a full list of active aliases, run `alias`.
 #
 # Alias
+alias proxy='export all_proxy=socks5://127.0.0.1:8235'
+alias unproxy='unset all_proxy'
 alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
 alias nvim=lvim
 alias code="open -a /Applications/Visual\ Studio\ Code.app"
-alias proxy='export all_proxy=socks5://127.0.0.1:8235'
-alias unproxy='unset all_proxy'
+alias ra=ranger
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# GPG workaround
+export GPG_TTY=$(tty)
