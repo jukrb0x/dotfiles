@@ -1,0 +1,8 @@
+set surround
+set relativenumber
+set number
+set clipboard+=unnamed
+set hlsearch
+set ignorecase
+set smartcase
+set ideajoin
