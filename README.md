@@ -16,7 +16,11 @@ What are dotfiles? check [this website](https://dotfiles.github.io/) for more in
 
 > Todo
 
-## Setups
+## Recipe
+
+> Todo
+
+## Documents
 
 > Todo
 
@@ -26,3 +30,4 @@ Sister repositories (managed with `yadm`):
 
 - Dotfiles for Windows Subsystem Linux (Ubuntu 20): [dotfiles-wsl-ubuntu](https://github.com/jukrb0x/dotfiles-wsl-ubuntu)
 - Dotfiles for macOS 11.4 (intel): [dotfiles-macos-intel](https://github.com/jukrb0x/dotfiles-macos-intel)
+

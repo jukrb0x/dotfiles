@@ -122,6 +122,9 @@ else
   export EDITOR='lvim'
 fi
 
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -140,7 +143,10 @@ alias code="open -a /Applications/Visual\ Studio\ Code.app"
 alias typora="open -a /Applications/Typora.app"
 alias ra=ranger
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 # GPG workaround
 export GPG_TTY=$(tty)
+# pyenv Initialization
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
