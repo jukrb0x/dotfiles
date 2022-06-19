@@ -17,12 +17,18 @@ What are dotfiles? check [this website](https://dotfiles.github.io/) for more in
 > Todo
 
 ## Recipe
-
-> Todo
+- homebrew
+- zsh + oh-my-zsh
+- tmux + oh-my-tmux
+- n + yarn
+- ranger
+- neovim + lunarvim
+- pinentry-mac
+- pipenv
 
 ## Documents
 
-> Todo
+- [chezmoi](https://www.chezmoi.io/)
 
 ## Extras
 
