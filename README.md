@@ -25,6 +25,7 @@ What are dotfiles? check [this website](https://dotfiles.github.io/) for more in
 - neovim + lunarvim
 - pinentry-mac
 - pipenv
+- bpytop
 
 ## Documents
 
