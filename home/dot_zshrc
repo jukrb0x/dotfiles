@@ -111,7 +111,7 @@ if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
 fi
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
