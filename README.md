@@ -17,6 +17,8 @@ What are dotfiles? check [this website](https://dotfiles.github.io/) for more in
 > Todo
 
 ## Recipe
+> do this by the top-down order
+
 - homebrew
 - zsh + oh-my-zsh
 - tmux + oh-my-tmux
@@ -26,6 +28,7 @@ What are dotfiles? check [this website](https://dotfiles.github.io/) for more in
 - pinentry-mac
 - pipenv
 - bpytop
+- [rustup](https://www.rust-lang.org/tools/install)
 
 ## Documents
 
