@@ -93,6 +93,7 @@ source $ZSH/oh-my-zsh.sh
 # export MANPATH="/usr/local/man:$MANPATH"
 # homebrew
 export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/opt/homebrew/sbin:$PATH"
 # java sdk
 export JAVA_HOME="$HOME/Library/Java/JavaVirtualMachines/corretto-18.0.1/Contents/Home"
 # android sdk
