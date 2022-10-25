@@ -143,6 +143,7 @@ alias nvim=lvim
 alias code="open -a /Applications/Visual\ Studio\ Code.app"
 alias typora="open -a /Applications/Typora.app"
 alias ra=ranger
+alias ls="exa --icons"
 
 # GPG workaround
 export GPG_TTY=$(tty)
