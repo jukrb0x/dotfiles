@@ -12,11 +12,11 @@ This repository is my dotfiles for macOS 12.4 (ARM-based Apple Silicon), managed
 
 What are dotfiles? check [this website](https://dotfiles.github.io/) for more information.
 
+The main goal is making the dotfiles installation easy on a clean OS.
+
 ## Installation
 
 > Todo
-
-## Recipe
 > do this by the top-down order
 
 - homebrew
