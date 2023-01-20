@@ -6,7 +6,8 @@
   </p>
 </h1>
 
-> :warning: Unstable Version: This repository is actively `Working In Progress`
+> **Warning**
+> [Unstable Version] This repository is actively `Working In Progress`
 
 This repository is my dotfiles for macOS 12.4 (ARM-based Apple Silicon), managed with `chezmoi`.
 
