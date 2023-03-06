@@ -170,7 +170,12 @@ lvim.plugins = {
   { "catppuccin/nvim" },
   { "joshdick/onedark.vim" },
   -- extentions
-  { "iamcco/markdown-preview.nvim" },
+  {
+    "iamcco/markdown-preview.nvim",
+    run = "cd app && yarn install",
+    setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
+    ft = { "markdown" }
+  },
   { "Iron-E/nvim-libmodal" },
   { "Iron-E/nvim-typora" },
   { "plasticboy/vim-markdown" },
