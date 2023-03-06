@@ -10,28 +10,22 @@ an executable
 
 -- general
 lvim.log.level = "warn"
-lvim.format_on_save = false
-lvim.colorscheme = "tokyonight" -- "onedark"
+lvim.format_on_save.enabled = false
+lvim.colorscheme = "tokyonight"
 lvim.transparent_window = true
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
--- vim options
-vim.opt.relativenumber = true
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
--- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
--- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 -- unmap a default keymapping
 -- vim.keymap.del("n", "<C-Up>")
 -- override a default keymapping
 -- lvim.keys.normal_mode["<C-q>"] = ":q<cr>" -- or vim.keymap.set("n", "<C-q>", ":q<cr>" )
-
--- navigation between tabs
-lvim.keys.normal_mode["<S-h>"] = ":bprev<cr>"
-lvim.keys.normal_mode["<S-l>"] = ":bnext<cr>"
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
@@ -171,8 +165,8 @@ lvim.builtin.treesitter.highlight.enable = true
 
 -- Additional Plugins
 lvim.plugins = {
-  -- colorschemes
   -- { "abzcoding/zephyr-nvim" },  -- not working
+  -- colorschemes
   { "catppuccin/nvim" },
   { "joshdick/onedark.vim" },
   -- extentions
