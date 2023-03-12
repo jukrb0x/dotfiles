@@ -94,6 +94,7 @@ lvim.builtin.treesitter.ensure_installed = {
 
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enable = true
+lvim.builtin.treesitter.autotag.enable = true
 
 -- generic LSP settings
 
@@ -194,8 +195,9 @@ lvim.plugins = {
     "folke/trouble.nvim",
     cmd = "TroubleToggle",
   },
+  -- auto tag closing for tsx
   {
-    "alvan/vim-closetag"
+    "windwp/nvim-ts-autotag",
   }
 }
 
