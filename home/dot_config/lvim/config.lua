@@ -25,6 +25,8 @@ lvim.leader = "space"
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["<C-i>"] = "<C-o>"
+lvim.keys.normal_mode["<C-o>"] = "<C-i>"
 -- lvim.keys.normal_mode["-"] = ":split<cr>"
 -- lvim.keys.normal_mode["<S>-"] = ":vsplit<cr>"
 -- unmap a default keymapping
@@ -90,7 +92,8 @@ lvim.builtin.treesitter.ensure_installed = {
   "rust",
   "java",
   "yaml",
-  "vue"
+  "vue",
+  "markdown"
 }
 
 lvim.builtin.treesitter.ignore_install = { "haskell" }
