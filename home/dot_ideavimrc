@@ -43,14 +43,39 @@ map <leader>f <Plug>(easymotion-s)
 map <leader>e <Plug>(easymotion-f)
 
 map <leader>d <Action>(Debug)
-map <leader>r <Action>(RenameElement)
 map <leader>c <Action>(Stop)
 map <leader>z <Action>(ToggleDistractionFreeMode)
+map <leader>b <Action>(ToggleLineBreakpoint)
+
+map fr <Action>(RenameElement)
+map gr <Action>(GotoDeclaration)
+map gu <Action>(FindUsages)
+map gI <Action>(GotoImplementation)
+map gc <Action>(CollapseRegion)
+map ge <Action>(ExpandRegion)
+
+map <C-i> <Action>(Back)
+map <C-o> <Action>(Forward)
+
+map <leader>gd <Action>(Compare.SameVersion)
+map <leader>gh <Action>(Vcs.ShowTabbedFileHistory)
+map <leader>gu <Action>(Vcs.RollbackChangedLines)
+
+map <leader>- <Action>(SplitHorizontally)
+map <leader>_ <Action>(SplitVertically)
+
+map <S-h> <Action>(PreviousTab)
+map <S-l> <Action>(NextTab)
+map <C-h> <Action>(PrevSplitter)
+map <C-l> <Action>(NextSplitter)
+
+map <M-j> <Action>(MoveLineDown)
+map <M-k> <Action>(MoveLineUp)
 
 map <leader>s <Action>(SelectInProjectView)
 map <leader>a <Action>(Annotate)
 map <leader>h <Action>(Vcs.ShowTabbedFileHistory)
-map <S-Space> <Action>(GotoNextError)
+map [e <Actioin>(GotoPreviousError)
+map ]e <Action> (GotoNextError)
 
-map <leader>b <Action>(ToggleLineBreakpoint)
 map <leader>o <Action>(FileStructurePopup)
