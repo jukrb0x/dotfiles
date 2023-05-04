@@ -1,0 +1,35 @@
+#!/bin/bash
+
+##########################################################################
+# For SleepWatcher to work, you will need to write sleep and
+# wakeup scripts, located here when using brew services:
+# 
+#   ~/.sleep
+#   ~/.wakeup
+# 
+# To restart sleepwatcher after an upgrade:
+#   brew services restart sleepwatcher
+# Or, if you don't want/need a background service you can just run:
+#   /opt/homebrew/opt/sleepwatcher/sbin/sleepwatcher -V -s /Users/jabriel/.sleep -w /Users/jabriel/.wakeup
+##########################################################################
+
+# Set the name of the application to relaunch
+APP_NAME="BetterDummy"
+APP_LOC="/Applications/BetterDisplay.app"
+
+# Check if the application is running
+if pgrep $APP_NAME > /dev/null
+then
+    # If it is running, obtain its PID and terminate it
+    PID=$(pgrep $APP_NAME)
+    kill $PID
+
+    # Wait for the process to terminate
+    while pgrep -u $UID -x $APP_NAME >/dev/null; do sleep 1; done
+
+    # Relaunch the application
+    open -a $APP_LOC
+else
+    # If the application is not running, simply launch it
+    open -a $APP_LOC
+fi
