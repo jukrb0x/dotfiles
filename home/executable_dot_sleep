@@ -12,6 +12,7 @@
 # Or, if you don't want/need a background service you can just run:
 #   /opt/homebrew/opt/sleepwatcher/sbin/sleepwatcher -V -s /Users/jabriel/.sleep -w /Users/jabriel/.wakeup
 ##########################################################################
+start=$SECONDS
 
 APP_NAME="BetterDummy"
 APP_LOC="/Applications/BetterDisplay.app"
@@ -21,8 +22,10 @@ if pgrep $APP_NAME > /dev/null
 then
     # If it is running, obtain its PID and terminate it
     PID=$(pgrep $APP_NAME)
+    while [[ $[$SECONDS - start] < 5 ]]; do
+      echo 'wait for 5 seconds' > /dev/null
+    done
     kill $PID
-
     # Wait for the process to terminate
     while pgrep -u $UID -x $APP_NAME >/dev/null; do sleep 1; done
 else
