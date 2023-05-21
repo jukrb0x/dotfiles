@@ -1,0 +1,7 @@
+{:logseq-heatmap {:version "v2.4.3", :repo "pengx17/logseq-plugin-heatmap", :effect true, :theme false}
+ :logseq-journals-calendar {:version "v0.10.10", :repo "xyhp915/logseq-journals-calendar", :effect false, :theme false}
+ :logseq-tabs {:version "v1.19.1", :repo "pengx17/logseq-plugin-tabs", :effect true, :theme false}
+ :logseq-bullet-threading {:version "v1.1.2", :repo "pengx17/logseq-plugin-bullet-threading", :effect false, :theme false}
+ :logseq-bonofix-theme {:version "v3.8.6", :repo "sansui233/logseq-bonofix-theme", :effect false, :theme true}
+ :logseq-vim-shortcuts {:version "v0.1.19", :repo "vipzhicheng/logseq-plugin-vim-shortcuts", :effect true, :theme false}
+ :logseq-git {:version "v1.5.2", :repo "haydenull/logseq-plugin-git", :effect true, :theme false}}
