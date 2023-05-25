@@ -7,7 +7,7 @@
     "Commit"
   ],
   "checkWhenDBChanged": true,
-  "autoCheckSynced": false,
+  "autoCheckSynced": true,
   "autoPush": true,
   "disabled": false
 }
