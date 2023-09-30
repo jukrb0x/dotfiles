@@ -25,7 +25,12 @@ The main goal is making the dotfiles installation easy on a clean OS.
 - bpytop
 - [rustup](https://www.rust-lang.org/tools/install)
 
-## Documents
+
+```sh
+$ chezmoi init --apply jukrb0x
+```
+
+## Documentation
 
 - [chezmoi](https://www.chezmoi.io/)
 
