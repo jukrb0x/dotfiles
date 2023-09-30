@@ -140,16 +140,7 @@ fi
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 ############################
-alias proxy='export all_proxy=socks5://127.0.0.1:8235'
-alias unproxy='unset all_proxy'
-alias zshconfig="nvim ~/.zshrc"
-alias ohmyzsh="nvim ~/.oh-my-zsh"
-alias nvim=lvim
-alias code="open -a /Applications/Visual\ Studio\ Code.app"
-alias typora="open -a /Applications/Typora.app"
-alias ra=ranger
-alias ls="exa --icons"
-alias cat="bat --theme=\$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo default || echo GitHub)"
+source $HOME/.zsh_aliases
 
 # GPG workaround
 export GPG_TTY=$(tty)
