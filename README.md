@@ -12,7 +12,7 @@ The main goal is making the dotfiles installation easy on a clean OS.
 
 ## Installation
 
-> todo: homebrew automation
+> todo: homebrew automation and fontbook installation
 
 - homebrew
 - zsh + oh-my-zsh
