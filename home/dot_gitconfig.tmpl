@@ -1,7 +1,7 @@
 [user]
 	name = {{ .name | quote }}
 	email = {{ .email | quote }}
-  signingkey = {{ .gpgSigningkey }}
+	signingkey = {{ .gpgSigningkey }}
 	useConfigOnly = true
 [includeIf "gitdir:~/work/"]
   path = ~/work/.gitconfig
