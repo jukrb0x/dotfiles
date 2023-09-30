@@ -81,9 +81,9 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
+    z
     zsh-autosuggestions 
     zsh-syntax-highlighting
-    zsh-z
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -147,6 +147,7 @@ alias code="open -a /Applications/Visual\ Studio\ Code.app"
 alias typora="open -a /Applications/Typora.app"
 alias ra=ranger
 alias ls="exa --icons"
+alias cat="bat --theme=\$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo default || echo GitHub)"
 
 # GPG workaround
 export GPG_TTY=$(tty)

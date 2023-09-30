@@ -1,7 +1,7 @@
 {:logseq-heatmap {:version "v2.4.3", :repo "pengx17/logseq-plugin-heatmap", :effect true, :theme false}
  :logseq-journals-calendar {:version "v0.10.10", :repo "xyhp915/logseq-journals-calendar", :effect false, :theme false}
  :logseq-tabs {:version "v1.19.1", :repo "pengx17/logseq-plugin-tabs", :effect true, :theme false}
- :logseq-bullet-threading {:version "v1.1.2", :repo "pengx17/logseq-plugin-bullet-threading", :effect false, :theme false}
+ :logseq-bullet-threading {:version "v1.1.4", :repo "pengx17/logseq-plugin-bullet-threading", :effect false, :theme false}
  :logseq-bonofix-theme {:version "v3.8.6", :repo "sansui233/logseq-bonofix-theme", :effect false, :theme true}
  :logseq-vim-shortcuts {:version "v0.1.19", :repo "vipzhicheng/logseq-plugin-vim-shortcuts", :effect true, :theme false}
  :logseq-git {:version "v1.5.2", :repo "haydenull/logseq-plugin-git", :effect true, :theme false}
@@ -10,10 +10,10 @@
  :logseq-banners-plugin {:version "v3.4.11", :repo "yoyurec/logseq-banners-plugin", :effect true, :theme false}
  :logseq-graph-analysis {:version "0.10.2", :repo "trashhalo/logseq-graph-analysis", :effect false, :theme false}
  :logseq-arc-theme {:version "0.3", :repo "andyburris/logseq-arc-theme", :effect false, :theme true}
- :logseq-agenda {:version "v2.15.3", :repo "haydenull/logseq-plugin-agenda", :effect true, :theme false}
+ :logseq-agenda {:version "v2.15.4", :repo "haydenull/logseq-plugin-agenda", :effect true, :theme false}
  :logseq-mark-map {:version "v0.3.17", :repo "vipzhicheng/logseq-plugin-mark-map", :effect false, :theme false}
  :logseq-comment-block {:version "v0.0.7", :repo "vipzhicheng/logseq-plugin-comment-block", :effect false, :theme false}
  :logseq-plugin-heading-level-shortcuts {:version "v0.0.6", :repo "vipzhicheng/logseq-plugin-heading-level-shortcuts", :effect false, :theme false}
  :logseq-paste-more {:version "v1.5.6", :repo "usoonees/logseq-plugin-paste-more", :effect true, :theme false}
  :logseq-file-manager {:version "v1.3.0", :repo "haydenull/logseq-plugin-file-manager", :effect true, :theme false}
- :logseq-tocgen {:version "v2.7.0", :repo "sethyuan/logseq-plugin-tocgen", :effect true, :theme false}}
+ :logseq-tocgen {:version "v2.10.4", :repo "sethyuan/logseq-plugin-tocgen", :effect true, :theme false}}
