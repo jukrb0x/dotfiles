@@ -1,13 +1,8 @@
 <h1>
-  <p align="center">
     <samp>
       dotfiles for macOS<sup><code>ARM</code></sup>
     </samp>
-  </p>
 </h1>
-
-> **Warning**
-> [Unstable Version] This repository is actively `Working In Progress`
 
 This repository is my dotfiles for macOS 12.4 (ARM-based Apple Silicon), managed with `chezmoi`.
 
@@ -17,8 +12,7 @@ The main goal is making the dotfiles installation easy on a clean OS.
 
 ## Installation
 
-> Todo
-> do this by the top-down order
+> todo: homebrew automation
 
 - homebrew
 - zsh + oh-my-zsh
