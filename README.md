@@ -4,31 +4,46 @@
     </samp>
 </h1>
 
-This repository is my dotfiles for macOS 12.4 (ARM-based Apple Silicon), managed with `chezmoi`.
+This repository is my dotfiles for ARM-based Apple Silicon, managed with `chezmoi`.
 
 What are dotfiles? check [this website](https://dotfiles.github.io/) for more information.
 
-The main goal is making the dotfiles installation easy on a clean OS.
+## Features
+
+A single command to enable the following features:
+
+- Manage dotfiles with `chezmoi`
+- Automate installation of Homebrew Packages
+- LunarVim
+- Nerd Font Pack: `Meslo`
+- Tmux configuration
+- Oh-My-Zsh configuration
+- TODO: iTerm2 configuration
 
 ## Installation
 
-> todo: homebrew automation and fontbook installation
+> [!WARNING]  
+> The setup script will install homebrew and chezmoi, and initialize the dotfiles to the home directory.
+> Make sure you have a backup of your dotfiles before running the script.
+> You better check the script before running it.
 
-- homebrew
-- zsh + oh-my-zsh
-- tmux + oh-my-tmux
-- n + yarn
-- ranger
-- neovim + lunarvim
-- pinentry-mac
-- pipenv
-- bpytop
-- [rustup](https://www.rust-lang.org/tools/install)
+`setup.sh` will install homebrew and chezmoi to initalize the basic envionment and pull the dotfiles.
 
+use curl to download and run with bash:
 
-```sh
-$ chezmoi init --apply jukrb0x
+```shell
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/jukrb0x/dotfiles/main/setup.sh)"
 ```
+
+or use wget:
+
+```shell
+$ /bin/bash -c "$(wget -O- https://raw.githubusercontent.com/jukrb0x/dotfiles/main/setup.sh)"
+```
+
+Afterwards, the chezmoi will run the scripts in `.chezmoiscripts` to install packages via homebrew, you can check `Brewfile` for the list of packages. The [LunarVim](https://github.com/lunarvim/lunarvim) will be installed after the homebrew packages.
+
+Chezmoi externals feature enables to pull other repositories to the home directory, such as tmux and oh-my-zsh configurations, and install a nerd font pack `Meslo` into the system.
 
 ## Documentation
 
@@ -40,4 +55,3 @@ Sibling repositories (managed with `yadm`):
 
 - Dotfiles for Windows Subsystem Linux (Ubuntu 20): [dotfiles-wsl-ubuntu](https://github.com/jukrb0x/dotfiles-wsl-ubuntu)
 - Dotfiles for macOS 11.4 (intel): [dotfiles-macos-intel](https://github.com/jukrb0x/dotfiles-macos-intel)
-
