@@ -36,6 +36,8 @@ echo "  1. install homebrew"
 echo "  2. install chezmoi"
 echo "  3. chezmoi init --apply $GITHUB_USER"
 echo ""
+echo "Chezmoi will handle all the dotfiles, nerd fonts, and homebrew packages."
+echo ""
 echo -e "${COLOR_YELLOW}WARNING${COLOR_NC}: This script will overwrite your existing dotfiles"
 echo "         Please backup your dotfiles before running this script"
 echo ""
@@ -75,6 +77,7 @@ else
 fi
 
 echo "Executing: chezmoi init --apply $GITHUB_USER"
+echo "This will overwrite your existing dotfiles, and install homebrew packages."
 chezmoi init --apply $GITHUB_USER
 
-echo "Dotfiles setup finished, the chemoi may continue to install other packages."
+echo "Dev environment setup complete."
