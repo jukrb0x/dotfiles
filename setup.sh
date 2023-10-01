@@ -1,10 +1,10 @@
 #!/bin/bash
 
 GITHUB_USER="jukrb0x"
-# to run this script, run the following command
-#   curl -fsSL https://raw.githubusercontent.com/jukrb0x/dotfiles/main/setup.sh | bash
+# to run this script, run the following command:
+#   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/jukrb0x/dotfiles/main/setup.sh)"
 # or use wget:
-#   wget -qO- https://raw.githubusercontent.com/jukrb0x/dotfiles/main/setup.sh | bash
+#   /bin/bash -c "$(wget -O- https://raw.githubusercontent.com/jukrb0x/dotfiles/main/setup.sh)"
 
 echo "========================"
 echo " Dev environment setup"
@@ -26,9 +26,7 @@ echo "         Please backup your dotfiles before running this script"
 echo "GitHub repo: https://github.com/$GITHUB_USER/dotfiles"
 echo ""
 echo "Press return to continue setup, other keys to exit"
-
-read -r -s -n 1 key
-if [[ "$key" != "" ]]; then
+if [ "$key" != "" ]; then
   echo "Exiting"
   exit 1
 fi
