@@ -8,16 +8,16 @@ GITHUB_USER="jukrb0x"
 
 # install homebrew
 # xcode command line tools will be installed automatically if not installed
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+if [ ! "$(command -v brew)" ]; then
+  echo "brew could not be found, installing homebrew"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
 
 # install chezmoi and clone dotfiles
-brew install chezmoi
-chezmoi init --apply $GITHUB_USER
-
-# if ~/.local/bin/lvim not exist, install LunarVim:
-if [ ! -f ~/.local/bin/lvim ]; then
-  # install lunarvim
-  LV_BRANCH='release-1.3/neovim-0.9' /bin/bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.3/neovim-0.9/utils/installer/install.sh)
-else
-  echo "LunarVim already installed"
+if [ ! "$(command -v chezmoi)" ]; then
+  echo "chezmoi could not be found, installing chezmoi with homebrew"
+  brew install chezmoi
 fi
+
+echo "Executing: chezmoi init --apply $GITHUB_USER"
+chezmoi init --apply $GITHUB_USER
