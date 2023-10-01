@@ -26,10 +26,16 @@ echo "         Please backup your dotfiles before running this script"
 echo "GitHub repo: https://github.com/$GITHUB_USER/dotfiles"
 echo ""
 echo "Press return to continue setup, other keys to exit"
-if [ "$key" != "" ]; then
-  echo "Exiting"
-  exit 1
-fi
+
+while IFS= read -r -s -n 1 key; do
+  if [[ $key == "" ]]; then
+    break
+  else
+    echo "Exiting"
+    exit 1
+  fi
+done
+
 
 # install homebrew
 # xcode command line tools will be installed automatically if not installed
