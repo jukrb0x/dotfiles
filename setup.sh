@@ -24,7 +24,7 @@ echo ""
 echo "WARNING: This script will overwrite your existing dotfiles"
 echo "         Please backup your dotfiles before running this script"
 echo "GitHub repo: https://github.com/$GITHUB_USER/dotfiles"
-eco ""
+echo ""
 echo "Press return to continue setup, other keys to exit"
 read -r -s -n 1 key
 if [ "$key" != "" ]; then
