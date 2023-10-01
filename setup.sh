@@ -43,12 +43,16 @@ done
 if [ ! "$(command -v brew)" ]; then
   echo "brew could not be found, installing homebrew"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+  echo "homebrew already installed."
 fi
 
 # install chezmoi and clone dotfiles
 if [ ! "$(command -v chezmoi)" ]; then
   echo "chezmoi could not be found, installing chezmoi with homebrew"
   brew install chezmoi
+else
+  echo "chezmoi already installed."
 fi
 
 echo "Executing: chezmoi init --apply $GITHUB_USER"
