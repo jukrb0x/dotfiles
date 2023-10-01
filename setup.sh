@@ -17,12 +17,12 @@ fi
 #    vvvv vvvv-- the code from above
 COLOR_RED='\033[0;31m'
 COLOR_YELLOW='\033[0;33m'
-COLOR_BLUE='\033[0;34m'
+COLOR_GREEN='\033[0;32m'
 COLOR_NC='\033[0m' # No Color
 
 echo "========================"
 echo " Dev environment setup"
-echo -e " ${COLOR_BLUE}$GITHUB_USER${COLOR_NC}'s dotfiles"
+echo -e " ${COLOR_GREEN}$GITHUB_USER${COLOR_NC}'s dotfiles"
 echo "========================"
 echo "Target machine: $(uname -a)"
 echo ""
