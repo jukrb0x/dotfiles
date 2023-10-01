@@ -23,9 +23,9 @@ A single command to enable the following features:
 ## Installation
 
 > [!WARNING]  
-> The setup script will install homebrew and chezmoi, and initialize the dotfiles to the home directory.
-> Make sure you have a backup of your dotfiles before running the script.
-> You better check the script before running it.
+> The setup script will install homebrew and chezmoi, and initialize the dotfiles to the home directory. 
+> Make sure you have a backup of your dotfiles before running the script. 
+> It's always a good idea to check the script before running it.
 
 `setup.sh` will install homebrew and chezmoi to initalize the basic envionment and pull the dotfiles.
 
