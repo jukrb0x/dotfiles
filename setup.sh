@@ -26,8 +26,9 @@ echo "         Please backup your dotfiles before running this script"
 echo "GitHub repo: https://github.com/$GITHUB_USER/dotfiles"
 echo ""
 echo "Press return to continue setup, other keys to exit"
+
 read -r -s -n 1 key
-if [ "$key" != "" ]; then
+if [[ "$key" != "" ]]; then
   echo "Exiting"
   exit 1
 fi
