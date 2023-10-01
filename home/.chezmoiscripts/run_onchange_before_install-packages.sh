@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "========================"
-echo "Chezmoi Script: run_onchange_before_install-packages.sh"
+echo " Chezmoi Script: run_onchange_before_install-packages.sh"
 echo "========================"
 # chezmoi source-path
 chezmoi_source_path="$(chezmoi source-path)"
