@@ -43,7 +43,6 @@ echo "         Please backup your dotfiles before running this script"
 echo ""
 echo "> GitHub: https://github.com/$GITHUB_USER/dotfiles"
 echo ""
-echo ""
 
 # let /bin/bash -c can read stdin 'return' key
 # https://stackoverflow.com/questions/226703/how-do-i-prompt-for-yes-no-cancel-input-in-a-linux-shell-script
