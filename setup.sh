@@ -25,15 +25,16 @@ echo "WARNING: This script will overwrite your existing dotfiles"
 echo "         Please backup your dotfiles before running this script"
 echo "GitHub repo: https://github.com/$GITHUB_USER/dotfiles"
 echo ""
-echo "Press return to continue setup, other keys to exit"
+echo ""
 
-while IFS= read -r -s -n 1 key; do
-  if [[ $key == "" ]]; then
-    break
-  else
-    echo "Exiting"
-    exit 1
-  fi
+# let /bin/bash -c can read stdin 'return' key
+# https://stackoverflow.com/questions/226703/how-do-i-prompt-for-yes-no-cancel-input-in-a-linux-shell-script
+while true; do
+  read -p "Press return to continue setup, other keys to exit" yn
+  case $yn in
+    "" ) break;;
+    * ) exit;;
+  esac
 done
 
 
