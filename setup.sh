@@ -57,3 +57,5 @@ fi
 
 echo "Executing: chezmoi init --apply $GITHUB_USER"
 chezmoi init --apply $GITHUB_USER
+
+echo "Dotfiles setup finished, the chemoi may continue to install other packages."
