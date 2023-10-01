@@ -19,3 +19,16 @@
     type = "git-repo"
     url = "https://github.com/zsh-users/zsh-autosuggestions.git"
     refreshPeriod = "168h"
+
+{{- $fontDir := "" }}
+{{- if eq .chezmoi.os "darwin" }}
+{{-   $fontDir = "Library/Fonts" }}
+{{- else if eq .chezmoi.os "linux" }}
+{{-   $fontDir = ".local/share/fonts" }}
+{{- end }}
+
+["{{ $fontDir }}/Meslo"]
+    type = "archive"
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.tar.xz"
+    exact = true
+    refreshPeriod = "168h"
