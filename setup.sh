@@ -11,11 +11,21 @@ fi
 # you can set GITHUB_USER to your github username if you want to use your own dotfiles:
 #   /GITHUB_USER=your_github_username bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/jukrb0x/dotfiles/main/setup.sh)"
 
+# Colorful echo
+# https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
+#    .---------- constant part!
+#    vvvv vvvv-- the code from above
+COLOR_RED='\033[0;31m'
+COLOR_YELLOW='\033[0;33m'
+COLOR_BLUE='\033[0;34m'
+COLOR_NC='\033[0m' # No Color
+
 echo "========================"
 echo " Dev environment setup"
-echo " $GITHUB_USER's dotfiles"
+echo -e " ${COLOR_BLUE}$GITHUB_USER${COLOR_NC}'s dotfiles"
 echo "========================"
 echo "Target machine: $(uname -a)"
+echo ""
 # make sure this is a mac with arm64
 if [ "$(uname -a | grep -c "Darwin.*arm64")" -ne 1 ]; then
     echo "This script is made for mac with arm64, exiting"
@@ -26,9 +36,10 @@ echo "  1. install homebrew"
 echo "  2. install chezmoi"
 echo "  3. chezmoi init --apply $GITHUB_USER"
 echo ""
-echo "WARNING: This script will overwrite your existing dotfiles"
+echo -e "${COLOR_YELLOW}WARNING${COLOR_NC}: This script will overwrite your existing dotfiles"
 echo "         Please backup your dotfiles before running this script"
-echo "GitHub repo: https://github.com/$GITHUB_USER/dotfiles"
+echo ""
+echo "> GitHub: https://github.com/$GITHUB_USER/dotfiles"
 echo ""
 echo ""
 
