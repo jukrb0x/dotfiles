@@ -1,4 +1,4 @@
-alias proxy='export all_proxy=socks5://127.0.0.1:8235'
+alias proxy='export all_proxy=socks5://127.0.0.1:6153'
 alias unproxy='unset all_proxy'
 alias zshconfig="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
