@@ -1,3 +1,4 @@
+# taps
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-drivers"
@@ -7,6 +8,8 @@ tap "homebrew/command-not-found"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "jesseduffield/lazygit"
+
+# `brew install` packages
 brew "neovim"
 brew "bat"
 brew "bfg"
@@ -43,6 +46,8 @@ brew "wget"
 brew "yarn"
 brew "youtube-dl"
 brew "jesseduffield/lazygit/lazygit"
+
+# `brew install --cask` casks
 cask "iterm2"
 cask "visual-studio-code"
 cask "balenaetcher"
