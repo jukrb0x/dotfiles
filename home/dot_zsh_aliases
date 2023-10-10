@@ -7,4 +7,5 @@ alias code="open -a /Applications/Visual\ Studio\ Code.app"
 alias typora="open -a /Applications/Typora.app"
 alias ra=ranger
 alias ls="eza --icons"
+alias gg="lazygit"
 alias cat="bat --theme=\$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo default || echo GitHub)"
