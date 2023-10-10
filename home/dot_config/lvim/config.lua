@@ -6,6 +6,9 @@
 -- vim config
 vim.opt.relativenumber = true
 
+-- for Github copilot
+vim.g.copilot_assume_mapped = true
+
 -- general
 lvim.format_on_save.enabled = false
 lvim.transparent_window = true
@@ -16,6 +19,7 @@ lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 lvim.keys.normal_mode["<C-i>"] = "<C-o>"
 lvim.keys.normal_mode["<C-o>"] = "<C-i>"
+lvim.keys.normal_mode["<Tab>"] = false
 
 
 lvim.builtin.which_key.mappings["-"] = { "<cmd>sp<cr>", "Split Panel" }
@@ -48,7 +52,10 @@ lvim.plugins = {
   { "wakatime/vim-wakatime" },
   { "norcalli/nvim-colorizer.lua" },
   { "ybian/smartim" },
-  { "github/copilot.vim" },
+  {
+    "github/copilot.vim",
+    build = ":Copilot setup"
+  },
   {
     "folke/trouble.nvim",
     cmd = "TroubleToggle",
