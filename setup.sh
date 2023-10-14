@@ -49,6 +49,7 @@ echo ""
 while true; do
     read -p "Press return to continue setup, other keys to exit: " -n 1 -s yn
     if [ -z "$yn" ]; then
+        echo ""
         break
     else
         echo ""
