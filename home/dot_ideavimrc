@@ -39,8 +39,9 @@ set ideastatusicon=gray
 set idearefactormode=keep
 
 """ Mappings --------------------------------
-map <leader>f <Plug>(easymotion-s)
-map <leader>e <Plug>(easymotion-f)
+map <leader>f <Action>(AceAction)
+map <leader>F <Action>(AceTargetAction)
+map <leader>e <Action>(AceLineAction)
 
 map <leader>d <Action>(Debug)
 map <leader>c <Action>(Stop)
