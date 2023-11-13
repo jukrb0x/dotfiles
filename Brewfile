@@ -10,7 +10,6 @@ tap "homebrew/services"
 tap "jesseduffield/lazygit"
 
 # `brew install` packages
-brew "font-monaspace"
 brew "neovim"
 brew "bat"
 brew "bfg"
@@ -49,6 +48,7 @@ brew "youtube-dl"
 brew "jesseduffield/lazygit/lazygit"
 
 # `brew install --cask` casks
+cask "font-monaspace"
 cask "iterm2"
 cask "visual-studio-code"
 cask "balenaetcher"
