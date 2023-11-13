@@ -8,8 +8,10 @@ tap "homebrew/command-not-found"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "jesseduffield/lazygit"
+tap "homebrew/cask-fonts"
 
 # `brew install` packages
+brew "font-monaspace"
 brew "neovim"
 brew "bat"
 brew "bfg"
