@@ -10,6 +10,7 @@ tap "homebrew/services"
 tap "jesseduffield/lazygit"
 
 # `brew install` packages
+brew "yarn"
 brew "neovim"
 brew "bat"
 brew "bfg"
@@ -44,7 +45,6 @@ brew "trash"
 brew "tree"
 brew "dust"
 brew "wget"
-brew "yarn"
 brew "youtube-dl"
 brew "jesseduffield/lazygit/lazygit"
 

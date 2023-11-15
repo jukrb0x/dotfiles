@@ -15,6 +15,9 @@ fi
 echo "Executing: brew bundle install --file=\"$chezmoi_source_path/../Brewfile\""
 brew bundle install --file="$chezmoi_source_path/../Brewfile"
 
+# install yarn global packages
+cd $HOME/.config/yarn/global/ && yarn
+
 
 # this require neovim is installed which should be done by brew bundle
 # if ~/.local/bin/lvim not exist, install LunarVim:
