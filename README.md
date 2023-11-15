@@ -8,7 +8,9 @@ This repository is my dotfiles for ARM-based Apple Silicon, managed with `chezmo
 
 What are dotfiles? check [this website](https://dotfiles.github.io/) for more information.
 
-It's still applicable even if you are not using macOS with Apple Silicon, this repository will help you construct your own dotfiles repository on various platforms.
+> [!TIP]
+> 
+> It's still applicable even if you are not using macOS with Apple Silicon, this repository will help you construct your own dotfiles repository on various platforms.
 
 ## Features
 
