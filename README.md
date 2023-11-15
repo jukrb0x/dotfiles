@@ -15,12 +15,13 @@ It's still applicable even if you are not using macOS with Apple Silicon, this r
 A single command to enable the following features:
 
 - Manage dotfiles with `chezmoi`
-- Automate installation of Homebrew Packages
-- LunarVim
-- Nerd Font Pack: `Meslo`
+- Automate installation of Homebrew packages
+- Automate installation of Yarn global packages
+- LunarVim and configuration
+- Nerd Font Pack: `Meslo Nerd Font`, GitHub `Monaspace`
 - Tmux configuration
 - Oh-My-Zsh configuration
-- TODO: iTerm2 configuration
+- **TODO:** iTerm2 configuration
 
 ## Installation
 
