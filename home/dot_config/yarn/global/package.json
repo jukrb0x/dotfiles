@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@microsoft/inshellisense": "^0.0.1-rc.4",
     "@vue/cli": "4.5.15",
     "commitizen": "^4.2.5",
     "create-slidev": "^0.33.0",
