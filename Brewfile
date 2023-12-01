@@ -49,7 +49,6 @@ brew "youtube-dl"
 brew "jesseduffield/lazygit/lazygit"
 
 # `brew install --cask` casks
-cask "font-monaspace"
 cask "iterm2"
 cask "visual-studio-code"
 cask "balenaetcher"
