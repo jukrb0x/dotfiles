@@ -1,4 +1,3 @@
-
 <h1>
     <samp>
       dotfiles for macOS<sup><code>ARM</code></sup>
