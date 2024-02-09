@@ -144,6 +144,7 @@ source $HOME/.zsh_aliases
 
 # GPG workaround
 export GPG_TTY=$(tty)
+
 # pyenv Initialization
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
