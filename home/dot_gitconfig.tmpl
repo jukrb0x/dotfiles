@@ -29,13 +29,52 @@
 	untrackedcache = true
 [init]
 	defaultBranch = main
-
+[alias]
+	a = add
+	ap = add -p
+	amc = am --continue
+	b = branch
+	bm = branch --merged
+	bnm = branch --no-merged
+	c = clone
+	ca = commit --amend
+	cane = commit --amend --no-edit
+	cf = commit --fixup
+	cm = commit --message
+	co = checkout
+	cob = checkout -b
+	com = checkout main
+	cp = cherry-pick
+	d = diff
+	dc = diff --cached
+	dom = diff origin/main
+	fo = fetch origin
+	fu = "!git log -n 16 --pretty=format:'%h %s' --no-merges | fzf | cut -c -7 | xargs -o git commit --fixup"
+	g = grep --line-number
+	mbhom = merge-base HEAD origin/main
+	mff = merge --ff-only
+	ol = log --pretty=oneline
+	l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	p = push
+	pf = push --force-with-lease
+	prb = pull --rebase
+	r = restore
+	ra = rebase --abort
+	rc = rebase --continue
+	ri = rebase --interactive
+	rl = reflog
+	riom = rebase --interactive origin/main
+	rpo = remote prune origin
+	s = status -sb
+	sh = "!git log -n 16 --pretty=format:'%h %s' --no-merges | fzf | cut -c -7 | xargs -o git show"
+	ss = commit --message snapshot --no-gpg-sign
+	su = submodule update
+	wd = diff --patience --word-diff
 [merge]
-    tool = unityyamlmerge
-
-    [mergetool "unityyamlmerge"]
-    trustExitCode = false
-    cmd = '/Applications/Unity/Hub/Editor/2021.3.6f1/Unity.app/Contents/Tools/UnityYAMLMerge' merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
+	tool = unityyamlmerge
+[mergetool "unityyamlmerge"]
+	trustExitCode = false
+	cmd = '/Applications/Unity/Hub/Editor/2021.3.6f1/Unity.app/Contents/Tools/UnityYAMLMerge' merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
 [pull]
 	rebase = false
 [diff "text"]
