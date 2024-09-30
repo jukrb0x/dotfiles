@@ -12,4 +12,4 @@ alias ls="eza --icons"
 alias gg="lazygit"
 alias cat="bat --theme=\$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo default || echo GitHub)"
 alias ghd="open -a /Applications/Github\ Desktop.app"
-
+alias fork="open -a /Applications/Fork.app"
