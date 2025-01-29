@@ -39,9 +39,12 @@ set ideastatusicon=gray
 set idearefactormode=keep
 
 """ Mappings --------------------------------
-map <leader>f <Action>(AceAction)
-map <leader>F <Action>(AceTargetAction)
-map <leader>e <Action>(AceLineAction)
+map s <Action>(AceAction)
+map S <Action>(AceTargetAction)
+map f <Action>(AceForwardAction)
+map F <Action>(AceBackwardAction)
+"" map <leader>e <Action>(AceLineAction)
+map <leader>e <Action>(SelectInProjectView)
 
 map <leader>d <Action>(Debug)
 map <leader>c <Action>(Stop)
