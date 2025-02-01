@@ -27,6 +27,7 @@ lvim.builtin.which_key.mappings["_"] = { "<cmd>vsp<cr>", "Split Panel Vertically
 -- lsp keybindings
 lvim.lsp.buffer_mappings.normal_mode['gr'] = { "<cmd>Telescope lsp_references<cr>", "Goto reference" }
 lvim.lsp.buffer_mappings.normal_mode['gd'] = { "<cmd>Telescope lsp_definitions<cr>", "Goto definition" }
+lvim.lsp.buffer_mappings.normal_mode['gI'] = { "<cmd>Telescope lsp_implementations<cr>", "Goto implementations" }
 lvim.lsp.buffer_mappings.normal_mode['<C-b>'] = { "<cmd>Telescope lsp_definitions<cr>", "Goto definition" }
 lvim.lsp.buffer_mappings.normal_mode['fr'] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" }
 
