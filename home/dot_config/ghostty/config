@@ -1,0 +1,15 @@
+copy-on-select = false
+theme = Peppermint
+macos-titlebar-style = tabs
+window-padding-x = 5
+background-opacity = 0.8
+background-blur-radius = 20
+
+font-size = 14
+font-family = MesloLGS Nerd Font, JetBrains Mono
+
+cursor-style = block
+cursor-style-blink = false
+shell-integration-features = no-cursor
+
+keybind = global:cmd+opt+grave_accent=toggle_quick_terminal
