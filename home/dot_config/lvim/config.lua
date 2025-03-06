@@ -19,15 +19,18 @@ lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 lvim.keys.normal_mode["<C-i>"] = "<C-o>"
 lvim.keys.normal_mode["<C-o>"] = "<C-i>"
-lvim.keys.normal_mode["<Tab>"] = false
 
-
+-- window management
 lvim.builtin.which_key.mappings["-"] = { "<cmd>sp<cr>", "Split Panel" }
 lvim.builtin.which_key.mappings["_"] = { "<cmd>vsp<cr>", "Split Panel Vertically" }
 
 -- lsp keybindings
 lvim.lsp.buffer_mappings.normal_mode['gr'] = { "<cmd>Telescope lsp_references<cr>", "Goto reference" }
 lvim.lsp.buffer_mappings.normal_mode['gd'] = { "<cmd>Telescope lsp_definitions<cr>", "Goto definition" }
+lvim.lsp.buffer_mappings.normal_mode['gI'] = { "<cmd>Telescope lsp_implementations<cr>", "Goto implementations" }
+lvim.lsp.buffer_mappings.normal_mode['<C-b>'] = { "<cmd>Telescope lsp_definitions<cr>", "Goto definition" }
+lvim.lsp.buffer_mappings.normal_mode['fr'] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" }
+
 
 -- treesitter
 lvim.builtin.treesitter.highlight.enable = true
@@ -54,8 +57,15 @@ lvim.plugins = {
   -- macOS only input method switcher
   { "ybian/smartim" },
   {
-    "github/copilot.vim",
-    build = ":Copilot setup"
+    "zbirenbaum/copilot-cmp",
+    event = "InsertEnter",
+    dependencies = { "zbirenbaum/copilot.lua" },
+    config = function()
+      vim.defer_fn(function()
+        require("copilot").setup()     -- https://github.com/zbirenbaum/copilot.lua/blob/master/README.md#setup-and-configuration
+        require("copilot_cmp").setup() -- https://github.com/zbirenbaum/copilot-cmp/blob/master/README.md#configuration
+      end, 100)
+    end,
   },
   {
     "folke/trouble.nvim",
@@ -69,7 +79,9 @@ lvim.plugins = {
     "folke/flash.nvim",
     event = "VeryLazy",
     ---@type Flash.Config
-    opts = {},
+    opts = {
+      modes = { char = { enabled = false } }
+    },
     -- stylua: ignore
     keys = {
       { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
