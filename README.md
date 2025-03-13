@@ -48,6 +48,8 @@ $ /bin/bash -c "$(wget -O- https://raw.githubusercontent.com/jukrb0x/dotfiles/ma
 
 Afterwards, the chezmoi will run the scripts in `.chezmoiscripts` to install packages via homebrew, you can check `Brewfile` for the list of packages. The [LunarVim](https://github.com/lunarvim/lunarvim) will be installed after the homebrew packages.
 
+> Dump Brewfile: `brew bundle dump`
+
 Chezmoi externals feature enables to pull other repositories to the home directory, such as tmux and oh-my-zsh configurations, and install a nerd font pack `Meslo` into the system.
 
 ## Documentation
