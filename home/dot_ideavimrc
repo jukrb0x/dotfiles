@@ -1,4 +1,4 @@
-"" Old settings -----
+""" General Vim settings --------------------
 set surround
 set relativenumber
 set number
@@ -8,7 +8,7 @@ set ignorecase
 set smartcase
 set ideajoin
 
-""" Plugins ---------------------
+""" Plugins ---------------------------------
 Plug 'preservim/nerdtree'
 Plug 'easymotion/vim-easymotion'
 
@@ -38,19 +38,20 @@ set ideajoin
 set ideastatusicon=gray
 set idearefactormode=keep
 
-""" Mappings --------------------------------
+""" Ace Jump --------------------------------
 map s <Action>(AceAction)
 map S <Action>(AceTargetAction)
 map f <Action>(AceForwardAction)
 map F <Action>(AceBackwardAction)
 "" map <leader>e <Action>(AceLineAction)
-map <leader>e <Action>(SelectInProjectView)
 
-map <leader>d <Action>(Debug)
-map <leader>c <Action>(Stop)
+""" Debugging --------------------------------
+map <leader>dd <Action>(Debug)
+map <leader>dc <Action>(Stop)
 map <leader>z <Action>(ToggleDistractionFreeMode)
 map <leader>b <Action>(ToggleLineBreakpoint)
 
+""" Editor actions ---------------------------
 map fr <Action>(RenameElement)
 map gr <Action>(GotoDeclaration)
 map gu <Action>(FindUsages)
@@ -60,27 +61,28 @@ map ge <Action>(ExpandRegion)
 
 map <C-i> <Action>(Back)
 map <C-o> <Action>(Forward)
+map <M-j> <Action>(MoveLineDown)
+map <M-k> <Action>(MoveLineUp)
+nmap <leader>w :w<CR>
+map <leader>c <Action>(CloseEditor)
+map <leader>e <Action>(SelectInProjectView)
+map <leader>o <Action>(FileStructurePopup)
 
-map <leader>gd <Action>(Compare.SameVersion)
-map <leader>gh <Action>(Vcs.ShowTabbedFileHistory)
-map <leader>gu <Action>(Vcs.RollbackChangedLines)
+map [e <Action>(GotoPreviousError)
+map ]e <Action>(GotoNextError)
 
+""" Window Management ------------------------
 map <leader>- <Action>(SplitHorizontally)
 map <leader>_ <Action>(SplitVertically)
-
 map <S-h> <Action>(PreviousTab)
 map <S-l> <Action>(NextTab)
 map <C-h> <Action>(PrevSplitter)
 map <C-l> <Action>(NextSplitter)
+map <C\> <Action>(ActivateTerminalToolWindow)
 
-map <M-j> <Action>(MoveLineDown)
-map <M-k> <Action>(MoveLineUp)
-
-map <leader>s <Action>(SelectInProjectView)
-map <leader>a <Action>(Annotate)
+""" VCS mappings (g for Git) -----------------
+map <leader>gd <Action>(Compare.SameVersion)
+map <leader>gh <Action>(Vcs.ShowTabbedFileHistory)
 map <leader>h <Action>(Vcs.ShowTabbedFileHistory)
-map [e <Action>(GotoPreviousError)
-map ]e <Action>(GotoNextError)
-map <C-\> <Action>(ActivateTerminalToolWindow)
-
-map <leader>o <Action>(FileStructurePopup)
+map <leader>gu <Action>(Vcs.RollbackChangedLines)
+map <leader>a <Action>(Annotate)
