@@ -52,21 +52,26 @@ map <leader>z <Action>(ToggleDistractionFreeMode)
 map <leader>b <Action>(ToggleLineBreakpoint)
 
 """ Editor actions ---------------------------
-map fr <Action>(RenameElement)
+
+"" Navigation
+map <C-i> <Action>(Back)
+map <C-o> <Action>(Forward)
 map gr <Action>(GotoDeclaration)
 map gu <Action>(FindUsages)
 map gI <Action>(GotoImplementation)
-map gc <Action>(CollapseRegion)
-map ge <Action>(ExpandRegion)
+map <leader>o <Action>(FileStructurePopup)
+map <leader>e <Action>(SelectInProjectView)
+map <leader>f <Action>(GotoFile)
 
-map <C-i> <Action>(Back)
-map <C-o> <Action>(Forward)
+"" Editing
+map fr <Action>(RenameElement)
 map <M-j> <Action>(MoveLineDown)
 map <M-k> <Action>(MoveLineUp)
 nmap <leader>w :w<CR>
 map <leader>c <Action>(CloseEditor)
-map <leader>e <Action>(SelectInProjectView)
-map <leader>o <Action>(FileStructurePopup)
+
+map gc <Action>(CollapseRegion)
+map ge <Action>(ExpandRegion)
 
 map [e <Action>(GotoPreviousError)
 map ]e <Action>(GotoNextError)
@@ -78,7 +83,7 @@ map <S-h> <Action>(PreviousTab)
 map <S-l> <Action>(NextTab)
 map <C-h> <Action>(PrevSplitter)
 map <C-l> <Action>(NextSplitter)
-map <C\> <Action>(ActivateTerminalToolWindow)
+map <C-\> <Action>(ActivateTerminalToolWindow)
 
 """ VCS mappings (g for Git) -----------------
 map <leader>gd <Action>(Compare.SameVersion)
