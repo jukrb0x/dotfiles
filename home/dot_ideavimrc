@@ -39,15 +39,20 @@ set ideastatusicon=gray
 set idearefactormode=keep
 
 """ Flash ------------------------------------
+" Search for string in visible area and jump
 nmap s <Action>(flash.search)
 xmap s <Action>(flash.search)
-
 " enhance vim f (find for char in characters to the right of the current cursor)
 nmap f <Action>(flash.find)
 xmap f <Action>(flash.find)
 " enhance vim F (find for char in characters to the left of the current cursor)
 nmap F <Action>(flash.find_backward)
 xmap F <Action>(flash.find_backward)
+" syntax node expansion (flash.nvim treesitter equivalent)
+nmap S <Action>(flash.treesitter)
+xmap S <Action>(flash.treesitter)
+" remote operator (after pressing an operator like d, use r to pick target line remotely)
+omap r <Action>(flash.remote)
 
 """ Debugging --------------------------------
 map <leader>dd <Action>(Debug)
