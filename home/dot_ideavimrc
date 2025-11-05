@@ -38,12 +38,16 @@ set ideajoin
 set ideastatusicon=gray
 set idearefactormode=keep
 
-""" Ace Jump --------------------------------
-map s <Action>(AceAction)
-map S <Action>(AceTargetAction)
-map f <Action>(AceForwardAction)
-map F <Action>(AceBackwardAction)
-"" map <leader>e <Action>(AceLineAction)
+""" Flash ------------------------------------
+nmap s <Action>(flash.search)
+xmap s <Action>(flash.search)
+
+" enhance vim f (find for char in characters to the right of the current cursor)
+nmap f <Action>(flash.find)
+xmap f <Action>(flash.find)
+" enhance vim F (find for char in characters to the left of the current cursor)
+nmap F <Action>(flash.find_backward)
+xmap F <Action>(flash.find_backward)
 
 """ Debugging --------------------------------
 map <leader>dd <Action>(Debug)
