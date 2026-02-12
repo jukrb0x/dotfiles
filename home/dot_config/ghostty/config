@@ -13,3 +13,5 @@ cursor-style-blink = false
 shell-integration-features = no-cursor
 
 keybind = global:cmd+opt+grave_accent=toggle_quick_terminal
+
+shell-integration-features = ssh-terminfo,ssh-env
