@@ -10,8 +10,7 @@ font-family = MesloLGS Nerd Font, JetBrains Mono
 
 cursor-style = block
 cursor-style-blink = false
-shell-integration-features = no-cursor
+shell-integration-features = no-cursor,ssh-terminfo,ssh-env
 
 keybind = global:cmd+opt+grave_accent=toggle_quick_terminal
-
-shell-integration-features = ssh-terminfo,ssh-env
+keybind = shift+enter=text:\x1b\r
