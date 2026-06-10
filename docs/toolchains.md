@@ -47,6 +47,9 @@ The actual LunarVim installation is handled by:
 pwsh ./scripts/install-windows-lunarvim.ps1
 ```
 
+The script uses LunarVim's official Windows PowerShell installer command for the
+`release-1.4/neovim-0.9` branch.
+
 LunarVim's official Windows prerequisites include Neovim, Git, make, Python,
 npm/Node, cargo, ripgrep, and PowerShell 7. This repo installs most of those
 through the app, Scoop, and toolchain scripts. Neovim providers are intentionally
