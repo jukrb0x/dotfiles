@@ -12,11 +12,6 @@ alias l = ls -a
 alias lg = lazygit
 
 # Zoxide
-if (which zoxide | is-not-empty) {
-    if not ("~/.zoxide.nu" | path expand | path exists) {
-        zoxide init nushell | save -f ~/.zoxide.nu
-    }
-}
 const zoxide_config = if ("~/.zoxide.nu" | path expand | path exists) {
     "~/.zoxide.nu"
 } else {

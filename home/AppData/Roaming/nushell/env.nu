@@ -27,6 +27,11 @@ if (which fnm | is-not-empty) {
     }
 }
 
+# Zoxide
+if (which zoxide | is-not-empty) {
+    zoxide init nushell | save -f ~/.zoxide.nu
+}
+
 const local_env = if ("~/.config/nushell/env.local.nu" | path expand | path exists) {
     "~/.config/nushell/env.local.nu"
 } else {
