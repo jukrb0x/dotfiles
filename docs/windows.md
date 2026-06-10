@@ -58,7 +58,6 @@ pwsh ./scripts/install-windows-apps.ps1
 pwsh ./scripts/install-windows-fonts.ps1
 pwsh ./scripts/install-windows-scoop.ps1
 pwsh ./scripts/install-windows-toolchains.ps1
-pwsh ./scripts/install-windows-lunarvim.ps1
 ```
 
 ## WinGet

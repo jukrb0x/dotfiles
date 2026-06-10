@@ -51,3 +51,6 @@ if (Get-Command rustup -ErrorAction SilentlyContinue) {
 if (Get-Command uv -ErrorAction SilentlyContinue) {
     uv python install
 }
+
+Write-Host "Installing LunarVim with the official Windows installer..."
+pwsh -c "`$LV_BRANCH='release-1.4/neovim-0.9'; iwr https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.4/neovim-0.9/utils/installer/install.ps1 -UseBasicParsing | iex"

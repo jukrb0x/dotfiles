@@ -41,14 +41,15 @@ On Windows, this repo manages:
 - `lvim.bat`
 - `lvim.ps1`
 
-The actual LunarVim installation is handled by:
+The actual LunarVim installation runs at the end of:
 
 ```powershell
-pwsh ./scripts/install-windows-lunarvim.ps1
+pwsh ./scripts/install-windows-toolchains.ps1
 ```
 
 The script uses LunarVim's official Windows PowerShell installer command for the
-`release-1.4/neovim-0.9` branch.
+`release-1.4/neovim-0.9` branch. The official Windows installer can be
+interactive; this repo does not try to invent a silent mode around it.
 
 LunarVim's official Windows prerequisites include Neovim, Git, make, Python,
 npm/Node, cargo, ripgrep, and PowerShell 7. This repo installs most of those
