@@ -54,7 +54,7 @@ lvim.plugins = {
   { "plasticboy/vim-markdown" },
   { "wakatime/vim-wakatime" },
   { "norcalli/nvim-colorizer.lua" },
-  -- macOS only input method switcher
+  -- input method switcher
   { "ybian/smartim" },
   {
     "zbirenbaum/copilot-cmp",
