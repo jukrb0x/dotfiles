@@ -16,8 +16,13 @@ if (which zoxide | is-not-empty) {
     if not ("~/.zoxide.nu" | path expand | path exists) {
         zoxide init nushell | save -f ~/.zoxide.nu
     }
-    source ~/.zoxide.nu
 }
+const zoxide_config = if ("~/.zoxide.nu" | path expand | path exists) {
+    "~/.zoxide.nu"
+} else {
+    null
+}
+source $zoxide_config
 
 # Starship
 if (which starship | is-not-empty) {
@@ -28,7 +33,9 @@ if (which starship | is-not-empty) {
     }
 }
 
-let local_config = ($nu.home-path | path join .config nushell config.local.nu)
-if ($local_config | path exists) {
-    source ~/.config/nushell/config.local.nu
+const local_config = if ("~/.config/nushell/config.local.nu" | path expand | path exists) {
+    "~/.config/nushell/config.local.nu"
+} else {
+    null
 }
+source $local_config

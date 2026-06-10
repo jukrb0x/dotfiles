@@ -27,7 +27,9 @@ if (which fnm | is-not-empty) {
     }
 }
 
-let local_env = ($nu.home-path | path join .config nushell env.local.nu)
-if ($local_env | path exists) {
-    source ~/.config/nushell/env.local.nu
+const local_env = if ("~/.config/nushell/env.local.nu" | path expand | path exists) {
+    "~/.config/nushell/env.local.nu"
+} else {
+    null
 }
+source-env $local_env
