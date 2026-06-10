@@ -6,6 +6,10 @@ Library/Fonts/Meslo/*.md
 
 .zoxide.nu
 
+{{ if eq .chezmoi.os "windows" }}
+.config/lvim/lazy-lock.json
+{{ end }}
+
 {{ if ne .chezmoi.os "darwin" }}
 .chezmoiscripts/**
 .oh-my-zsh/**
