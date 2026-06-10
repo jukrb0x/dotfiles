@@ -1,3 +1,32 @@
+{{ if eq .chezmoi.os "darwin" }}
 .oh-my-zsh/cache/**
 .oh-my-zsh/custom/themes/powerlevel10k/**/*.zwc
 Library/Fonts/Meslo/*.md
+{{ end }}
+
+.zoxide.nu
+
+{{ if ne .chezmoi.os "darwin" }}
+.chezmoiscripts/**
+.oh-my-zsh/**
+.tmux/**
+.p10k.zsh
+.tmux.conf
+.tmux.conf.local
+.zsh_aliases
+.zshrc
+.sleep
+.wakeup
+.config/ghostty/**
+.config/karabiner/**
+.config/yarn/**
+.logseq/**
+.gnupg/**
+{{ end }}
+
+{{ if ne .chezmoi.os "windows" }}
+AppData/**
+Documents/PowerShell/**
+.local/bin/lvim.bat
+.local/bin/lvim.ps1
+{{ end }}
