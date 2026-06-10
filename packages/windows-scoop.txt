@@ -1,0 +1,7 @@
+# Scoop-managed CLI utilities. Put a tool here when Scoop is the cleanest
+# readable source for a portable, user-scoped install.
+bat
+fd
+fzf
+make
+wget
