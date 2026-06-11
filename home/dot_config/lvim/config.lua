@@ -13,6 +13,27 @@ vim.g.copilot_assume_mapped = true
 lvim.format_on_save.enabled = false
 lvim.transparent_window = true
 
+-- Avoid nvim-tree watcher storms when browsing the Windows home directory.
+-- Git integration stays enabled; only noisy home/junction paths skip watches.
+local home_dir = vim.fn.expand("~"):gsub("\\", "\\\\")
+lvim.builtin.nvimtree.setup.filesystem_watchers = {
+  enable = true,
+  ignore_dirs = {
+    home_dir .. "$",
+    home_dir .. "\\\\AppData",
+    home_dir .. "\\\\Application Data",
+    home_dir .. "\\\\Cookies",
+    home_dir .. "\\\\Local Settings",
+    home_dir .. "\\\\My Documents",
+    home_dir .. "\\\\NetHood",
+    home_dir .. "\\\\PrintHood",
+    home_dir .. "\\\\Recent",
+    home_dir .. "\\\\SendTo",
+    home_dir .. "\\\\Start Menu",
+    home_dir .. "\\\\Templates",
+  },
+}
+
 -- keybindings
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
