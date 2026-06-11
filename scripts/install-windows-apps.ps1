@@ -3,42 +3,72 @@ $ErrorActionPreference = "Stop"
 
 function Test-WinGetPackageInstalled {
     param(
-        [Parameter(Mandatory)] [string] $Id,
+        [string] $Id,
+        [string] $Name,
         [string] $Source = "winget"
     )
 
-    winget list --id $Id --exact --source $Source --disable-interactivity | Out-Null
+    $arguments = @(
+        "list"
+        "--exact"
+        "--source", $Source
+        "--disable-interactivity"
+    )
+
+    if ($Id) {
+        $arguments += @("--id", $Id)
+    } else {
+        $arguments += @("--name", $Name)
+    }
+
+    winget @arguments | Out-Null
     return $LASTEXITCODE -eq 0
 }
 
 function Install-WinGetPackage {
     param(
-        [Parameter(Mandatory)] [string] $Id,
+        [string] $Id,
+        [string] $PackageName,
         [string] $Source = "winget",
         [string] $Name = $Id
     )
 
-    if (Test-WinGetPackageInstalled -Id $Id -Source $Source) {
-        Write-Host "$Name is already installed."
+    $displayName = if ($Name) { $Name } elseif ($PackageName) { $PackageName } else { $Id }
+
+    if (Test-WinGetPackageInstalled -Id $Id -Name $PackageName -Source $Source) {
+        Write-Host "$displayName is already installed."
         return
     }
 
-    Write-Host "Installing $Name from $Source..."
+    Write-Host "Installing $displayName from $Source..."
 
-    $arguments = @(
-        "install"
-        "--id", $Id
-        "--exact"
-        "--source", $Source
-        "--silent"
-        "--disable-interactivity"
-        "--accept-source-agreements"
-        "--accept-package-agreements"
-    )
+    if ($Id) {
+        $arguments = @(
+            "install"
+            "--id", $Id
+            "--exact"
+            "--source", $Source
+            "--silent"
+            "--disable-interactivity"
+            "--accept-source-agreements"
+            "--accept-package-agreements"
+        )
+    } else {
+        $arguments = @(
+            "install"
+            $PackageName
+            "--exact"
+            "--source", $Source
+            "--silent"
+            "--disable-interactivity"
+            "--accept-source-agreements"
+            "--accept-package-agreements"
+        )
+    }
 
     winget @arguments
     if ($LASTEXITCODE -ne 0) {
-        throw "winget install failed for $Id with exit code $LASTEXITCODE"
+        throw "winget install failed for $displayName with exit code $LASTEXITCODE"
     }
 }
 # Optional WinGet-managed apps/tools, ordered by setup dependency and daily workflow.
@@ -73,7 +103,11 @@ $Apps = @(
     @{ Id = "eza-community.eza" },
     @{ Id = "JesseDuffield.lazygit" },
     @{ Id = "muesli.duf" },
+    @{ Id = "OpenAI.Codex" },
     @{ Id = "tldr-pages.tlrc" },
+
+    # AI apps
+    @{ PackageName = "Codex"; Source = "msstore"; Name = "Codex app" },
 
     # Developer tools
     @{ Id = "Kitware.CMake" },
@@ -87,8 +121,9 @@ $Apps = @(
 
 foreach ($app in $Apps) {
     $id = $app.Id
+    $packageName = $app.PackageName
     $source = if ($app.Source) { $app.Source } else { $DefaultSource }
-    $name = if ($app.Name) { $app.Name } else { $id }
+    $name = if ($app.Name) { $app.Name } elseif ($packageName) { $packageName } else { $id }
 
-    Install-WinGetPackage -Id $id -Source $source -Name $name
+    Install-WinGetPackage -Id $id -PackageName $packageName -Source $source -Name $name
 }
