@@ -32,6 +32,13 @@ $officialFonts = @(
         AssetPattern = "monaspace-frozen-*.zip"
         Include = @("*.otf", "*.ttf")
         Recurse = $true
+    },
+    @{
+        Name = "Monaspace Nerd Fonts"
+        GitHubRepo = "githubnext/monaspace"
+        AssetPattern = "monaspace-nerdfonts-*.zip"
+        Include = @("*.otf", "*.ttf")
+        Recurse = $true
     }
 )
 
