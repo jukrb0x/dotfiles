@@ -2,15 +2,22 @@
 $ErrorActionPreference = "Stop"
 
 $nerdFonts = @(
-    "Meslo",
-    "Monaspace"
+    "Meslo"
 )
 
 $officialFonts = @(
     @{
         Name = "JetBrains Mono"
-        Url = "https://github.com/JetBrains/JetBrainsMono/releases/latest/download/JetBrainsMono-2.304.zip"
+        GitHubRepo = "JetBrains/JetBrainsMono"
+        AssetPattern = "JetBrainsMono-*.zip"
         Include = @("fonts/ttf/JetBrainsMono-*.ttf")
+    },
+    @{
+        Name = "Monaspace"
+        GitHubRepo = "githubnext/monaspace"
+        AssetPattern = "monaspace-variable-*.zip"
+        Include = @("*.otf", "*.ttf")
+        Recurse = $true
     }
 )
 
@@ -40,6 +47,52 @@ public static class FontInstall {
 }
 "@
 Add-Type -AssemblyName PresentationCore
+
+function Get-LatestGitHubReleaseAssetUrl {
+    param(
+        [Parameter(Mandatory)] [string] $Repo,
+        [Parameter(Mandatory)] [string] $AssetPattern
+    )
+
+    try {
+        $release = Invoke-RestMethod `
+            -Uri "https://api.github.com/repos/$Repo/releases/latest" `
+            -Headers @{ "User-Agent" = "install-windows-fonts.ps1" }
+        $asset = $release.assets |
+            Where-Object { $_.name -like $AssetPattern } |
+            Select-Object -First 1
+
+        if ($asset) {
+            return $asset.browser_download_url
+        }
+    } catch {
+        Write-Warning "GitHub API lookup failed for $Repo. Falling back to release page parsing."
+    }
+
+    $handler = [System.Net.Http.HttpClientHandler]::new()
+    $handler.AllowAutoRedirect = $false
+    $client = [System.Net.Http.HttpClient]::new($handler)
+    try {
+        $client.DefaultRequestHeaders.UserAgent.ParseAdd("install-windows-fonts.ps1")
+        $latest = $client.GetAsync("https://github.com/$Repo/releases/latest").GetAwaiter().GetResult()
+        $location = $latest.Headers.Location
+        $tag = [IO.Path]::GetFileName($location.AbsolutePath)
+    } finally {
+        $client.Dispose()
+        $handler.Dispose()
+    }
+
+    $assetsPage = Invoke-WebRequest -Uri "https://github.com/$Repo/releases/expanded_assets/$tag"
+    $assetPath = $assetsPage.Links |
+        Where-Object { [IO.Path]::GetFileName($_.href) -like $AssetPattern } |
+        Select-Object -First 1 -ExpandProperty href
+
+    if (-not $assetPath) {
+        throw "Could not find release asset matching '$AssetPattern' in $Repo latest release."
+    }
+
+    "https://github.com$assetPath"
+}
 
 function Install-FontFile {
     param([Parameter(Mandatory)] [string] $Path)
@@ -90,9 +143,12 @@ function Install-FontFile {
 foreach ($font in $officialFonts) {
     $archive = Join-Path $tempDir "$($font.Name).zip"
     $extractDir = Join-Path $tempDir $font.Name
+    $url = Get-LatestGitHubReleaseAssetUrl `
+        -Repo $font.GitHubRepo `
+        -AssetPattern $font.AssetPattern
 
     Write-Host "Downloading $($font.Name)..."
-    Invoke-WebRequest -Uri $font.Url -OutFile $archive
+    Invoke-WebRequest -Uri $url -OutFile $archive
 
     Remove-Item -LiteralPath $extractDir -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -ItemType Directory -Path $extractDir -Force | Out-Null
@@ -100,7 +156,7 @@ foreach ($font in $officialFonts) {
     Expand-Archive -LiteralPath $archive -DestinationPath $extractDir -Force
 
     foreach ($include in $font.Include) {
-        Get-ChildItem -Path (Join-Path $extractDir $include) -File |
+        Get-ChildItem -Path (Join-Path $extractDir $include) -File -Recurse:$font.Recurse |
             ForEach-Object { Install-FontFile $_.FullName }
     }
 }

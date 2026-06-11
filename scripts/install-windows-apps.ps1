@@ -1,6 +1,46 @@
 #Requires -Version 7.1
 $ErrorActionPreference = "Stop"
 
+function Test-WinGetPackageInstalled {
+    param(
+        [Parameter(Mandatory)] [string] $Id,
+        [string] $Source = "winget"
+    )
+
+    winget list --id $Id --exact --source $Source --disable-interactivity | Out-Null
+    return $LASTEXITCODE -eq 0
+}
+
+function Install-WinGetPackage {
+    param(
+        [Parameter(Mandatory)] [string] $Id,
+        [string] $Source = "winget",
+        [string] $Name = $Id
+    )
+
+    if (Test-WinGetPackageInstalled -Id $Id -Source $Source) {
+        Write-Host "$Name is already installed."
+        return
+    }
+
+    Write-Host "Installing $Name from $Source..."
+
+    $arguments = @(
+        "install"
+        "--id", $Id
+        "--exact"
+        "--source", $Source
+        "--silent"
+        "--disable-interactivity"
+        "--accept-source-agreements"
+        "--accept-package-agreements"
+    )
+
+    winget @arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "winget install failed for $Id with exit code $LASTEXITCODE"
+    }
+}
 # Optional WinGet-managed apps/tools, ordered by setup dependency and daily workflow.
 # Required dotfiles dependencies live in packages/windows-winget-required.txt and
 # are synchronized by chezmoi apply.
@@ -19,6 +59,7 @@ $Apps = @(
     # Editors and notes
     @{ Id = "Microsoft.VisualStudioCode" },
     @{ Id = "Notion.Notion" },
+    @{ Id = "Appest.Dida" },
     @{ Id = "Obsidian.Obsidian" },
 
     # Terminals
@@ -49,21 +90,5 @@ foreach ($app in $Apps) {
     $source = if ($app.Source) { $app.Source } else { $DefaultSource }
     $name = if ($app.Name) { $app.Name } else { $id }
 
-    Write-Host "Installing $name from $source..."
-
-    $arguments = @("install")
-    $arguments += @("--id", $id)
-    $arguments += @(
-        "--exact"
-        "--source", $source
-        "--silent"
-        "--disable-interactivity"
-        "--accept-source-agreements"
-        "--accept-package-agreements"
-    )
-
-    winget @arguments
-    if ($LASTEXITCODE -ne 0) {
-        throw "winget install failed for $id with exit code $LASTEXITCODE"
-    }
+    Install-WinGetPackage -Id $id -Source $source -Name $name
 }

@@ -5,8 +5,20 @@ $ErrorActionPreference = "Stop"
 # packages/windows-winget-required.txt hash: {{ include "../packages/windows-winget-required.txt" | sha256sum }}
 $packageFile = {{ joinPath .chezmoi.sourceDir ".." "packages" "windows-winget-required.txt" | quote }}
 
+function Test-WinGetPackageInstalled {
+    param([Parameter(Mandatory)] [string] $Id)
+
+    winget list --id $Id --exact --source winget --disable-interactivity | Out-Null
+    return $LASTEXITCODE -eq 0
+}
+
 function Install-WinGetPackage {
     param([Parameter(Mandatory)] [string] $Id)
+
+    if (Test-WinGetPackageInstalled $Id) {
+        Write-Host "$Id is already installed."
+        return
+    }
 
     $arguments = @(
         "install"

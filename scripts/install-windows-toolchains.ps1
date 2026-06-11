@@ -1,14 +1,35 @@
 #Requires -Version 7.1
 $ErrorActionPreference = "Stop"
 
+function Test-WinGetPackageInstalled {
+    param(
+        [Parameter(Mandatory)] [string] $Id,
+        [string] $Source = "winget"
+    )
+
+    winget list --id $Id --exact --source $Source --disable-interactivity | Out-Null
+    return $LASTEXITCODE -eq 0
+}
+
 function Install-WinGetPackage {
-    param([Parameter(Mandatory)] [string] $Id)
+    param(
+        [Parameter(Mandatory)] [string] $Id,
+        [string] $Source = "winget",
+        [string] $Name = $Id
+    )
+
+    if (Test-WinGetPackageInstalled -Id $Id -Source $Source) {
+        Write-Host "$Name is already installed."
+        return
+    }
+
+    Write-Host "Installing $Name from $Source..."
 
     $arguments = @(
         "install"
         "--id", $Id
         "--exact"
-        "--source", "winget"
+        "--source", $Source
         "--silent"
         "--disable-interactivity"
         "--accept-source-agreements"
@@ -20,7 +41,6 @@ function Install-WinGetPackage {
         throw "winget install failed for $Id with exit code $LASTEXITCODE"
     }
 }
-
 # Optional language/toolchain managers. Required editor dependencies live in
 # packages/*-required.txt and are synchronized by chezmoi apply.
 $Toolchains = @(

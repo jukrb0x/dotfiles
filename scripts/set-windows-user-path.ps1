@@ -1,4 +1,3 @@
-#Requires -Version 7.1
 $ErrorActionPreference = "Stop"
 
 $paths = @(
