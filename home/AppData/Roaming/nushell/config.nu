@@ -11,6 +11,10 @@ alias gst = git status
 alias l = ls -a
 alias lg = lazygit
 
+def --env ccd [] {
+    cd (chezmoi source-path | path dirname)
+}
+
 # Zoxide
 const zoxide_config = if ("~/.zoxide.nu" | path expand | path exists) {
     "~/.zoxide.nu"

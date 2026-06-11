@@ -7,6 +7,10 @@ function lvim {
     & "$HOME\.local\bin\lvim.ps1" @args
 }
 
+function ccd {
+    Set-Location (Split-Path -Parent (chezmoi source-path))
+}
+
 $env:EDITOR = "$HOME\.local\bin\lvim.bat"
 $env:VISUAL = $env:EDITOR
 
