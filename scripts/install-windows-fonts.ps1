@@ -13,9 +13,23 @@ $officialFonts = @(
         Include = @("fonts/ttf/JetBrainsMono-*.ttf")
     },
     @{
-        Name = "Monaspace"
+        Name = "Monaspace Static"
+        GitHubRepo = "githubnext/monaspace"
+        AssetPattern = "monaspace-static-*.zip"
+        Include = @("*.otf", "*.ttf")
+        Recurse = $true
+    },
+    @{
+        Name = "Monaspace Variable"
         GitHubRepo = "githubnext/monaspace"
         AssetPattern = "monaspace-variable-*.zip"
+        Include = @("*.otf", "*.ttf")
+        Recurse = $true
+    },
+    @{
+        Name = "Monaspace Frozen"
+        GitHubRepo = "githubnext/monaspace"
+        AssetPattern = "monaspace-frozen-*.zip"
         Include = @("*.otf", "*.ttf")
         Recurse = $true
     }
