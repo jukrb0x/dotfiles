@@ -34,6 +34,11 @@ lvim.builtin.nvimtree.setup.filesystem_watchers = {
   },
 }
 
+
+-- Avoid indent-blankline calling nvim-treesitter's experimental indent code,
+-- which crashes on Markdown injection queries with this Neovim/parser combo.
+lvim.builtin.indentlines.options.use_treesitter = false
+
 -- keybindings
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
