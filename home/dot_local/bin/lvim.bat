@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 if not defined XDG_DATA_HOME set XDG_DATA_HOME=%APPDATA%
-if not defined XDG_CONFIG_HOME set XDG_CONFIG_HOME=%LOCALAPPDATA%
+if not defined XDG_CONFIG_HOME set XDG_CONFIG_HOME=%USERPROFILE%\.config
 if not defined XDG_CACHE_HOME set XDG_CACHE_HOME=%TEMP%
 
 if not defined LUNARVIM_RUNTIME_DIR set LUNARVIM_RUNTIME_DIR=!XDG_DATA_HOME!\lunarvim

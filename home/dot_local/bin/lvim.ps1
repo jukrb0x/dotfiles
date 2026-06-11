@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 
 $env:XDG_DATA_HOME = $env:XDG_DATA_HOME ?? $env:APPDATA
-$env:XDG_CONFIG_HOME = $env:XDG_CONFIG_HOME ?? $env:LOCALAPPDATA
+$env:XDG_CONFIG_HOME = $env:XDG_CONFIG_HOME ?? "$HOME\.config"
 $env:XDG_CACHE_HOME = $env:XDG_CACHE_HOME ?? $env:TEMP
 
 $env:LUNARVIM_RUNTIME_DIR = $env:LUNARVIM_RUNTIME_DIR ?? "$env:XDG_DATA_HOME\lunarvim"

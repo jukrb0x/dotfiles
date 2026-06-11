@@ -6,6 +6,29 @@
 -- vim config
 vim.opt.relativenumber = true
 
+if vim.fn.has("win32") == 1 then
+  -- Make LunarVim's terminal and clipboard behave consistently on Windows.
+  vim.opt.shell = "pwsh.exe"
+  vim.opt.shellcmdflag =
+  "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
+  vim.cmd [[
+    let &shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+    let &shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+    set shellquote= shellxquote=
+  ]]
+
+  vim.g.clipboard = {
+    copy = {
+      ["+"] = "win32yank.exe -i --crlf",
+      ["*"] = "win32yank.exe -i --crlf",
+    },
+    paste = {
+      ["+"] = "win32yank.exe -o --lf",
+      ["*"] = "win32yank.exe -o --lf",
+    },
+  }
+end
+
 -- for Github copilot
 vim.g.copilot_assume_mapped = true
 
