@@ -1,201 +1,153 @@
 # Windows setup
 
-Windows setup is intentionally split by chosen installer source. The rule is
-not "GUI uses winget, CLI uses Scoop"; choose the source that is most official,
-readable, and stable for each tool.
+Windows setup is split into three paths:
+
+1. Bootstrap: install only the minimum tools needed to run chezmoi reliably.
+2. Chezmoi apply: maintain required state for managed dotfiles.
+3. Optional setup: install heavier apps, fonts, IDEs, and preference-driven tools.
 
 ## Bootstrap
 
-Start with only the tools needed to fetch and inspect the dotfiles:
+Bootstrap is intentionally small. It is only responsible for making `chezmoi
+apply` possible on a fresh Windows machine:
+
+- Git
+- PowerShell 7
+- chezmoi
+- current-user PowerShell execution policy
+
+Run:
 
 ```powershell
-winget install --id Git.Git --exact --source winget --silent --disable-interactivity --accept-source-agreements --accept-package-agreements
-winget install --id twpayne.chezmoi --exact --source winget --silent --disable-interactivity --accept-source-agreements --accept-package-agreements
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+powershell -ExecutionPolicy Bypass -File ./bootstrap/windows.ps1
 ```
 
-Initialize the repo, but do not apply immediately:
+Then open PowerShell 7 and initialize/apply the dotfiles:
 
 ```powershell
 chezmoi init https://github.com/jukrb0x/dotfiles.git
-chezmoi cd
+chezmoi apply
 ```
 
-Create local Git identity before applying the managed Git config:
-
-```powershell
-notepad $HOME\.gitconfig.local
-```
-
-Example local identity:
-
-```ini
-[user]
-    name = Your Name
-    email = you@example.com
-
-[commit]
-    gpgsign = false
-```
-
-Preview the apply set:
-
-```powershell
-chezmoi managed --include files
-chezmoi diff
-```
-
-Apply only after the diff looks right:
+If the repo is already initialized:
 
 ```powershell
 chezmoi apply
 ```
 
-Then install Windows apps and CLI tools:
+## Automatic Required State
+
+`chezmoi apply` owns only the state required for managed dotfiles to work.
+These scripts live in `home/.chezmoiscripts` and are templated so they only run
+on Windows:
+
+- `run_after_10-windows-user-path.ps1.tmpl`
+- `run_onchange_after_20-windows-winget-required.ps1.tmpl`
+- `run_onchange_after_30-windows-scoop-required.ps1.tmpl`
+- `run_onchange_after_40-windows-msys2-required.ps1.tmpl`
+
+Required package lists live in `packages/`:
+
+- `windows-winget-required.txt`
+- `windows-scoop-required.txt`
+- `windows-msys2-required.txt`
+
+Use this rule when deciding whether something belongs there:
+
+- Put it in required if a managed shell/editor config needs it to start or work.
+- Keep it manual if it is a GUI app, font, IDE, large language environment, or personal preference.
+
+## Daily Maintenance
+
+For normal dotfiles updates:
 
 ```powershell
-pwsh ./scripts/set-windows-user-path.ps1
+chezmoi update
+```
+
+For local source changes:
+
+```powershell
+chezmoi apply
+```
+
+`run_onchange_` scripts rerun only when their rendered script content changes.
+The Windows package scripts include a checksum of their package-list file, so
+editing a required package list triggers the matching package sync.
+
+## Optional Machine Setup
+
+These scripts are explicit bootstrap helpers, not automatic required state:
+
+```powershell
+chezmoi cd
 pwsh ./scripts/install-windows-apps.ps1
 pwsh ./scripts/install-windows-fonts.ps1
 pwsh ./scripts/install-windows-scoop.ps1
 pwsh ./scripts/install-windows-toolchains.ps1
 ```
 
+Use them when you want the fuller machine setup. They should not duplicate
+packages already owned by `packages/*-required.txt`.
+
 ## WinGet
 
-Use `winget` for Windows apps and tools whose official Windows install path is
-clear through WinGet:
+Required WinGet packages are synchronized by chezmoi from
+`packages/windows-winget-required.txt`.
 
-```powershell
-pwsh ./scripts/install-windows-apps.ps1
-```
-
-The WinGet script is ordered by setup flow:
-
-- foundation tools
-- secrets app
-- editors
-- terminals
-- shell runtime tools
-- command-line tools with clear WinGet packages
-- developer tools
-- IDEs
-
-1Password is installed as an app, but secrets and private identity still live
-outside the dotfiles repo. Add the 1Password CLI only when a dotfile workflow
-actually needs `op`.
-
-The script uses WinGet's non-interactive flags for normal WinGet packages:
-
-- `--silent`
-- `--disable-interactivity`
-- `--accept-source-agreements`
-- `--accept-package-agreements`
-
-Raycast for Windows is intentionally not included in the script for now. It is a
-Microsoft Store package, and WinGet/Store acquisition can hang or fail even when
-`winget install raycast` works manually. Install it manually from the official
-Raycast Windows page or Microsoft Store until that path is reliable enough to
-script.
-
-Starship is installed here because the official Starship Windows instructions
-list `winget install --id Starship.Starship`.
-
-Nushell is also installed here instead of Scoop because it is the daily shell,
-not just an interchangeable CLI utility. Nushell's official Windows docs list
-both WinGet and Scoop; WinGet now supports user-scope Nushell installs by
-default.
-
-Some CLI tools also live in the WinGet script when their project docs point at
-WinGet directly, or when the WinGet package is clearly newer/better maintained:
-
-- `zoxide`: official Windows recommendation is WinGet
-- `lazygit`: official Windows install docs list WinGet
-- `ripgrep`: official docs list both Scoop and WinGet, and the WinGet MSVC
-  package is current
-- `eza`: official docs list both, with a clear WinGet package
-- `tlrc`: official docs list both, with a clear WinGet package
-- `delta`: official docs list both, with a clear WinGet package
-- `dust` and `duf`: WinGet packages are current and clear
-- `btop`: WinGet is used because the Scoop package's install script can fail
-  when its default config file already exists in the extracted app directory
-
-## Fonts
-
-Install terminal/editor fonts separately:
-
-```powershell
-pwsh ./scripts/install-windows-fonts.ps1
-```
-
-The font script installs current-user fonts for:
-
-- JetBrains Mono from JetBrains' official release
-- Meslo Nerd Font for terminals
-- Monaspace Nerd Font, GitHub's type family patched with Nerd Font glyphs
-
-It downloads JetBrains Mono from JetBrains' official release and terminal Nerd
-Fonts from the Nerd Fonts GitHub releases. Fonts are registered under the
-current user's Windows font registry, and the registry names are read from the
-font metadata instead of guessed from filenames.
-
-Use the upstream font name for JetBrains editor settings:
-
-- Editor font: `JetBrains Mono`
-- Terminal font: `MesloLGM Nerd Font Mono` unless another Meslo size variant
-  is preferred
-- Monaspace Nerd Font: Nerd Fonts exposes GitHub's Monaspace family as
-  `Monaspice...`; use `MonaspiceNe NFM` for a good default mono variant
+Optional WinGet apps and tools live in `scripts/install-windows-apps.ps1`.
+This keeps GUI apps, IDEs, and preference-heavy tools out of routine
+`chezmoi apply` runs.
 
 ## Scoop
 
-Use Scoop for small command-line utilities where Scoop gives a clean,
-portable, user-scoped install. The script installs Scoop if it is missing, then
-installs every package listed in `packages/windows-scoop.txt`:
+Required Scoop packages are synchronized by chezmoi from
+`packages/windows-scoop-required.txt`.
+
+Optional Scoop packages live in `packages/windows-scoop.txt` and are installed
+by:
 
 ```powershell
 pwsh ./scripts/install-windows-scoop.ps1
 ```
 
-Scoop is a per-user package manager by default, but this Windows setup assumes
-the terminal may run elevated. The script uses Scoop's official `-RunAsAdmin`
-installer switch when Scoop is missing.
+Scoop is per-user by default. The install script uses Scoop's official
+`-RunAsAdmin` installer switch when Scoop is missing, because this setup may run
+from an elevated terminal.
 
-This is the Windows equivalent of keeping a small Brewfile-like CLI list.
-Scoop is command-line/script-friendly by design; the script installs packages in
-one `scoop install ...` call.
+## Fonts
 
-The Scoop list is intentionally small. It currently keeps tools like `bat`,
-`fd`, and `fzf` where the official docs list both WinGet and Scoop and Scoop's
-shim-based user install is simple, plus `make` where the WinGet option is less
-appealing for this setup.
+Fonts are optional machine setup, not required dotfiles state:
 
-## TODO
+```powershell
+pwsh ./scripts/install-windows-fonts.ps1
+```
 
-- Revisit whether any low-risk Windows setup should move into
-  `.chezmoiscripts` after this manual bootstrap has been used successfully on a
-  real machine.
+The font script installs current-user fonts for JetBrains Mono, Meslo Nerd Font,
+and Monaspace Nerd Font.
 
 ## Toolchains
 
-Keep language toolchain choices explicit:
+Required editor/compiler dependencies are synchronized by chezmoi:
 
-- WSL: `wsl --install`
-- Rust: `rustup`
-- Python: `uv`
-- Node: `fnm` plus Corepack-managed `pnpm`
-- Go: WinGet stable Go for now
-- Bun: WinGet Bun
+- MSYS2 from `packages/windows-winget-required.txt`
+- MSYS2 UCRT64 GCC from `packages/windows-msys2-required.txt`
 
-See `docs/toolchains.md`.
+Optional language toolchains are installed explicitly:
 
-Do not put private work identity, company paths, tokens, remotes, or emails in
-the dotfiles repo.
+```powershell
+pwsh ./scripts/install-windows-toolchains.ps1
+```
+
+The optional toolchain script installs language managers/runtimes such as `fnm`,
+`uv`, `rustup`, Go, and Bun, then runs the LunarVim Windows installer.
 
 ## PATH
 
 Windows command locations belong in the user `Path` environment variable, not in
-shell profiles. Run this whenever a fresh machine is missing expected command
-paths:
+shell profiles. `chezmoi apply` runs the PATH script automatically, and the same
+logic can be run manually if needed:
 
 ```powershell
 pwsh ./scripts/set-windows-user-path.ps1
@@ -206,5 +158,7 @@ It ensures these user paths exist:
 - `%USERPROFILE%\.local\bin`
 - `%USERPROFILE%\scoop\shims`
 - `%LOCALAPPDATA%\Microsoft\WinGet\Links`
+- `C:\msys64\ucrt64\bin`
 
-Restart terminals after updating user environment variables.
+Restart terminals after updating user environment variables. GUI-launched tools
+may need a sign out/sign in cycle before they inherit the updated user PATH.

@@ -4,7 +4,8 @@ $ErrorActionPreference = "Stop"
 $paths = @(
     (Join-Path $HOME ".local\bin"),
     (Join-Path $HOME "scoop\shims"),
-    (Join-Path $env:LOCALAPPDATA "Microsoft\WinGet\Links")
+    (Join-Path $env:LOCALAPPDATA "Microsoft\WinGet\Links"),
+    "C:\msys64\ucrt64\bin"
 )
 
 $userPath = [Environment]::GetEnvironmentVariable("Path", "User")

@@ -1,0 +1,9 @@
+# WinGet packages required for managed Windows dotfiles to work.
+Git.Git
+Microsoft.PowerShell
+twpayne.chezmoi
+Neovim.Neovim
+Starship.Starship
+ajeetdsouza.zoxide
+BurntSushi.ripgrep.MSVC
+MSYS2.MSYS2

@@ -1,0 +1,39 @@
+{{ if eq .chezmoi.os "windows" -}}
+#Requires -Version 7.1
+$ErrorActionPreference = "Stop"
+
+# packages/windows-winget-required.txt hash: {{ include "../packages/windows-winget-required.txt" | sha256sum }}
+$packageFile = {{ joinPath .chezmoi.sourceDir ".." "packages" "windows-winget-required.txt" | quote }}
+
+function Install-WinGetPackage {
+    param([Parameter(Mandatory)] [string] $Id)
+
+    $arguments = @(
+        "install"
+        "--id", $Id
+        "--exact"
+        "--source", "winget"
+        "--silent"
+        "--disable-interactivity"
+        "--accept-source-agreements"
+        "--accept-package-agreements"
+    )
+
+    winget @arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "winget install failed for $Id with exit code $LASTEXITCODE"
+    }
+}
+
+if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+    throw "winget is required to install required Windows packages, but winget was not found on PATH."
+}
+
+$packages = @(Get-Content $packageFile |
+    ForEach-Object { $_.Trim() } |
+    Where-Object { $_ -and -not $_.StartsWith("#") })
+
+foreach ($package in $packages) {
+    Install-WinGetPackage $package
+}
+{{ end -}}

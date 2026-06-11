@@ -1,7 +1,6 @@
-# Scoop-managed CLI utilities. Put a tool here when Scoop is the cleanest
-# readable source for a portable, user-scoped install.
+# Optional Scoop-managed CLI utilities. Required Scoop packages live in
+# packages/windows-scoop-required.txt and are synchronized by chezmoi apply.
 bat
 fd
 fzf
-make
 wget

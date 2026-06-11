@@ -1,13 +1,13 @@
 #Requires -Version 7.1
 $ErrorActionPreference = "Stop"
 
-# WinGet-managed apps/tools, ordered by setup dependency and daily workflow.
+# Optional WinGet-managed apps/tools, ordered by setup dependency and daily workflow.
+# Required dotfiles dependencies live in packages/windows-winget-required.txt and
+# are synchronized by chezmoi apply.
 $DefaultSource = "winget"
 $Apps = @(
-    # Foundation
-    @{ Id = "Git.Git" },
+    # Foundation extras
     @{ Id = "GitHub.cli" },
-    @{ Id = "Microsoft.PowerShell" },
     @{ Id = "Nushell.Nushell" },
 
     # Secrets
@@ -16,23 +16,18 @@ $Apps = @(
     # App maintenance
     @{ Id = "GeekUninstaller.GeekUninstaller" },
 
-    # Editors
+    # Editors and notes
     @{ Id = "Microsoft.VisualStudioCode" },
-    @{ Id = "Neovim.Neovim" },
+    @{ Id = "Notion.Notion" },
     @{ Id = "Obsidian.Obsidian" },
 
     # Terminals
     @{ Id = "Microsoft.WindowsTerminal" },
     @{ Id = "Eugeny.Tabby" },
 
-    # Shell prompt
-    @{ Id = "Starship.Starship" },
-
-    # Command-line tools with clear WinGet packages
-    @{ Id = "ajeetdsouza.zoxide" },
+    # Optional command-line tools with clear WinGet packages
     @{ Id = "aristocratos.btop4win" },
     @{ Id = "bootandy.dust" },
-    @{ Id = "BurntSushi.ripgrep.MSVC" },
     @{ Id = "dandavison.delta" },
     @{ Id = "eza-community.eza" },
     @{ Id = "JesseDuffield.lazygit" },
@@ -68,4 +63,7 @@ foreach ($app in $Apps) {
     )
 
     winget @arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "winget install failed for $id with exit code $LASTEXITCODE"
+    }
 }

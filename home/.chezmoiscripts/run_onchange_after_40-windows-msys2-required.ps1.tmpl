@@ -1,0 +1,23 @@
+{{ if eq .chezmoi.os "windows" -}}
+#Requires -Version 7.1
+$ErrorActionPreference = "Stop"
+
+# packages/windows-msys2-required.txt hash: {{ include "../packages/windows-msys2-required.txt" | sha256sum }}
+$packageFile = {{ joinPath .chezmoi.sourceDir ".." "packages" "windows-msys2-required.txt" | quote }}
+$pacman = "C:\msys64\usr\bin\pacman.exe"
+
+if (-not (Test-Path $pacman)) {
+    throw "MSYS2 pacman was not found at $pacman. Ensure MSYS2.MSYS2 is installed by the WinGet required script, then run chezmoi apply again."
+}
+
+$packages = @(Get-Content $packageFile |
+    ForEach-Object { $_.Trim() } |
+    Where-Object { $_ -and -not $_.StartsWith("#") })
+
+if ($packages.Count -gt 0) {
+    & $pacman -Sy --needed --noconfirm @packages
+    if ($LASTEXITCODE -ne 0) {
+        throw "pacman failed with exit code $LASTEXITCODE"
+    }
+}
+{{ end -}}

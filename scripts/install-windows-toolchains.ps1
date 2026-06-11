@@ -16,8 +16,13 @@ function Install-WinGetPackage {
     )
 
     winget @arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "winget install failed for $Id with exit code $LASTEXITCODE"
+    }
 }
 
+# Optional language/toolchain managers. Required editor dependencies live in
+# packages/*-required.txt and are synchronized by chezmoi apply.
 $Toolchains = @(
     "Schniz.fnm",
     "astral-sh.uv",

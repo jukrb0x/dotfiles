@@ -1,0 +1,2 @@
+# MSYS2 UCRT64 packages required by managed Neovim/LunarVim configuration.
+mingw-w64-ucrt-x86_64-gcc

@@ -1,0 +1,7 @@
+{{ if eq .chezmoi.os "windows" -}}
+#Requires -Version 7.1
+$ErrorActionPreference = "Stop"
+
+$setPathScript = {{ joinPath .chezmoi.sourceDir ".." "scripts" "set-windows-user-path.ps1" | quote }}
+& $setPathScript
+{{ end -}}

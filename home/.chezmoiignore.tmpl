@@ -11,7 +11,7 @@ Library/Fonts/Meslo/*.md
 {{ end }}
 
 {{ if ne .chezmoi.os "darwin" }}
-.chezmoiscripts/**
+.chezmoiscripts/install-packages.sh
 .oh-my-zsh/**
 .tmux/**
 .p10k.zsh
@@ -29,6 +29,7 @@ Library/Fonts/Meslo/*.md
 {{ end }}
 
 {{ if ne .chezmoi.os "windows" }}
+.chezmoiscripts/*windows*.ps1.tmpl
 AppData/**
 Documents/PowerShell/**
 .local/bin/lvim.bat
