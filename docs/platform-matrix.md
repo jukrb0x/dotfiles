@@ -19,7 +19,6 @@
 - `~/.config/ghostty/config`
 - `~/.config/karabiner/karabiner.json`
 - `~/.gnupg/gpg-agent.conf`
-- Logseq settings, until Windows usage is confirmed
 - required Homebrew sync through `packages/Brewfile.required` and the macOS chezmoi onchange script
 - optional Homebrew setup through `packages/Brewfile.optional`, `packages/Brewfile.fonts`, `packages/Brewfile.toolchains`, and the matching `scripts/install-macos-*.sh` commands
 
