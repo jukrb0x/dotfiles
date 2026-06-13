@@ -1,0 +1,4 @@
+# Optional fonts for macOS.
+cask "font-jetbrains-mono-nerd-font"
+cask "font-meslo-lg-nerd-font"
+cask "font-monaspace-nerd-font"

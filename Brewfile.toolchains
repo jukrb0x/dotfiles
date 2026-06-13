@@ -1,0 +1,6 @@
+# Optional macOS language and runtime toolchains.
+brew "n"
+brew "pyenv"
+brew "rustup-init"
+brew "uv"
+brew "yarn"

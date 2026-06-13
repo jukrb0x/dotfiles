@@ -1,3 +1,7 @@
+# Compatibility Brewfile for full manual Homebrew setup.
+# chezmoi apply uses Brewfile.required.
+# Optional apps/tools are installed explicitly with scripts/install-macos-*.sh.
+
 # `brew install --cask` casks
 # `brew install` packages
 # taps
