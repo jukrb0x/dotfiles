@@ -146,34 +146,31 @@ See [docs/windows.md](docs/windows.md) and
 
 ## macOS
 
-macOS currently uses the older Apple Silicon bootstrap script:
+macOS Apple Silicon bootstrap installs the minimum tools needed to initialize
+chezmoi:
 
 ```shell
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/jukrb0x/dotfiles/main/setup.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/jukrb0x/dotfiles/main/bootstrap/macos.sh)"
 ```
 
-or:
+To use a fork or another remote, override the repo URL:
 
 ```shell
-/bin/bash -c "$(wget -O- https://raw.githubusercontent.com/jukrb0x/dotfiles/main/setup.sh)"
+DOTFILES_REPO_URL=https://github.com/you/dotfiles.git /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/jukrb0x/dotfiles/main/bootstrap/macos.sh)"
 ```
 
-That script installs Homebrew and chezmoi, then runs `chezmoi init --apply`.
-Chezmoi then uses the macOS `.chezmoiscripts` flow to install Homebrew packages
-from `Brewfile`, Yarn globals, and LunarVim.
+The bootstrap installs Homebrew only when it is missing, installs chezmoi only
+when it is missing, and runs `chezmoi init` without applying changes.
 
-> [!NOTE]
-> macOS setup still reflects the older version of this repo. The next cleanup is
-> to give macOS the same bootstrap / required state / optional setup boundaries
-> now used by Windows.
+Review the pending changes before applying them:
 
-### macOS TODO
+```shell
+chezmoi diff
+chezmoi apply
+```
 
-- organize macOS scripts and setup around the same bootstrap / required state /
-  optional setup model used by Windows
-- split legacy `setup.sh` behavior into smaller, explicit scripts
-- decide which Homebrew, Yarn, LunarVim, and font steps belong in chezmoi
-  scripts versus optional setup scripts
+Do not skip `chezmoi diff`; the bootstrap is intentionally safe and does not run
+`chezmoi apply` or `chezmoi init --apply`.
 
 ## Maintenance
 
