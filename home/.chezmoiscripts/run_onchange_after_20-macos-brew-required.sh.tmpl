@@ -2,7 +2,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-brewfile="{{ .chezmoi.sourceDir }}/../Brewfile.required"
+brewfile="{{ .chezmoi.sourceDir }}/../packages/Brewfile.required"
 
 if ! command -v brew >/dev/null 2>&1; then
   echo "Homebrew is required before macOS package sync. Run bootstrap/macos.sh first." >&2

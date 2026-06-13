@@ -82,13 +82,13 @@ chezmoi cd
 
 ## Required Packages
 
-Required macOS packages live in `Brewfile.required`.
+Required macOS packages live in `packages/Brewfile.required`.
 
 During `chezmoi apply`, the macOS chezmoi onchange script checks that required
 Homebrew packages are present and runs:
 
 ```shell
-brew bundle install --file=Brewfile.required
+brew bundle install --file=packages/Brewfile.required
 ```
 
 This required layer is for tools the managed dotfiles need in order to work.
@@ -122,9 +122,9 @@ chezmoi cd
 
 These commands use:
 
-- `Brewfile.optional`
-- `Brewfile.fonts`
-- `Brewfile.toolchains`
+- `packages/Brewfile.optional`
+- `packages/Brewfile.fonts`
+- `packages/Brewfile.toolchains`
 
 ## Local Private Config
 
@@ -144,11 +144,23 @@ These files are intentionally not managed by this repo.
 
 ## External Archives
 
-External shell assets use chezmoi externals. Powerlevel10k follows the latest
-GitHub release, matching the freshness model used by the Windows font installer.
+External shell assets can use chezmoi externals, but they are opt-in. Keep the
+default off on existing machines so `chezmoi diff` and `chezmoi apply` do not
+depend on GitHub archive downloads.
+
+To let chezmoi manage shell externals on a machine, add this to that machine's
+chezmoi config:
+
+```toml
+[data]
+manageShellExternals = true
+```
+
+When enabled, Powerlevel10k follows the latest upstream branch archive instead
+of doing a GitHub latest-release lookup during template rendering.
 
 Fonts are not managed as chezmoi externals. Install them explicitly with
-`./scripts/install-macos-fonts.sh`, which uses `Brewfile.fonts`.
+`./scripts/install-macos-fonts.sh`, which uses `packages/Brewfile.fonts`.
 
 `setup.sh` is legacy only. Use `bootstrap/macos.sh`, `chezmoi apply`, and the
 explicit optional setup scripts for current macOS setup.
