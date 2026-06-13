@@ -18,7 +18,6 @@
 - `~/.sleep` and `~/.wakeup`
 - `~/.config/ghostty/config`
 - `~/.config/karabiner/karabiner.json`
-- `~/.config/yarn/global/package.json`
 - `~/.gnupg/gpg-agent.conf`
 - Logseq settings, until Windows usage is confirmed
 - required Homebrew sync through `packages/Brewfile.required` and the macOS chezmoi onchange script
