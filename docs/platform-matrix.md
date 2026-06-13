@@ -21,8 +21,8 @@
 - `~/.config/yarn/global/package.json`
 - `~/.gnupg/gpg-agent.conf`
 - Logseq settings, until Windows usage is confirmed
-- `.chezmoiscripts/run_onchange_before_install-packages.sh`
-- Homebrew setup through `Brewfile` and `setup.sh`
+- required Homebrew sync through `Brewfile.required` and the macOS chezmoi onchange script
+- optional Homebrew setup through `Brewfile.optional`, `Brewfile.fonts`, `Brewfile.toolchains`, and the matching `scripts/install-macos-*.sh` commands
 
 ## Windows only
 
@@ -39,6 +39,9 @@
 - `~/.gitconfig.local`
 - `~/.gitconfig-work`
 - `~/.gitconfig-personal`
+- `~/.zshrc.local.pre`
+- `~/.zshrc.local`
+- `~/.zprofile.local`
 - 1Password-managed secrets
 - private or account-specific Git settings
 - folder-based Git identity rules

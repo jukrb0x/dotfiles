@@ -53,10 +53,17 @@ machine fast to set up.
 ```text
 bootstrap/       minimal platform bootstrap scripts
 home/            chezmoi source root, applied to $HOME
-packages/        required and optional package lists
+packages/        Windows package lists
 scripts/         explicit optional setup/maintenance scripts
 docs/            platform notes and setup decisions
-Brewfile         current macOS Homebrew package list
+Brewfile         compatibility macOS Homebrew bundle
+Brewfile.required
+                 required macOS packages synced by chezmoi apply
+Brewfile.optional
+                 optional macOS apps and tools
+Brewfile.fonts  optional macOS fonts
+Brewfile.toolchains
+                 optional macOS toolchains
 setup.sh         legacy macOS Apple Silicon bootstrap
 ```
 
@@ -171,6 +178,13 @@ chezmoi apply
 
 Do not skip `chezmoi diff`; the bootstrap is intentionally safe and does not run
 `chezmoi apply` or `chezmoi init --apply`.
+
+Required macOS packages are declared in `Brewfile.required` and synchronized by
+`chezmoi apply`. Optional apps, fonts, and toolchains live in separate Brewfiles
+and are installed only by explicit scripts.
+
+See [docs/macos.md](docs/macos.md) for fresh setup, existing-machine migration,
+daily maintenance, and the required-vs-optional Homebrew model.
 
 ## Maintenance
 
