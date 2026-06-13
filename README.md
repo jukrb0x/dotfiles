@@ -66,7 +66,6 @@ packages/Brewfile.fonts
                  optional macOS fonts
 packages/Brewfile.toolchains
                  optional macOS toolchains
-setup.sh         legacy macOS Apple Silicon bootstrap
 ```
 
 ## Setup Model
