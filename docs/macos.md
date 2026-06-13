@@ -147,5 +147,8 @@ These files are intentionally not managed by this repo.
 External shell assets use chezmoi externals. Powerlevel10k follows the latest
 GitHub release, matching the freshness model used by the Windows font installer.
 
+Fonts are not managed as chezmoi externals. Install them explicitly with
+`./scripts/install-macos-fonts.sh`, which uses `Brewfile.fonts`.
+
 `setup.sh` is legacy only. Use `bootstrap/macos.sh`, `chezmoi apply`, and the
 explicit optional setup scripts for current macOS setup.

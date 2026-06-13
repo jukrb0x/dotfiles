@@ -28,22 +28,3 @@
     stripComponents = 1
     refreshPeriod = "168h"
 {{- end }}
-
-{{- $fontDir := "" }}
-{{- if eq .chezmoi.os "darwin" }}
-{{-   $fontDir = "Library/Fonts" }}
-{{- end }}
-
-{{- if ne $fontDir "" }}
-["{{ $fontDir }}/Meslo"]
-    type = "archive"
-    url = "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.tar.xz"
-    exact = true
-    refreshPeriod = "168h"
-
-["{{ $fontDir }}/Monaspace"]
-    type = "archive"
-    url = "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Monaspace.tar.xz"
-    exact = true
-    refreshPeriod = "168h"
-{{- end }}
