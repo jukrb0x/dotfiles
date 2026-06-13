@@ -5,6 +5,10 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+if [[ -f "$HOME/.zshrc.local.pre" ]]; then
+  source "$HOME/.zshrc.local.pre"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # basic PATHs
 export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -172,3 +176,7 @@ export PATH=$PNPM_HOME:$PATH
 
 # Zoxide
 eval "$(zoxide init zsh)"
+
+if [[ -f "$HOME/.zshrc.local" ]]; then
+  source "$HOME/.zshrc.local"
+fi
