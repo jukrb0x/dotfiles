@@ -85,6 +85,7 @@ $Apps = @(
 
     # App maintenance
     @{ Id = "GeekUninstaller.GeekUninstaller" },
+    @{ Id = "voidtools.Everything" },
 
     # Editors and notes
     @{ Id = "Microsoft.VisualStudioCode" },
