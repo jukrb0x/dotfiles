@@ -103,8 +103,8 @@ lvim.plugins = {
   { "plasticboy/vim-markdown" },
   { "wakatime/vim-wakatime" },
   { "norcalli/nvim-colorizer.lua" },
-  -- input method switcher
-  { "ybian/smartim" },
+  -- input method switcher (smartim's im-select helper is macOS-only)
+  { "ybian/smartim", enabled = vim.fn.has("macunix") == 1 },
   {
     "zbirenbaum/copilot-cmp",
     event = "InsertEnter",
