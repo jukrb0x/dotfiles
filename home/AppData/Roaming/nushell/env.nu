@@ -1,6 +1,7 @@
 # LunarVim
 $env.XDG_DATA_HOME = $env.APPDATA
 $env.XDG_CONFIG_HOME = ($env.USERPROFILE | path join .config)
+$env.XDG_STATE_HOME = ($env.LOCALAPPDATA | path join state)
 $env.XDG_CACHE_HOME = $env.TEMP
 
 $env.LUNARVIM_RUNTIME_DIR = ($env.XDG_DATA_HOME | path join lunarvim)
@@ -11,7 +12,7 @@ $env.LUNARVIM_BASE_DIR = ($env.LUNARVIM_RUNTIME_DIR | path join lvim)
 $env.EDITOR = "lvim"
 $env.VISUAL = $env.EDITOR
 
-# fnm
+# fnm reads XDG_STATE_HOME before XDG_CACHE_HOME for multishell shims.
 if (which fnm | is-not-empty) {
     fnm env --json | from json | load-env
 

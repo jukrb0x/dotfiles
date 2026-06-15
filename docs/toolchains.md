@@ -45,6 +45,11 @@ Nushell initializes `fnm` through JSON output:
 fnm env --json | from json | load-env
 ```
 
+Before running `fnm`, Nushell sets `XDG_STATE_HOME` to
+`$env.LOCALAPPDATA/state`. `fnm` uses that state directory for
+`FNM_MULTISHELL_PATH` before falling back to `XDG_CACHE_HOME`; this keeps the
+per-shell Node shims out of `%TEMP%`.
+
 Then `FNM_MULTISHELL_PATH` is prepended to `PATH`, which lets Nushell resolve
 `node`, `npm`, and Corepack-managed package managers.
 
