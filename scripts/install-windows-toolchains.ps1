@@ -74,7 +74,17 @@ if (Get-Command rustup -ErrorAction SilentlyContinue) {
 }
 
 if (Get-Command uv -ErrorAction SilentlyContinue) {
-    uv python install
+    $pythonCommand = Get-Command python -ErrorAction SilentlyContinue
+    $windowsAppsPath = Join-Path $env:LOCALAPPDATA "Microsoft\WindowsApps"
+    $pythonIsWindowsAppsAlias = $pythonCommand -and
+        $pythonCommand.Source -and
+        $pythonCommand.Source.StartsWith($windowsAppsPath, [StringComparison]::OrdinalIgnoreCase)
+
+    if (-not $pythonCommand -or $pythonIsWindowsAppsAlias) {
+        uv python install --default
+    } else {
+        uv python install
+    }
 }
 
 Write-Host "Installing LunarVim with the official Windows installer..."

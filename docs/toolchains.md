@@ -39,6 +39,13 @@ This installs:
 - Go: WinGet stable Go
 - Bun: WinGet Bun
 
+Python is installed with `uv python install`. If `python` is missing, or if it
+only resolves to the Microsoft Store alias in `WindowsApps`, the script uses
+`uv python install --default` so uv creates `python.exe`, `python3.exe`, and
+versioned Python launchers. The Windows PATH script puts uv's executable
+directories before the Microsoft Store aliases so plain `python` resolves to
+uv-managed Python when uv owns the default launcher.
+
 Nushell initializes `fnm` through JSON output:
 
 ```nu

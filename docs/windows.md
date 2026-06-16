@@ -155,10 +155,14 @@ pwsh ./scripts/set-windows-user-path.ps1
 
 It ensures these user paths exist:
 
+- `%APPDATA%\..\bin`
 - `%USERPROFILE%\.local\bin`
 - `%USERPROFILE%\scoop\shims`
 - `%LOCALAPPDATA%\Microsoft\WinGet\Links`
 - `C:\msys64\ucrt64\bin`
+
+Managed paths are placed before existing user paths so uv's Python launchers win
+over the Microsoft Store aliases in `%LOCALAPPDATA%\Microsoft\WindowsApps`.
 
 Restart terminals after updating user environment variables. GUI-launched tools
 may need a sign out/sign in cycle before they inherit the updated user PATH.
