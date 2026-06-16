@@ -83,7 +83,8 @@ $Apps = @(
     # Secrets
     @{ Id = "AgileBits.1Password" },
 
-    # App maintenance
+    # System utilities
+    @{ Id = "7zip.7zip" },
     @{ Id = "GeekUninstaller.GeekUninstaller" },
     @{ Id = "voidtools.Everything" },
 
