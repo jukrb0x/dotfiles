@@ -7,7 +7,6 @@
 	# proxy = socks5://127.0.0.1:6153
 [commit]
 	gpgsign = false
-	template = ~/.stCommitMsg
 [gpg]
 	program = gpg
 [tag]
@@ -81,8 +80,6 @@
 	tlstimeout = 3
 [rebase]
 	backend = merge
-[protocol]
-	version = 1
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
