@@ -58,8 +58,6 @@ home/            chezmoi source root, applied to $HOME
 packages/        platform package manifests
 scripts/         explicit optional setup/maintenance scripts
 docs/            platform notes and setup decisions
-packages/Brewfile
-                 compatibility macOS Homebrew bundle
 packages/Brewfile.required
                  required macOS packages synced by chezmoi apply
 packages/Brewfile.optional
@@ -68,6 +66,10 @@ packages/Brewfile.fonts
                  optional macOS fonts
 packages/Brewfile.toolchains
                  optional macOS toolchains
+packages/Brewfile.linux.required
+                 required Linux packages synced by chezmoi apply
+packages/Brewfile.linux.toolchains
+                 optional Linux toolchains
 ```
 
 ## Setup Model
