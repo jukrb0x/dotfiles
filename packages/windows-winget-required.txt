@@ -2,6 +2,7 @@
 Git.Git
 Microsoft.PowerShell
 twpayne.chezmoi
+Nushell.Nushell
 Neovim.Neovim
 Starship.Starship
 ajeetdsouza.zoxide
