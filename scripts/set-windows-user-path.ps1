@@ -5,6 +5,7 @@ $paths = @(
     (Join-Path $HOME ".local\bin"),
     (Join-Path $HOME "scoop\shims"),
     (Join-Path $env:LOCALAPPDATA "Microsoft\WinGet\Links"),
+    (Join-Path $env:ProgramFiles "7-Zip"),
     "C:\msys64\ucrt64\bin"
 )
 

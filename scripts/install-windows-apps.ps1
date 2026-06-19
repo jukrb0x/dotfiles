@@ -83,6 +83,11 @@ $Apps = @(
     # Secrets
     @{ Id = "AgileBits.1Password" },
 
+    # Internet Browsers
+    @{ Id = "Google.Chrome" },
+    @{ Id = "Vivaldi.Vivaldi" },
+    @{ Id = "Brave.Brave" },
+
     # System utilities
     @{ Id = "7zip.7zip" },
     @{ Id = "GeekUninstaller.GeekUninstaller" },
@@ -129,3 +134,5 @@ foreach ($app in $Apps) {
 
     Install-WinGetPackage -Id $id -PackageName $packageName -Source $source -Name $name
 }
+
+& (Join-Path $PSScriptRoot "set-windows-user-path.ps1")

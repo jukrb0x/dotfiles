@@ -159,6 +159,7 @@ It ensures these user paths exist:
 - `%USERPROFILE%\.local\bin`
 - `%USERPROFILE%\scoop\shims`
 - `%LOCALAPPDATA%\Microsoft\WinGet\Links`
+- `%ProgramFiles%\7-Zip`
 - `C:\msys64\ucrt64\bin`
 
 Managed paths are placed before existing user paths so uv's Python launchers win
