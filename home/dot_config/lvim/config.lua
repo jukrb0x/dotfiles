@@ -3,9 +3,6 @@
 -- Forum: https://www.reddit.com/r/lunarvim/
 -- Discord: https://discord.com/invite/Xb9B4Ny
 
--- vim config
-vim.opt.relativenumber = true
-
 if vim.fn.has("win32") == 1 then
   -- Make LunarVim's terminal and clipboard behave consistently on Windows.
   vim.opt.shell = "pwsh.exe"
@@ -27,36 +24,36 @@ if vim.fn.has("win32") == 1 then
       ["*"] = "win32yank.exe -o --lf",
     },
   }
+
+  -- Avoid nvim-tree watcher storms when browsing the Windows home directory.
+  -- Git integration stays enabled; only noisy home/junction paths skip watches.
+  local home_dir = vim.fn.expand("~"):gsub("\\", "\\\\")
+  lvim.builtin.nvimtree.setup.filesystem_watchers = {
+    enable = true,
+    ignore_dirs = {
+      home_dir .. "$",
+      home_dir .. "\\\\AppData",
+      home_dir .. "\\\\Application Data",
+      home_dir .. "\\\\Cookies",
+      home_dir .. "\\\\Local Settings",
+      home_dir .. "\\\\My Documents",
+      home_dir .. "\\\\NetHood",
+      home_dir .. "\\\\PrintHood",
+      home_dir .. "\\\\Recent",
+      home_dir .. "\\\\SendTo",
+      home_dir .. "\\\\Start Menu",
+      home_dir .. "\\\\Templates",
+    },
+  }
 end
 
--- for Github copilot
+-- vim config
+vim.opt.relativenumber = true
 vim.g.copilot_assume_mapped = true
 
 -- general
 lvim.format_on_save.enabled = false
 lvim.transparent_window = true
-
--- Avoid nvim-tree watcher storms when browsing the Windows home directory.
--- Git integration stays enabled; only noisy home/junction paths skip watches.
-local home_dir = vim.fn.expand("~"):gsub("\\", "\\\\")
-lvim.builtin.nvimtree.setup.filesystem_watchers = {
-  enable = true,
-  ignore_dirs = {
-    home_dir .. "$",
-    home_dir .. "\\\\AppData",
-    home_dir .. "\\\\Application Data",
-    home_dir .. "\\\\Cookies",
-    home_dir .. "\\\\Local Settings",
-    home_dir .. "\\\\My Documents",
-    home_dir .. "\\\\NetHood",
-    home_dir .. "\\\\PrintHood",
-    home_dir .. "\\\\Recent",
-    home_dir .. "\\\\SendTo",
-    home_dir .. "\\\\Start Menu",
-    home_dir .. "\\\\Templates",
-  },
-}
-
 
 -- Avoid indent-blankline calling nvim-treesitter's experimental indent code,
 -- which crashes on Markdown injection queries with this Neovim/parser combo.
