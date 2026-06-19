@@ -82,13 +82,17 @@ chezmoi cd
 
 ## Required Packages
 
-Required macOS packages live in `packages/Brewfile.required`.
+Required macOS packages live in:
+
+- `packages/Brewfile.required`
+- `packages/Brewfile.macos.required`
 
 During `chezmoi apply`, the macOS chezmoi onchange script checks that required
 Homebrew packages are present and runs:
 
 ```shell
 brew bundle install --file=packages/Brewfile.required
+brew bundle install --file=packages/Brewfile.macos.required
 ```
 
 This required layer is for tools the managed dotfiles need in order to work.
@@ -123,8 +127,10 @@ chezmoi cd
 These commands use:
 
 - `packages/Brewfile.optional`
+- `packages/Brewfile.macos.optional`
 - `packages/Brewfile.fonts`
 - `packages/Brewfile.toolchains`
+- `packages/Brewfile.macos.toolchains`
 
 ## Local Private Config
 

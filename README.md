@@ -59,17 +59,23 @@ packages/        platform package manifests
 scripts/         explicit optional setup/maintenance scripts
 docs/            platform notes and setup decisions
 packages/Brewfile.required
-                 required macOS packages synced by chezmoi apply
+                 required cross-platform Homebrew packages synced by chezmoi apply
+packages/Brewfile.macos.required
+                 required macOS-only Homebrew packages synced by chezmoi apply
+packages/Brewfile.linux.required
+                 required Linux-only Homebrew packages synced by chezmoi apply
 packages/Brewfile.optional
-                 optional macOS apps and tools
+                 optional cross-platform Homebrew packages
+packages/Brewfile.macos.optional
+                 optional macOS-only Homebrew packages and casks
 packages/Brewfile.fonts
                  optional macOS fonts
 packages/Brewfile.toolchains
-                 optional macOS toolchains
-packages/Brewfile.linux.required
-                 required Linux packages synced by chezmoi apply
+                 optional cross-platform Homebrew toolchains
+packages/Brewfile.macos.toolchains
+                 optional macOS-only Homebrew toolchains
 packages/Brewfile.linux.toolchains
-                 optional Linux toolchains
+                 optional Linux-only Homebrew toolchains
 ```
 
 ## Setup Model
@@ -185,8 +191,9 @@ Do not skip `chezmoi diff`; the bootstrap is intentionally safe and does not run
 `chezmoi apply` or `chezmoi init --apply`.
 
 Required macOS packages are declared in `packages/Brewfile.required` and
-synchronized by `chezmoi apply`. Optional apps, fonts, and toolchains live in
-separate Brewfiles under `packages/` and are installed only by explicit scripts.
+`packages/Brewfile.macos.required`, then synchronized by `chezmoi apply`.
+Optional apps, fonts, and toolchains live in separate Brewfiles under
+`packages/` and are installed only by explicit scripts.
 
 See [docs/macos.md](docs/macos.md) for fresh setup, existing-machine migration,
 daily maintenance, and the required-vs-optional Homebrew model.

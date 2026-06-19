@@ -2,7 +2,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-brewfile="{{ .chezmoi.sourceDir }}/../packages/Brewfile.linux.required"
+brewfiles=(
+  "{{ .chezmoi.sourceDir }}/../packages/Brewfile.required"
+  "{{ .chezmoi.sourceDir }}/../packages/Brewfile.linux.required"
+)
 
 if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -13,5 +16,7 @@ if ! command -v brew >/dev/null 2>&1; then
   exit 1
 fi
 
-brew bundle --file="$brewfile" check || brew bundle --file="$brewfile" install
+for brewfile in "${brewfiles[@]}"; do
+  brew bundle --file="$brewfile" check || brew bundle --file="$brewfile" install
+done
 {{- end }}

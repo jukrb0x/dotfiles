@@ -13,18 +13,23 @@ apps and SDK paths stay on macOS.
 
 ## Required Packages
 
-Required Linux packages live in `packages/Brewfile.linux.required`.
+Required Linux packages live in:
+
+- `packages/Brewfile.required`
+- `packages/Brewfile.linux.required`
 
 During `chezmoi apply`, the Linux chezmoi onchange script checks that Homebrew
 is present and runs:
 
 ```shell
+brew bundle --file=packages/Brewfile.required install
 brew bundle --file=packages/Brewfile.linux.required install
 ```
 
-Use this Brewfile for CLI tools shared with macOS when the Homebrew formula name
-is portable. Keep macOS-only formulae such as `pinentry-mac` in the macOS
-Brewfile.
+Use `packages/Brewfile.required` for CLI tools shared with macOS when the
+Homebrew formula name is portable. Keep Linux-only formulae in
+`packages/Brewfile.linux.required` and macOS-only formulae such as
+`pinentry-mac` in the macOS Brewfile.
 
 ## Shell
 
@@ -36,13 +41,16 @@ chsh -s "$(command -v zsh)"
 
 ## Optional Toolchains
 
-Optional Linux toolchains live in `packages/Brewfile.linux.toolchains`.
+Optional Linux toolchains live in:
+
+- `packages/Brewfile.toolchains`
+- `packages/Brewfile.linux.toolchains`
 
 Install them explicitly:
 
 ```shell
 chezmoi cd
-./scripts/install-linux-toolchains.sh
+bash ./scripts/install-linux-toolchains.sh
 ```
 
 This script also installs LunarVim with the official Linux/macOS installer,
@@ -51,10 +59,14 @@ than part of routine `chezmoi apply`.
 
 ## Optional Apps And Fonts
 
-There is no Linux apps or fonts script yet.
+Shared optional Homebrew packages can be installed explicitly:
 
-Add `scripts/install-linux-apps.sh` when there are optional Linux packages worth
-installing outside required state. Add `scripts/install-linux-fonts.sh` only
+```shell
+chezmoi cd
+bash ./scripts/install-linux-apps.sh
+```
+
+There is no Linux fonts script yet. Add `scripts/install-linux-fonts.sh` only
 when targeting a full Linux desktop where user-font installation can be handled
 without distro-specific assumptions.
 

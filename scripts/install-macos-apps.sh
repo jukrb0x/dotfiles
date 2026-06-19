@@ -3,11 +3,16 @@ set -euo pipefail
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd -- "$script_dir/.." && pwd)"
-brewfile="$repo_root/packages/Brewfile.optional"
+brewfiles=(
+  "$repo_root/packages/Brewfile.optional"
+  "$repo_root/packages/Brewfile.macos.optional"
+)
 
 if ! command -v brew >/dev/null 2>&1; then
   echo "Homebrew is unavailable. Run bootstrap/macos.sh first." >&2
   exit 1
 fi
 
-brew bundle install --file="$brewfile"
+for brewfile in "${brewfiles[@]}"; do
+  brew bundle install --file="$brewfile"
+done

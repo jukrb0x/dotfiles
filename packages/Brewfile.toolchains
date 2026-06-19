@@ -1,4 +1,6 @@
-# Optional macOS language and runtime toolchains.
-brew "n"
+# Optional language and runtime toolchains.
 brew "rustup-init"
 brew "uv"
+brew "n"
+brew "bun"
+brew "go"

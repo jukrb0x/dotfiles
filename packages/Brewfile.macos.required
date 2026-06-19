@@ -1,0 +1,3 @@
+# Required macOS-only Homebrew formulae for managed dotfiles.
+brew "pinentry-mac"
+brew "trash"

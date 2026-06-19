@@ -1,4 +1,4 @@
-# Required Homebrew formulae for managed macOS dotfiles.
+# Required Homebrew formulae for managed dotfiles.
 brew "bat"
 brew "btop"
 brew "chezmoi"
@@ -13,10 +13,8 @@ brew "git-lfs"
 brew "gnupg"
 brew "lazygit"
 brew "neovim"
-brew "pinentry-mac"
 brew "pnpm"
 brew "tmux"
-brew "trash"
 brew "tree"
 brew "yazi"
 brew "zoxide"

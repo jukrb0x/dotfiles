@@ -14,8 +14,8 @@
 - `~/.sleep` and `~/.wakeup`
 - `~/.config/ghostty/config`
 - `~/.config/karabiner/karabiner.json`
-- required Homebrew sync through `packages/Brewfile.required` and the macOS chezmoi onchange script
-- optional Homebrew setup through `packages/Brewfile.optional`, `packages/Brewfile.fonts`, `packages/Brewfile.toolchains`, and the matching `scripts/install-macos-*.sh` commands
+- required Homebrew sync through `packages/Brewfile.required`, `packages/Brewfile.macos.required`, and the macOS chezmoi onchange script
+- optional Homebrew setup through `packages/Brewfile.optional`, `packages/Brewfile.macos.optional`, `packages/Brewfile.fonts`, `packages/Brewfile.toolchains`, `packages/Brewfile.macos.toolchains`, and the matching `scripts/install-macos-*.sh` commands
 
 ## macOS and Linux
 
@@ -28,7 +28,8 @@
 
 ## Linux only
 
-- required Linuxbrew sync through `packages/Brewfile.linux.required` and the Linux chezmoi onchange script
+- required Linuxbrew sync through `packages/Brewfile.required`, `packages/Brewfile.linux.required`, and the Linux chezmoi onchange script
+- optional Linuxbrew setup through `packages/Brewfile.optional`, `packages/Brewfile.toolchains`, `packages/Brewfile.linux.toolchains`, and the matching `scripts/install-linux-*.sh` commands
 
 ## WSL only
 
