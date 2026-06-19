@@ -82,12 +82,6 @@ lvim.lsp.buffer_mappings.normal_mode['fr'] = { "<cmd>lua vim.lsp.buf.rename()<cr
 lvim.builtin.treesitter.highlight.enable = true
 lvim.builtin.treesitter.autotag.enable = true
 
--- LunarVim's bundled Tree-sitter stack is not compatible with Neovim 0.12's
--- highlighter API. Leave LSP hover/K working, but avoid decorator crashes.
-if vim.version().minor >= 12 then
-  lvim.builtin.treesitter.highlight.enable = false
-end
-
 -- neovim plugins
 lvim.plugins = {
   -- { "abzcoding/zephyr-nvim" },  -- not working
