@@ -1,4 +1,4 @@
-{{- if and (eq .chezmoi.os "darwin") (get . "manageShellExternals") }}
+{{- if and (or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux")) (get . "manageShellExternals") }}
 [".tmux"]
     type = "git-repo"
     url = "https://github.com/gpakosz/.tmux.git"

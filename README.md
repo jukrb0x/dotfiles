@@ -30,6 +30,8 @@ point.
 - package lists for required and optional tools
 - Windows bootstrap and setup automation
 - macOS Apple Silicon setup through the existing Homebrew flow
+- Linux setup through Linuxbrew and shared zsh config
+- WSL setup through Ubuntu prerequisites plus the Linux layer
 - fonts and visual environment preferences
 
 ## Design Philosophy
@@ -186,6 +188,19 @@ separate Brewfiles under `packages/` and are installed only by explicit scripts.
 
 See [docs/macos.md](docs/macos.md) for fresh setup, existing-machine migration,
 daily maintenance, and the required-vs-optional Homebrew model.
+
+## Linux
+
+Linux uses Homebrew for Linux, sharing the zsh-oriented shell setup with macOS
+while keeping macOS-only paths and apps out of Linux.
+
+See [docs/linux.md](docs/linux.md) for Linuxbrew package sync and shared shell
+notes.
+
+## WSL
+
+See [docs/wsl.md](docs/wsl.md) for Ubuntu bootstrap, networking, and
+default-shell notes.
 
 ## Maintenance
 

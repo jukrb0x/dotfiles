@@ -1,0 +1,17 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/usr/bin/env bash
+set -euo pipefail
+
+brewfile="{{ .chezmoi.sourceDir }}/../packages/Brewfile.linux.required"
+
+if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is required before Linux package sync. Run bootstrap/wsl.sh first." >&2
+  exit 1
+fi
+
+brew bundle --file="$brewfile" check || brew bundle --file="$brewfile" install
+{{- end }}

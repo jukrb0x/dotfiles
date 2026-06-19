@@ -1,33 +1,49 @@
-{{ if eq .chezmoi.os "darwin" }}
+{{- $isDarwin := eq .chezmoi.os "darwin" -}}
+{{- $isLinux := eq .chezmoi.os "linux" -}}
+{{- $isWindows := eq .chezmoi.os "windows" -}}
+{{- $usesSharedZsh := or $isDarwin $isLinux -}}
+
+{{ if $usesSharedZsh }}
 .oh-my-zsh/cache/**
 .oh-my-zsh/custom/themes/powerlevel10k/**/*.zwc
+{{ end }}
+
+{{ if $isDarwin }}
 Library/Fonts/Meslo/*.md
 {{ end }}
 
 .zoxide.nu
 .logseq/**
 
-{{ if eq .chezmoi.os "windows" }}
+{{ if $isWindows }}
 .config/lvim/lazy-lock.json
 {{ end }}
 
-{{ if ne .chezmoi.os "darwin" }}
+{{ if not $usesSharedZsh }}
 .chezmoiscripts/install-packages.sh
 .oh-my-zsh/**
 .tmux/**
 .p10k.zsh
 .tmux.conf
 .tmux.conf.local
+.zprofile
 .zsh_aliases
 .zshrc
+.gnupg/**
+{{ end }}
+
+{{ if not $isLinux }}
+.chezmoiscripts/*linux*.sh.tmpl
+{{ end }}
+
+{{ if not $isDarwin }}
 .sleep
 .wakeup
 .config/ghostty/**
 .config/karabiner/**
-.gnupg/**
 {{ end }}
 
-{{ if ne .chezmoi.os "windows" }}
+{{ if not $isWindows }}
 .chezmoiscripts/*windows*.ps1.tmpl
 AppData/**
 Documents

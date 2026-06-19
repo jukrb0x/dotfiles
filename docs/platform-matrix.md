@@ -11,16 +11,28 @@
 
 ## macOS only
 
-- `~/.zshrc`
-- `~/.zsh_aliases`
-- `~/.p10k.zsh`
-- `~/.tmux` and `~/.tmux.conf*`
 - `~/.sleep` and `~/.wakeup`
 - `~/.config/ghostty/config`
 - `~/.config/karabiner/karabiner.json`
-- `~/.gnupg/gpg-agent.conf`
 - required Homebrew sync through `packages/Brewfile.required` and the macOS chezmoi onchange script
 - optional Homebrew setup through `packages/Brewfile.optional`, `packages/Brewfile.fonts`, `packages/Brewfile.toolchains`, and the matching `scripts/install-macos-*.sh` commands
+
+## macOS and Linux
+
+- `~/.zshrc`
+- `~/.zsh_aliases`
+- `~/.zprofile`
+- `~/.p10k.zsh`
+- `~/.tmux` and `~/.tmux.conf*`
+- `~/.gnupg/gpg-agent.conf`, rendered with platform-specific pinentry
+
+## Linux only
+
+- required Linuxbrew sync through `packages/Brewfile.linux.required` and the Linux chezmoi onchange script
+
+## WSL only
+
+- WSL bootstrap through `bootstrap/wsl.sh`
 
 ## Windows only
 

@@ -1,0 +1,5 @@
+# Optional Linux language and runtime toolchains.
+brew "bun"
+brew "go"
+brew "rustup-init"
+brew "uv"
