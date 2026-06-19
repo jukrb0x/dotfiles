@@ -167,14 +167,6 @@ fi
 # GPG workaround
 export GPG_TTY=$(tty)
 
-# pyenv Initialization
-export PYENV_ROOT="$HOME/.pyenv"
-if command -v pyenv >/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-elif [[ -d "$PYENV_ROOT/bin" ]]; then
-  export PATH="$PYENV_ROOT/bin:$PATH"
-fi
-
 # pnpm
 {{- if eq .chezmoi.os "darwin" }}
 export PNPM_HOME="$HOME/Library/pnpm"
