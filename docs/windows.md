@@ -42,6 +42,7 @@ chezmoi apply
 These scripts live in `home/.chezmoiscripts` and are templated so they only run
 on Windows:
 
+- `run_after_05-windows-user-environment.ps1.tmpl`
 - `run_after_10-windows-user-path.ps1.tmpl`
 - `run_onchange_after_20-windows-winget-required.ps1.tmpl`
 - `run_onchange_after_30-windows-scoop-required.ps1.tmpl`
@@ -90,6 +91,25 @@ pwsh ./scripts/install-windows-toolchains.ps1
 
 Use them when you want the fuller machine setup. They should not duplicate
 packages already owned by `packages/*-required.txt`.
+
+## User Environment
+
+Windows-wide shell/app consistency belongs in the user environment, not only in
+shell startup files. `chezmoi apply` sets:
+
+- `XDG_CONFIG_HOME=%USERPROFILE%\.config`
+- `XDG_DATA_HOME=%APPDATA%`
+- `XDG_STATE_HOME=%LOCALAPPDATA%\state`
+- `XDG_CACHE_HOME=%LOCALAPPDATA%\cache`
+
+This makes XDG-aware tools resolve user data consistently from PowerShell, cmd,
+Nushell, GUI-launched apps, and automation.
+
+Run the same logic manually if needed:
+
+```powershell
+pwsh ./scripts/set-windows-user-environment.ps1
+```
 
 ## WinGet
 

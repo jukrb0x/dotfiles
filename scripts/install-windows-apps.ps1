@@ -135,4 +135,5 @@ foreach ($app in $Apps) {
     Install-WinGetPackage -Id $id -PackageName $packageName -Source $source -Name $name
 }
 
+& (Join-Path $PSScriptRoot "set-windows-user-environment.ps1")
 & (Join-Path $PSScriptRoot "set-windows-user-path.ps1")

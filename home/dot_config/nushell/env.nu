@@ -1,8 +1,8 @@
 # LunarVim
-$env.XDG_DATA_HOME = $env.APPDATA
-$env.XDG_CONFIG_HOME = ($env.USERPROFILE | path join .config)
-$env.XDG_STATE_HOME = ($env.LOCALAPPDATA | path join state)
-$env.XDG_CACHE_HOME = $env.TEMP
+$env.XDG_DATA_HOME = ($env.XDG_DATA_HOME? | default $env.APPDATA)
+$env.XDG_CONFIG_HOME = ($env.XDG_CONFIG_HOME? | default ($env.USERPROFILE | path join .config))
+$env.XDG_STATE_HOME = ($env.XDG_STATE_HOME? | default ($env.LOCALAPPDATA | path join state))
+$env.XDG_CACHE_HOME = ($env.XDG_CACHE_HOME? | default ($env.LOCALAPPDATA | path join cache))
 
 $env.LUNARVIM_RUNTIME_DIR = ($env.XDG_DATA_HOME | path join lunarvim)
 $env.LUNARVIM_CONFIG_DIR = ($env.XDG_CONFIG_HOME | path join lvim)

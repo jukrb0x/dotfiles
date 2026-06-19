@@ -55,6 +55,7 @@ foreach ($toolchain in $Toolchains) {
     Install-WinGetPackage $toolchain
 }
 
+& (Join-Path $PSScriptRoot "set-windows-user-environment.ps1")
 & (Join-Path $PSScriptRoot "set-windows-user-path.ps1")
 
 if (Get-Command fnm -ErrorAction SilentlyContinue) {

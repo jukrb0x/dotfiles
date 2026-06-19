@@ -21,6 +21,23 @@ function Set-ChezmoiPowerShellInterpreter {
         $block + "`n" | Set-Content -Path $configFile -Encoding UTF8
     }
 }
+
+function Set-WindowsUserEnvironment {
+    $xdgEnvironment = [ordered]@{
+        XDG_CONFIG_HOME = Join-Path $HOME ".config"
+        XDG_DATA_HOME   = $env:APPDATA
+        XDG_STATE_HOME  = Join-Path $env:LOCALAPPDATA "state"
+        XDG_CACHE_HOME  = Join-Path $env:LOCALAPPDATA "cache"
+    }
+
+    foreach ($name in $xdgEnvironment.Keys) {
+        $path = [IO.Path]::GetFullPath($xdgEnvironment[$name])
+        [Environment]::SetEnvironmentVariable($name, $path, "User")
+        Set-Item -Path "Env:$name" -Value $path
+        Write-Host "Set user $name to $path."
+    }
+}
+
 function Test-WinGetPackageInstalled {
     param(
         [Parameter(Mandatory)] [string] $Id,
@@ -62,6 +79,7 @@ function Install-WinGetPackage {
     }
 }
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+Set-WindowsUserEnvironment
 
 $BootstrapPackages = @(
     "Git.Git",

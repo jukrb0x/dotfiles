@@ -3,6 +3,7 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $packageFile = Join-Path $repoRoot "packages\windows-scoop.txt"
+$setUserEnvironmentScript = Join-Path $PSScriptRoot "set-windows-user-environment.ps1"
 $setUserPathScript = Join-Path $PSScriptRoot "set-windows-user-path.ps1"
 
 if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
@@ -12,6 +13,7 @@ if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
     & "$env:TEMP\install-scoop.ps1" -RunAsAdmin
 }
 
+& $setUserEnvironmentScript
 & $setUserPathScript
 
 $packages = @(Get-Content $packageFile |
