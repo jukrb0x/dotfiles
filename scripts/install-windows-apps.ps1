@@ -1,76 +1,8 @@
 #Requires -Version 7.1
 $ErrorActionPreference = "Stop"
 
-function Test-WinGetPackageInstalled {
-    param(
-        [string] $Id,
-        [string] $Name,
-        [string] $Source = "winget"
-    )
+Import-Module (Join-Path $PSScriptRoot "lib\WindowsSetup.psm1") -Force -DisableNameChecking
 
-    $arguments = @(
-        "list"
-        "--exact"
-        "--source", $Source
-        "--disable-interactivity"
-    )
-
-    if ($Id) {
-        $arguments += @("--id", $Id)
-    } else {
-        $arguments += @("--name", $Name)
-    }
-
-    winget @arguments | Out-Null
-    return $LASTEXITCODE -eq 0
-}
-
-function Install-WinGetPackage {
-    param(
-        [string] $Id,
-        [string] $PackageName,
-        [string] $Source = "winget",
-        [string] $Name = $Id
-    )
-
-    $displayName = if ($Name) { $Name } elseif ($PackageName) { $PackageName } else { $Id }
-
-    if (Test-WinGetPackageInstalled -Id $Id -Name $PackageName -Source $Source) {
-        Write-Host "$displayName is already installed."
-        return
-    }
-
-    Write-Host "Installing $displayName from $Source..."
-
-    if ($Id) {
-        $arguments = @(
-            "install"
-            "--id", $Id
-            "--exact"
-            "--source", $Source
-            "--silent"
-            "--disable-interactivity"
-            "--accept-source-agreements"
-            "--accept-package-agreements"
-        )
-    } else {
-        $arguments = @(
-            "install"
-            $PackageName
-            "--exact"
-            "--source", $Source
-            "--silent"
-            "--disable-interactivity"
-            "--accept-source-agreements"
-            "--accept-package-agreements"
-        )
-    }
-
-    winget @arguments
-    if ($LASTEXITCODE -ne 0) {
-        throw "winget install failed for $displayName with exit code $LASTEXITCODE"
-    }
-}
 # Optional WinGet-managed apps/tools, ordered by setup dependency and daily workflow.
 # Required dotfiles dependencies live in packages/windows-winget-required.txt and
 # are synchronized by chezmoi apply.

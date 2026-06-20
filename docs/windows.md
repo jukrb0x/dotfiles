@@ -103,7 +103,9 @@ shell startup files. `chezmoi apply` sets:
 - `XDG_CACHE_HOME=%LOCALAPPDATA%\cache`
 
 This makes XDG-aware tools resolve user data consistently from PowerShell, cmd,
-Nushell, GUI-launched apps, and automation.
+Nushell, GUI-launched apps, and automation. Tool-specific variables belong to
+the script that installs that toolchain; for example, Bun's `BUN_INSTALL` is set
+only by the optional Windows toolchain script.
 
 Run the same logic manually if needed:
 
@@ -115,6 +117,14 @@ pwsh ./scripts/set-windows-user-environment.ps1
 
 Required WinGet packages are synchronized by chezmoi from
 `packages/windows-winget-required.txt`.
+
+The WinGet required manifest accepts strict version specs:
+
+- `Package.Id` installs the package if missing and does not enforce a version.
+- `Package.Id@1.2.3` installs the exact version when missing and fails if a
+  different version is already installed.
+- `Package.Id@1.2` accepts installed versions matching `1.2.*` and adds a
+  WinGet pin for that range.
 
 Optional WinGet apps and tools live in `scripts/install-windows-apps.ps1`.
 This keeps GUI apps, IDEs, and preference-heavy tools out of routine
@@ -161,7 +171,10 @@ pwsh ./scripts/install-windows-toolchains.ps1
 ```
 
 The optional toolchain script installs language managers/runtimes such as `fnm`,
-`uv`, `rustup`, Go, and Bun, then runs the LunarVim Windows installer.
+`uv`, `rustup`, Go, and Bun, then runs the LunarVim Windows installer. When Bun
+is installed here, the script sets `BUN_INSTALL=%USERPROFILE%\.bun` and adds
+`%USERPROFILE%\.bun\bin` to the user PATH so global Bun shims do not land under
+`%LOCALAPPDATA%\cache`.
 
 ## PATH
 

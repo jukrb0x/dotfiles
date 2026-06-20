@@ -1,5 +1,7 @@
 $ErrorActionPreference = "Stop"
 
+Import-Module (Join-Path (Split-Path -Parent $PSScriptRoot) "scripts\lib\WindowsSetup.psm1") -Force -DisableNameChecking
+
 function Set-ChezmoiPowerShellInterpreter {
     $configDir = Join-Path $HOME ".config\chezmoi"
     $configFile = Join-Path $configDir "chezmoi.toml"
@@ -31,51 +33,7 @@ function Set-WindowsUserEnvironment {
     }
 
     foreach ($name in $xdgEnvironment.Keys) {
-        $path = [IO.Path]::GetFullPath($xdgEnvironment[$name])
-        [Environment]::SetEnvironmentVariable($name, $path, "User")
-        Set-Item -Path "Env:$name" -Value $path
-        Write-Host "Set user $name to $path."
-    }
-}
-
-function Test-WinGetPackageInstalled {
-    param(
-        [Parameter(Mandatory)] [string] $Id,
-        [string] $Source = "winget"
-    )
-
-    winget list --id $Id --exact --source $Source --disable-interactivity | Out-Null
-    return $LASTEXITCODE -eq 0
-}
-
-function Install-WinGetPackage {
-    param(
-        [Parameter(Mandatory)] [string] $Id,
-        [string] $Source = "winget",
-        [string] $Name = $Id
-    )
-
-    if (Test-WinGetPackageInstalled -Id $Id -Source $Source) {
-        Write-Host "$Name is already installed."
-        return
-    }
-
-    Write-Host "Installing $Name from $Source..."
-
-    $arguments = @(
-        "install"
-        "--id", $Id
-        "--exact"
-        "--source", $Source
-        "--silent"
-        "--disable-interactivity"
-        "--accept-source-agreements"
-        "--accept-package-agreements"
-    )
-
-    winget @arguments
-    if ($LASTEXITCODE -ne 0) {
-        throw "winget install failed for $Id with exit code $LASTEXITCODE"
+        Set-ManagedUserEnvironment -Name $name -Value $xdgEnvironment[$name]
     }
 }
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
@@ -88,7 +46,7 @@ $BootstrapPackages = @(
 )
 
 foreach ($package in $BootstrapPackages) {
-    Install-WinGetPackage $package
+    Install-WinGetPackageSpec -Spec (Parse-WinGetPackageSpec $package)
 }
 
 Set-ChezmoiPowerShellInterpreter

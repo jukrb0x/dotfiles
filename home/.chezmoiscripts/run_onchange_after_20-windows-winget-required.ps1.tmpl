@@ -4,48 +4,10 @@ $ErrorActionPreference = "Stop"
 
 # packages/windows-winget-required.txt hash: {{ include "../packages/windows-winget-required.txt" | sha256sum }}
 $packageFile = {{ joinPath .chezmoi.sourceDir ".." "packages" "windows-winget-required.txt" | quote }}
+$modulePath = {{ joinPath .chezmoi.sourceDir ".." "scripts" "lib" "WindowsSetup.psm1" | quote }}
+Import-Module $modulePath -Force -DisableNameChecking
 
-function Test-WinGetPackageInstalled {
-    param([Parameter(Mandatory)] [string] $Id)
-
-    winget list --id $Id --exact --source winget --disable-interactivity | Out-Null
-    return $LASTEXITCODE -eq 0
-}
-
-function Install-WinGetPackage {
-    param([Parameter(Mandatory)] [string] $Id)
-
-    if (Test-WinGetPackageInstalled $Id) {
-        Write-Host "$Id is already installed."
-        return
-    }
-
-    $arguments = @(
-        "install"
-        "--id", $Id
-        "--exact"
-        "--source", "winget"
-        "--silent"
-        "--disable-interactivity"
-        "--accept-source-agreements"
-        "--accept-package-agreements"
-    )
-
-    winget @arguments
-    if ($LASTEXITCODE -ne 0) {
-        throw "winget install failed for $Id with exit code $LASTEXITCODE"
-    }
-}
-
-if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-    throw "winget is required to install required Windows packages, but winget was not found on PATH."
-}
-
-$packages = @(Get-Content $packageFile |
-    ForEach-Object { $_.Trim() } |
-    Where-Object { $_ -and -not $_.StartsWith("#") })
-
-foreach ($package in $packages) {
-    Install-WinGetPackage $package
+foreach ($package in Read-WinGetPackageSpecs -Path $packageFile) {
+    Install-WinGetPackageSpec -Spec $package
 }
 {{ end -}}

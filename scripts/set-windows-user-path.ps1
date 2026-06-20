@@ -1,5 +1,7 @@
 $ErrorActionPreference = "Stop"
 
+Import-Module (Join-Path $PSScriptRoot "lib\WindowsSetup.psm1") -Force -DisableNameChecking
+
 $paths = @(
     (Join-Path $env:APPDATA "..\bin"),
     (Join-Path $HOME ".local\bin"),
@@ -9,30 +11,6 @@ $paths = @(
     "C:\msys64\ucrt64\bin"
 )
 
-function Get-PathKey {
-    param([Parameter(Mandatory)] [string] $Path)
-
-    try {
-        [IO.Path]::GetFullPath([Environment]::ExpandEnvironmentVariables($Path)).TrimEnd("\").ToLowerInvariant()
-    } catch {
-        $Path.Trim().TrimEnd("\").ToLowerInvariant()
-    }
-}
-
-$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
-$entries = @($userPath -split ";" | Where-Object { $_ })
-$managedPaths = @($paths | ForEach-Object { [IO.Path]::GetFullPath($_) })
-$managedPathKeys = @($managedPaths | ForEach-Object { Get-PathKey $_ })
-
-$remainingEntries = @($entries | Where-Object {
-    $entryKey = Get-PathKey $_
-    $managedPathKeys -notcontains $entryKey
-})
-
-$newUserPath = @($managedPaths + $remainingEntries | Select-Object -Unique) -join ";"
-[Environment]::SetEnvironmentVariable("Path", $newUserPath, "User")
-
-$machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
-$env:Path = @($machinePath, $newUserPath | Where-Object { $_ }) -join ";"
+Add-ManagedUserPath -Path $paths
 
 Write-Host "Updated user PATH. Restart terminals to inherit it."

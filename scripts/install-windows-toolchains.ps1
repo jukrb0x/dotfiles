@@ -1,46 +1,8 @@
 #Requires -Version 7.1
 $ErrorActionPreference = "Stop"
 
-function Test-WinGetPackageInstalled {
-    param(
-        [Parameter(Mandatory)] [string] $Id,
-        [string] $Source = "winget"
-    )
+Import-Module (Join-Path $PSScriptRoot "lib\WindowsSetup.psm1") -Force -DisableNameChecking
 
-    winget list --id $Id --exact --source $Source --disable-interactivity | Out-Null
-    return $LASTEXITCODE -eq 0
-}
-
-function Install-WinGetPackage {
-    param(
-        [Parameter(Mandatory)] [string] $Id,
-        [string] $Source = "winget",
-        [string] $Name = $Id
-    )
-
-    if (Test-WinGetPackageInstalled -Id $Id -Source $Source) {
-        Write-Host "$Name is already installed."
-        return
-    }
-
-    Write-Host "Installing $Name from $Source..."
-
-    $arguments = @(
-        "install"
-        "--id", $Id
-        "--exact"
-        "--source", $Source
-        "--silent"
-        "--disable-interactivity"
-        "--accept-source-agreements"
-        "--accept-package-agreements"
-    )
-
-    winget @arguments
-    if ($LASTEXITCODE -ne 0) {
-        throw "winget install failed for $Id with exit code $LASTEXITCODE"
-    }
-}
 # Optional language/toolchain managers. Required editor dependencies live in
 # packages/*-required.txt and are synchronized by chezmoi apply.
 $Toolchains = @(
@@ -52,11 +14,14 @@ $Toolchains = @(
 )
 
 foreach ($toolchain in $Toolchains) {
-    Install-WinGetPackage $toolchain
+    Install-WinGetPackageSpec -Spec (Parse-WinGetPackageSpec $toolchain)
 }
 
 & (Join-Path $PSScriptRoot "set-windows-user-environment.ps1")
 & (Join-Path $PSScriptRoot "set-windows-user-path.ps1")
+
+Set-ManagedUserEnvironment -Name "BUN_INSTALL" -Value (Join-Path $HOME ".bun")
+Add-ManagedUserPath -Path (Join-Path $HOME ".bun\bin")
 
 if (Get-Command fnm -ErrorAction SilentlyContinue) {
     fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression
