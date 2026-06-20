@@ -38,6 +38,7 @@ This installs:
 - Rust: `rustup`
 - Go: WinGet stable Go
 - Bun: WinGet Bun
+- tree-sitter CLI: WinGet `tree-sitter.tree-sitter-cli@0.26`
 
 Python is installed with `uv python install`. If `python` is missing, or if it
 only resolves to the Microsoft Store alias in `WindowsApps`, the script uses
@@ -77,16 +78,21 @@ The actual LunarVim installation runs at the end of:
 pwsh ./scripts/install-windows-toolchains.ps1
 ```
 
+To install or refresh the language toolchains without running the LunarVim
+installer, pass `--no-lvim`:
+
+```powershell
+pwsh ./scripts/install-windows-toolchains.ps1 --no-lvim
+```
+
 The script uses the Windows PowerShell installer from the `jukrb0x/LunarVim`
-fork on the `codex/nvim-012-legacy-treesitter` branch. This branch keeps
-LunarVim's legacy plugin graph intact and shadows the archived
-`nvim-treesitter` query predicate module with a Neovim 0.12-compatible version.
-The installer can be
-interactive; this repo does not try to invent a silent mode around it.
+fork on the `codex/nvim-012-modern-treesitter` branch. This branch keeps
+LunarVim usable on Neovim 0.12 by tracking the modern `nvim-treesitter` branch
+and carrying LunarVim compatibility fixes. The installer can be interactive;
+this repo does not try to invent a silent mode around it.
 
 Some LunarVim plugins compile native Treesitter-related components, so this repo
 installs MSYS2 UCRT64 GCC and exposes `gcc.exe` on the user PATH. The Windows
-toolchain script also installs the prebuilt `tree-sitter` CLI into
-`~/.local/bin` for parser installs and updates. Neovim providers are
-intentionally not managed separately here; LunarVim's installer or runtime
-should handle what it needs.
+toolchain script installs `tree-sitter.tree-sitter-cli@0.26` through WinGet for
+parser installs and updates. Neovim providers are intentionally not managed
+separately here; LunarVim's installer or runtime should handle what it needs.
