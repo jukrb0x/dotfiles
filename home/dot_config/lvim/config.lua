@@ -49,7 +49,6 @@ end
 
 -- vim config
 vim.opt.relativenumber = true
-vim.g.copilot_assume_mapped = true
 
 -- general
 lvim.format_on_save.enabled = false
@@ -102,17 +101,6 @@ lvim.plugins = {
   { "norcalli/nvim-colorizer.lua" },
   -- input method switcher (smartim's im-select helper is macOS-only)
   { "ybian/smartim", enabled = vim.fn.has("macunix") == 1 },
-  {
-    "zbirenbaum/copilot-cmp",
-    event = "InsertEnter",
-    dependencies = { "zbirenbaum/copilot.lua" },
-    config = function()
-      vim.defer_fn(function()
-        require("copilot").setup()     -- https://github.com/zbirenbaum/copilot.lua/blob/master/README.md#setup-and-configuration
-        require("copilot_cmp").setup() -- https://github.com/zbirenbaum/copilot-cmp/blob/master/README.md#configuration
-      end, 100)
-    end,
-  },
   {
     "folke/trouble.nvim",
     cmd = "TroubleToggle",
