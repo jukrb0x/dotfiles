@@ -77,11 +77,16 @@ The actual LunarVim installation runs at the end of:
 pwsh ./scripts/install-windows-toolchains.ps1
 ```
 
-The script uses LunarVim's official Windows PowerShell installer command for the
-`release-1.4/neovim-0.9` branch. The official Windows installer can be
+The script uses the Windows PowerShell installer from the `jukrb0x/LunarVim`
+fork on the `codex/nvim-012-legacy-treesitter` branch. This branch keeps
+LunarVim's legacy plugin graph intact and shadows the archived
+`nvim-treesitter` query predicate module with a Neovim 0.12-compatible version.
+The installer can be
 interactive; this repo does not try to invent a silent mode around it.
 
 Some LunarVim plugins compile native Treesitter-related components, so this repo
-installs MSYS2 UCRT64 GCC and exposes `gcc.exe` on the user PATH. Neovim
-providers are intentionally not managed separately here; LunarVim's installer or
-runtime should handle what it needs.
+installs MSYS2 UCRT64 GCC and exposes `gcc.exe` on the user PATH. The Windows
+toolchain script also installs the prebuilt `tree-sitter` CLI into
+`~/.local/bin` for parser installs and updates. Neovim providers are
+intentionally not managed separately here; LunarVim's installer or runtime
+should handle what it needs.

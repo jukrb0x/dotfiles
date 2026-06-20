@@ -184,27 +184,36 @@ function Get-WinGetAvailableVersions {
         Where-Object { $_ -and $_ -notmatch '^(Found|Version|-+)' })
 }
 
+function Get-WinGetPackageVersionFromListOutput {
+    param(
+        [Parameter(Mandatory)] [string] $Id,
+        [Parameter(Mandatory)] [AllowEmptyString()] [string[]] $OutputLines
+    )
+
+    foreach ($line in @($OutputLines)) {
+        if ($line -match [regex]::Escape($Id)) {
+            $pattern = "\s$([regex]::Escape($Id))\s+(?<version>\S+)"
+            if ($line -match $pattern) {
+                return $Matches.version
+            }
+        }
+    }
+
+    $null
+}
+
 function Get-WinGetPackageVersion {
     param(
         [Parameter(Mandatory)] [string] $Id,
         [string] $Source = "winget"
     )
 
-    $output = winget list --id $Id --exact --source $Source --disable-interactivity 2>$null
+    $output = winget list --id $Id --exact --source $Source --disable-interactivity 2>&1
     if ($LASTEXITCODE -ne 0) {
         return $null
     }
 
-    foreach ($line in @($output)) {
-        if ($line -match [regex]::Escape($Id)) {
-            $columns = @($line -split '\s{2,}' | Where-Object { $_ })
-            if ($columns.Count -ge 3) {
-                return $columns[2].Trim()
-            }
-        }
-    }
-
-    $null
+    Get-WinGetPackageVersionFromListOutput -Id $Id -OutputLines @($output)
 }
 
 function Test-WinGetPackageInstalled {
@@ -338,6 +347,7 @@ Export-ModuleMember -Function `
     Add-WinGetPackagePin, `
     Get-ManagedPathKey, `
     Get-WinGetPackageVersion, `
+    Get-WinGetPackageVersionFromListOutput, `
     Install-WinGetPackage, `
     Install-WinGetPackageSpec, `
     Merge-ManagedPathEntries, `

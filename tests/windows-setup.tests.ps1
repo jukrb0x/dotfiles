@@ -75,6 +75,18 @@ Assert-True (Test-WinGetVersionSatisfiesSpec -InstalledVersion "0.9.0" -Spec $ex
 Assert-True (-not (Test-WinGetVersionSatisfiesSpec -InstalledVersion "0.9.1" -Spec $exactSpec)) "0.9.1 should not satisfy @0.9.0."
 
 Assert-Equal `
+    -Actual (Get-WinGetPackageVersionFromListOutput -Id "Git.Git" -OutputLines @(
+        "",
+        "   - ",
+        "                                                                                                                        ",
+        "Name Id      Version",
+        "--------------------",
+        "Git  Git.Git 2.54.0"
+    )) `
+    -Expected "2.54.0" `
+    -Message "Installed WinGet package detection should parse single-space table columns."
+
+Assert-Equal `
     -Actual (Select-WinGetInstallVersion -AvailableVersions @("0.8.9", "0.9.0", "0.9.5", "0.10.0") -Spec $minorSpec) `
     -Expected "0.9.5" `
     -Message "Prefix specs should select the latest available matching version."
