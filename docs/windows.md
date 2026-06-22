@@ -126,9 +126,22 @@ The WinGet required manifest accepts strict version specs:
 - `Package.Id@1.2` accepts installed versions matching `1.2.*` and adds a
   WinGet pin for that range.
 
-Optional WinGet apps and tools live in `scripts/install-windows-apps.ps1`.
-This keeps GUI apps, IDEs, and preference-heavy tools out of routine
-`chezmoi apply` runs.
+Optional WinGet apps and tools live in
+`packages/windows-winget-apps.psd1` and are installed by
+`scripts/install-windows-apps.ps1`. This keeps GUI apps, IDEs, and
+preference-heavy tools out of routine `chezmoi apply` runs while still keeping
+package data under `packages/`.
+
+The optional WinGet apps manifest uses PowerShell data syntax:
+
+```powershell
+@{
+    Apps = @(
+        @{ Id = "Google.Chrome" }
+        @{ PackageName = "Codex"; Source = "msstore"; Name = "Codex app" }
+    )
+}
+```
 
 ## Scoop
 

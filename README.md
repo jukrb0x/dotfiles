@@ -159,6 +159,10 @@ pwsh ./scripts/install-windows-scoop.ps1
 pwsh ./scripts/install-windows-toolchains.ps1
 ```
 
+Optional WinGet apps are declared in
+`packages/windows-winget-apps.psd1`, including Microsoft Store entries that
+need `PackageName` and `Source`.
+
 See [docs/windows.md](docs/windows.md) and
 [docs/toolchains.md](docs/toolchains.md) for the current Windows setup model.
 
