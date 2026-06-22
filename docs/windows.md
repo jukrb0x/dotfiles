@@ -77,6 +77,26 @@ chezmoi apply
 The Windows package scripts include a checksum of their package-list file, so
 editing a required package list triggers the matching package sync.
 
+WinGet package upgrades are explicit maintenance, not part of `chezmoi apply`.
+Preview available WinGet upgrades:
+
+```powershell
+pwsh ./scripts/update-windows-winget.ps1
+```
+
+Upgrade only packages declared in this repo's WinGet manifests:
+
+```powershell
+pwsh ./scripts/update-windows-winget.ps1 --managed
+```
+
+Upgrade every WinGet-managed package on the machine only when you explicitly
+want WinGet to own that broader update:
+
+```powershell
+pwsh ./scripts/update-windows-winget.ps1 --all
+```
+
 ## Optional Machine Setup
 
 These scripts are explicit bootstrap helpers, not automatic required state:
@@ -135,6 +155,12 @@ by `Id`, it prints the installed version and does not attempt to upgrade it.
 When `Version` is set to a full version such as `1.2.3`, the installed version
 must match exactly. When `Version` is set to a prefix such as `1.2`, installed
 versions matching `1.2.*` are accepted and a matching WinGet pin is added.
+
+Managed WinGet upgrades are handled by `scripts/update-windows-winget.ps1`.
+With `--managed`, the script reads `windows-winget-required.psd1`,
+`windows-winget-apps.psd1`, and `windows-winget-toolchains.psd1`, then upgrades
+only entries with a WinGet `Id`. Entries that only have `PackageName` are
+skipped because exact managed upgrades need a stable package id.
 
 Optional WinGet apps and tools live in
 `packages/windows-winget-apps.psd1` and are installed by

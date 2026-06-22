@@ -163,6 +163,18 @@ Optional WinGet apps are declared in
 `packages/windows-winget-apps.psd1`, including Microsoft Store entries that
 need `PackageName` and `Source`.
 
+WinGet upgrades are explicit. Preview available upgrades with:
+
+```powershell
+pwsh ./scripts/update-windows-winget.ps1
+```
+
+Upgrade only packages declared in this repo's WinGet manifests with:
+
+```powershell
+pwsh ./scripts/update-windows-winget.ps1 --managed
+```
+
 See [docs/windows.md](docs/windows.md) and
 [docs/toolchains.md](docs/toolchains.md) for the current Windows setup model.
 
