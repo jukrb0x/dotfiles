@@ -9,10 +9,10 @@ Toolchains are split by ownership:
 
 Required packages are the tools managed dotfiles need in order to work:
 
-- Neovim: `packages/windows-winget-required.txt`
-- ripgrep: `packages/windows-winget-required.txt`
+- Neovim: `packages/windows-winget-required.psd1`
+- ripgrep: `packages/windows-winget-required.psd1`
 - make: `packages/windows-scoop-required.txt`
-- MSYS2: `packages/windows-winget-required.txt`
+- MSYS2: `packages/windows-winget-required.psd1`
 - MSYS2 UCRT64 GCC: `packages/windows-msys2-required.txt`
 
 These are applied by Windows scripts in `home/.chezmoiscripts`.
@@ -38,7 +38,8 @@ This installs:
 - Rust: `rustup`
 - Go: WinGet stable Go
 - Bun: WinGet Bun
-- tree-sitter CLI: WinGet `tree-sitter.tree-sitter-cli@0.26`
+- tree-sitter CLI: WinGet `tree-sitter.tree-sitter-cli` with
+  `Version = "0.26"` in `packages/windows-winget-toolchains.psd1`
 
 Python is installed with `uv python install`. If `python` is missing, or if it
 only resolves to the Microsoft Store alias in `WindowsApps`, the script uses
@@ -93,6 +94,7 @@ this repo does not try to invent a silent mode around it.
 
 Some LunarVim plugins compile native Treesitter-related components, so this repo
 installs MSYS2 UCRT64 GCC and exposes `gcc.exe` on the user PATH. The Windows
-toolchain script installs `tree-sitter.tree-sitter-cli@0.26` through WinGet for
+toolchain script installs `tree-sitter.tree-sitter-cli` through WinGet with a
+`0.26.*` version prefix from `packages/windows-winget-toolchains.psd1` for
 parser installs and updates. Neovim providers are intentionally not managed
 separately here; LunarVim's installer or runtime should handle what it needs.

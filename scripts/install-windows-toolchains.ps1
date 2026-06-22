@@ -12,19 +12,12 @@ if ($RemainingArgs -contains "--no-lvim") {
     $NoLvim = $true
 }
 
-# Optional language/toolchain managers. Required editor dependencies live in
-# packages/*-required.txt and are synchronized by chezmoi apply.
-$Toolchains = @(
-    "Schniz.fnm",
-    "astral-sh.uv",
-    "Rustlang.Rustup",
-    "GoLang.Go",
-    "Oven-sh.Bun",
-    "tree-sitter.tree-sitter-cli@0.26"
-)
+$repoRoot = Split-Path -Parent $PSScriptRoot
+$toolchainManifestPath = Join-Path $repoRoot "packages\windows-winget-toolchains.psd1"
+$Toolchains = @(Read-WinGetPackageSpecs -Path $toolchainManifestPath)
 
 foreach ($toolchain in $Toolchains) {
-    Install-WinGetPackageSpec -Spec (Parse-WinGetPackageSpec $toolchain)
+    Install-WinGetPackageSpec -Spec $toolchain
 }
 
 & (Join-Path $PSScriptRoot "set-windows-user-environment.ps1")

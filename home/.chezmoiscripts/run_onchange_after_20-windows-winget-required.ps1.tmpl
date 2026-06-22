@@ -2,8 +2,8 @@
 #Requires -Version 7.1
 $ErrorActionPreference = "Stop"
 
-# packages/windows-winget-required.txt hash: {{ include "../packages/windows-winget-required.txt" | sha256sum }}
-$packageFile = {{ joinPath .chezmoi.sourceDir ".." "packages" "windows-winget-required.txt" | quote }}
+# packages/windows-winget-required.psd1 hash: {{ include "../packages/windows-winget-required.psd1" | sha256sum }}
+$packageFile = {{ joinPath .chezmoi.sourceDir ".." "packages" "windows-winget-required.psd1" | quote }}
 $modulePath = {{ joinPath .chezmoi.sourceDir ".." "scripts" "lib" "WindowsSetup.psm1" | quote }}
 Import-Module $modulePath -Force -DisableNameChecking
 

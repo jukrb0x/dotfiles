@@ -106,7 +106,7 @@ macOS bootstrap currently installs:
 
 On Windows, required packages are declared in:
 
-- `packages/windows-winget-required.txt`
+- `packages/windows-winget-required.psd1`
 - `packages/windows-scoop-required.txt`
 - `packages/windows-msys2-required.txt`
 

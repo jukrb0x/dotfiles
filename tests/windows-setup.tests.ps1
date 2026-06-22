@@ -103,4 +103,35 @@ try {
 }
 Assert-True $badSpecFailed "Malformed WinGet specs should fail instead of being guessed."
 
+$manifestPath = Join-Path ([IO.Path]::GetTempPath()) "windows-winget-test-packages-$PID.psd1"
+try {
+    @'
+@{
+    Packages = @(
+        @{ Id = "Git.Git" }
+        @{ Id = "tree-sitter.tree-sitter-cli"; Version = "0.26" }
+        @{ PackageName = "Codex"; Source = "msstore"; Name = "Codex app" }
+    )
+}
+'@ | Set-Content -LiteralPath $manifestPath -Encoding utf8
+
+    $manifestSpecs = @(Read-WinGetPackageSpecs -Path $manifestPath)
+    Assert-Equal $manifestSpecs[0].Id "Git.Git" "Manifest entries should parse WinGet ids."
+    Assert-Equal $manifestSpecs[0].Source "winget" "Manifest entries should default to the winget source."
+    Assert-Equal $manifestSpecs[1].Id "tree-sitter.tree-sitter-cli" "Manifest entries should parse versioned ids."
+    Assert-Equal $manifestSpecs[1].Version "0.26" "Manifest entries should parse version prefixes from the Version property."
+    Assert-Equal $manifestSpecs[1].PinVersion "0.26.*" "Manifest version prefixes should keep existing pin behavior."
+    Assert-Equal $manifestSpecs[2].PackageName "Codex" "Manifest entries should support PackageName installs."
+    Assert-Equal $manifestSpecs[2].Source "msstore" "Manifest entries should preserve non-default sources."
+    Assert-Equal $manifestSpecs[2].Name "Codex app" "Manifest entries should preserve friendly display names."
+} finally {
+    if (Test-Path -LiteralPath $manifestPath) {
+        Remove-Item -LiteralPath $manifestPath
+    }
+}
+
+$installSpecText = (Get-Command Install-WinGetPackageSpec).ScriptBlock.ToString()
+Assert-True ($installSpecText -match 'Get-WinGetPackageVersion') "WinGet spec installs should print installed version information when an id is already present."
+Assert-True ($installSpecText -notmatch '\bupgrade\b') "WinGet spec installs should not attempt to upgrade existing packages."
+
 Write-Host "windows-setup tests passed."

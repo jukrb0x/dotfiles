@@ -43,7 +43,7 @@
 - `~/.local/bin/lvim.bat`
 - `~/.local/bin/lvim.ps1`
 - current-user font installation through `scripts/install-windows-fonts.ps1`
-- Windows package notes under `packages/windows-*.txt`
+- Windows package notes under `packages/windows-*`
 
 ## Machine-local
 

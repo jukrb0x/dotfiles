@@ -1,6 +1,6 @@
 @{
     # Optional WinGet-managed apps/tools, ordered by setup dependency and daily workflow.
-    # Required dotfiles dependencies live in packages/windows-winget-required.txt and
+    # Required dotfiles dependencies live in packages/windows-winget-required.psd1 and
     # are synchronized by chezmoi apply.
     Apps = @(
         # Foundation extras

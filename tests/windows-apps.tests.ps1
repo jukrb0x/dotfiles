@@ -43,8 +43,8 @@ Assert-Equal $codexApp.Name "Codex app" "Microsoft Store apps should preserve a 
 $forkApp = @($apps | Where-Object { $_.Id -eq "Fork.Fork" })[0]
 Assert-Equal $forkApp.Id "Fork.Fork" "Manifest should preserve optional WinGet apps that were added to install-windows-apps.ps1."
 
-Assert-True ($script -match 'Import-PowerShellDataFile') "install-windows-apps.ps1 should import optional apps from the packages manifest."
-Assert-True ($script -match '\$appManifest\.Apps') "install-windows-apps.ps1 should install apps from the imported manifest."
+Assert-True ($script -match 'Read-WinGetPackageSpecs') "install-windows-apps.ps1 should read optional apps through the shared WinGet manifest reader."
+Assert-True ($script -match 'Install-WinGetPackageSpec') "install-windows-apps.ps1 should install apps through the shared WinGet spec installer."
 Assert-True ($script -notmatch 'Google\.Chrome|Codex app|Fork\.Fork') "install-windows-apps.ps1 should not hardcode optional app package data."
 
 Write-Host "windows-apps tests passed."

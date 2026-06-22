@@ -3,6 +3,7 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $scriptPath = Join-Path $repoRoot "scripts\install-windows-toolchains.ps1"
+$manifestPath = Join-Path $repoRoot "packages\windows-winget-toolchains.psd1"
 $script = Get-Content -LiteralPath $scriptPath -Raw
 
 function Assert-Match {
@@ -39,8 +40,27 @@ Assert-Match `
 
 Assert-Match `
     -Text $script `
-    -Pattern 'tree-sitter\.tree-sitter-cli@0\.26' `
-    -Message "tree-sitter CLI should be installed through WinGet with a 0.26 version prefix."
+    -Pattern 'windows-winget-toolchains\.psd1' `
+    -Message "install-windows-toolchains.ps1 should read WinGet toolchains from packages/windows-winget-toolchains.psd1."
+
+if ($script -match 'Schniz\.fnm|astral-sh\.uv|tree-sitter\.tree-sitter-cli') {
+    throw "WinGet toolchain package data should not be hardcoded in install-windows-toolchains.ps1."
+}
+
+if (-not (Test-Path -LiteralPath $manifestPath)) {
+    throw "Optional Windows WinGet toolchains should live in packages/windows-winget-toolchains.psd1."
+}
+
+$manifest = Import-PowerShellDataFile -LiteralPath $manifestPath
+$toolchains = @($manifest.Packages)
+$treeSitter = @($toolchains | Where-Object { $_.Id -eq "tree-sitter.tree-sitter-cli" })[0]
+if (-not $treeSitter) {
+    throw "tree-sitter CLI should be listed in the WinGet toolchains manifest."
+}
+
+if ($treeSitter.Version -ne "0.26") {
+    throw "tree-sitter CLI should keep its 0.26 version prefix in the manifest."
+}
 
 Assert-Match `
     -Text $script `

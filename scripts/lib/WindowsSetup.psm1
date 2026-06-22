@@ -102,6 +102,8 @@ function Parse-WinGetPackageSpec {
 
     [pscustomobject]@{
         Id          = $id
+        PackageName = $null
+        Name        = $null
         Version     = $version
         VersionMode = $versionMode
         PinVersion  = $pinVersion
@@ -109,8 +111,70 @@ function Parse-WinGetPackageSpec {
     }
 }
 
+function Get-WinGetVersionSpec {
+    param([string] $Version)
+
+    if (-not $Version) {
+        return [pscustomobject]@{
+            Version     = $null
+            VersionMode = "Any"
+            PinVersion  = $null
+        }
+    }
+
+    if ($Version -notmatch '^[0-9][0-9A-Za-z.\-_]*$') {
+        throw "Invalid WinGet package version '$Version'. Expected 1.2 or 1.2.3."
+    }
+
+    $parts = @($Version -split '\.')
+    if ($parts.Count -lt 3) {
+        return [pscustomobject]@{
+            Version     = $Version
+            VersionMode = "Prefix"
+            PinVersion  = "$Version.*"
+        }
+    }
+
+    [pscustomobject]@{
+        Version     = $Version
+        VersionMode = "Exact"
+        PinVersion  = $Version
+    }
+}
+
+function ConvertTo-WinGetPackageSpec {
+    param([Parameter(Mandatory)] $Package)
+
+    if ($Package -is [string]) {
+        return Parse-WinGetPackageSpec $Package
+    }
+
+    $id = $Package.Id
+    $packageName = $Package.PackageName
+    if (-not $id -and -not $packageName) {
+        throw "WinGet package manifest entries must define Id or PackageName."
+    }
+
+    $versionSpec = Get-WinGetVersionSpec -Version $Package.Version
+    [pscustomobject]@{
+        Id          = $id
+        PackageName = $packageName
+        Name        = $Package.Name
+        Version     = $versionSpec.Version
+        VersionMode = $versionSpec.VersionMode
+        PinVersion  = $versionSpec.PinVersion
+        Source      = if ($Package.Source) { $Package.Source } else { "winget" }
+    }
+}
+
 function Read-WinGetPackageSpecs {
     param([Parameter(Mandatory)] [string] $Path)
+
+    if ([IO.Path]::GetExtension($Path) -eq ".psd1") {
+        $manifest = Import-PowerShellDataFile -LiteralPath $Path
+        $packages = if ($manifest.Packages) { $manifest.Packages } else { $manifest.Apps }
+        return @($packages | ForEach-Object { ConvertTo-WinGetPackageSpec $_ })
+    }
 
     @(Get-Content -LiteralPath $Path |
         ForEach-Object { $_.Trim() } |
@@ -305,21 +369,34 @@ function Install-WinGetPackageSpec {
         throw "winget is required to install Windows packages, but winget was not found on PATH."
     }
 
-    $installedVersion = Get-WinGetPackageVersion -Id $Spec.Id -Source $Spec.Source
+    $displayName = if ($Spec.Name) { $Spec.Name } elseif ($Spec.PackageName) { $Spec.PackageName } else { $Spec.Id }
+
+    if ($Spec.Id) {
+        $installedVersion = Get-WinGetPackageVersion -Id $Spec.Id -Source $Spec.Source
+    } else {
+        $installedVersion = $null
+    }
+
     if ($installedVersion) {
         if (-not (Test-WinGetVersionSatisfiesSpec -InstalledVersion $installedVersion -Spec $Spec)) {
             throw "$($Spec.Id) is installed at $installedVersion, which does not satisfy requested spec $($Spec.Id)@$($Spec.Version)."
         }
 
-        Write-Host "$($Spec.Id) is already installed: $installedVersion."
+        Write-Host "$displayName is already installed: $installedVersion."
         Add-WinGetPackagePin -Spec $Spec
         return
     }
 
-    Write-Host "Installing $($Spec.Id) from $($Spec.Source)..."
+    if ($Spec.PackageName -and -not $Spec.Id) {
+        if (Test-WinGetPackageInstalled -Name $Spec.PackageName -Source $Spec.Source) {
+            Write-Host "$displayName is already installed."
+            return
+        }
+    }
+
+    Write-Host "Installing $displayName from $($Spec.Source)..."
     $arguments = @(
         "install"
-        "--id", $Spec.Id
         "--exact"
         "--source", $Spec.Source
         "--silent"
@@ -328,7 +405,19 @@ function Install-WinGetPackageSpec {
         "--accept-package-agreements"
     )
 
+    if ($Spec.Id) {
+        $arguments += @("--id", $Spec.Id)
+    } elseif ($Spec.PackageName) {
+        $arguments += @($Spec.PackageName)
+    } else {
+        throw "Either Id or PackageName is required to install a WinGet package."
+    }
+
     if ($Spec.VersionMode -ne "Any") {
+        if (-not $Spec.Id) {
+            throw "Versioned WinGet specs require Id so available versions can be resolved."
+        }
+
         $availableVersions = Get-WinGetAvailableVersions -Id $Spec.Id -Source $Spec.Source
         $installVersion = Select-WinGetInstallVersion -AvailableVersions $availableVersions -Spec $Spec
         $arguments += @("--version", $installVersion)
@@ -336,7 +425,7 @@ function Install-WinGetPackageSpec {
 
     winget @arguments
     if ($LASTEXITCODE -ne 0) {
-        throw "winget install failed for $($Spec.Id) with exit code $LASTEXITCODE"
+        throw "winget install failed for $displayName with exit code $LASTEXITCODE"
     }
 
     Add-WinGetPackagePin -Spec $Spec

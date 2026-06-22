@@ -50,7 +50,7 @@ on Windows:
 
 Required package lists live in `packages/`:
 
-- `windows-winget-required.txt`
+- `windows-winget-required.psd1`
 - `windows-scoop-required.txt`
 - `windows-msys2-required.txt`
 
@@ -116,15 +116,25 @@ pwsh ./scripts/set-windows-user-environment.ps1
 ## WinGet
 
 Required WinGet packages are synchronized by chezmoi from
-`packages/windows-winget-required.txt`.
+`packages/windows-winget-required.psd1`.
 
-The WinGet required manifest accepts strict version specs:
+The WinGet required manifest uses PowerShell data syntax:
 
-- `Package.Id` installs the package if missing and does not enforce a version.
-- `Package.Id@1.2.3` installs the exact version when missing and fails if a
-  different version is already installed.
-- `Package.Id@1.2` accepts installed versions matching `1.2.*` and adds a
-  WinGet pin for that range.
+```powershell
+@{
+    Packages = @(
+        @{ Id = "Git.Git" }
+        @{ Id = "tree-sitter.tree-sitter-cli"; Version = "0.26" }
+        @{ PackageName = "Codex"; Source = "msstore"; Name = "Codex app" }
+    )
+}
+```
+
+The installer only installs missing packages. If a package is already installed
+by `Id`, it prints the installed version and does not attempt to upgrade it.
+When `Version` is set to a full version such as `1.2.3`, the installed version
+must match exactly. When `Version` is set to a prefix such as `1.2`, installed
+versions matching `1.2.*` are accepted and a matching WinGet pin is added.
 
 Optional WinGet apps and tools live in
 `packages/windows-winget-apps.psd1` and are installed by
@@ -174,7 +184,7 @@ and Monaspace Nerd Font.
 
 Required editor/compiler dependencies are synchronized by chezmoi:
 
-- MSYS2 from `packages/windows-winget-required.txt`
+- MSYS2 from `packages/windows-winget-required.psd1`
 - MSYS2 UCRT64 GCC from `packages/windows-msys2-required.txt`
 
 Optional language toolchains are installed explicitly:
