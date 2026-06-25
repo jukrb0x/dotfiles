@@ -21,7 +21,7 @@ fi
 if command -v eza >/dev/null 2>&1; then
   alias ls="eza --icons"
 fi
-alias gg="lazygit"
+alias lg="lazygit"
 {{- if eq .chezmoi.os "darwin" }}
 if command -v bat >/dev/null 2>&1; then
   alias cat="bat --theme=\$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo default || echo GitHub)"

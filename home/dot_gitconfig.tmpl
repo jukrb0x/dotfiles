@@ -1,3 +1,5 @@
+{{- $isDarwin := eq .chezmoi.os "darwin" -}}
+{{- $isLinux := eq .chezmoi.os "linux" -}}
 {{- $isWindows := eq .chezmoi.os "windows" -}}
 [user]
 	useConfigOnly = true
@@ -96,3 +98,11 @@
 	driver = git lfs merge-driver --ancestor %O --current %A --other %B --marker-size %L --output %A --program 'git merge-file --stdout --marker-size=%%L %%A %%O %%B >%%D'
 [include]
 	path = ~/.gitconfig.local
+{{ if $isLinux }}
+[credential "https://github.com"]
+	helper = 
+	helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+{{ end}}
