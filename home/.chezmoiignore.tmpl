@@ -15,9 +15,7 @@ Library/Fonts/Meslo/*.md
 .zoxide.nu
 .logseq/**
 
-{{ if $isWindows }}
 .config/lvim/lazy-lock.json
-{{ end }}
 
 {{ if not $usesSharedZsh }}
 .chezmoiscripts/install-packages.sh
@@ -34,9 +32,11 @@ Library/Fonts/Meslo/*.md
 
 {{ if not $isLinux }}
 .chezmoiscripts/*linux*.sh.tmpl
+.docker/config.json
 {{ end }}
 
 {{ if not $isDarwin }}
+.chezmoiscripts/*macos*.sh.tmpl
 .sleep
 .wakeup
 .config/ghostty/**
