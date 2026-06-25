@@ -10,6 +10,7 @@ alias gst = git status
 # CLI
 alias l = ls -a
 alias lg = lazygit
+alias cat = bat
 
 def --env ccd [] {
     cd (chezmoi source-path | path dirname)
