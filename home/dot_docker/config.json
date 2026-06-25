@@ -1,5 +1,1 @@
-{
- "cliPluginsExtraDirs": [
-      "/home/linuxbrew/.linuxbrew/lib/docker/cli-plugins"
-  ]
-}
+{}

@@ -57,6 +57,16 @@ This script also installs LunarVim with the official Linux/macOS installer,
 matching the Windows and macOS model where LunarVim setup is explicit rather
 than part of routine `chezmoi apply`.
 
+Docker is intentionally not installed through Linuxbrew. On WSL, install Docker
+Engine through apt and systemd with:
+
+```shell
+chezmoi cd
+bash ./scripts/install-wsl-docker.sh
+```
+
+See [wsl.md](wsl.md) for the Docker verification steps.
+
 ## Optional Apps And Fonts
 
 Shared optional Homebrew packages can be installed explicitly:

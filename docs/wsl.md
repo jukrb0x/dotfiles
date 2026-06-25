@@ -62,6 +62,37 @@ If `chsh` asks for a password or is unavailable, set the shell from Windows:
 wsl.exe -d Ubuntu -u root -- chsh -s /usr/bin/zsh jabriel
 ```
 
+## Docker Engine
+
+Docker is managed by Ubuntu packages and systemd inside WSL, not by Linuxbrew.
+Linuxbrew is good for user-level CLI tools, but Docker is a daemon plus
+container runtime, networking, cgroups, and socket permissions.
+
+Install or repair Docker Engine from inside WSL:
+
+```shell
+chezmoi cd
+bash ./scripts/install-wsl-docker.sh
+```
+
+Then restart WSL from Windows so group membership is refreshed:
+
+```powershell
+wsl.exe --shutdown
+```
+
+Open WSL again and verify:
+
+```shell
+docker version
+docker compose version
+docker run --rm hello-world
+```
+
+The Docker client should show both `Client` and `Server` details. The Compose
+plugin is provided by the `docker-compose-plugin` apt package, so
+`~/.docker/config.json` does not need a Linuxbrew plugin directory.
+
 ## Local Private Config
 
 Keep WSL-specific values in local files:
