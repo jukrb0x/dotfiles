@@ -53,5 +53,8 @@
         # IDEs
         @{ Id = "JetBrains.Toolbox" }
         @{ Id = "Anysphere.Cursor" }
+
+        # Games
+        @{ Id = "Valve.Steam" }
     )
 }
