@@ -108,6 +108,7 @@ function Parse-WinGetPackageSpec {
         VersionMode = $versionMode
         PinVersion  = $pinVersion
         Source      = "winget"
+        Scope       = $null
     }
 }
 
@@ -164,6 +165,7 @@ function ConvertTo-WinGetPackageSpec {
         VersionMode = $versionSpec.VersionMode
         PinVersion  = $versionSpec.PinVersion
         Source      = if ($Package.Source) { $Package.Source } else { "winget" }
+        Scope       = $Package.Scope
     }
 }
 
@@ -411,6 +413,10 @@ function Install-WinGetPackageSpec {
         $arguments += @($Spec.PackageName)
     } else {
         throw "Either Id or PackageName is required to install a WinGet package."
+    }
+
+    if ($Spec.Scope) {
+        $arguments += @("--scope", $Spec.Scope)
     }
 
     if ($Spec.VersionMode -ne "Any") {

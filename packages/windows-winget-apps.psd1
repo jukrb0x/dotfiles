@@ -21,7 +21,7 @@
         @{ Id = "voidtools.Everything" }
 
         # Editors and notes
-        @{ Id = "Microsoft.VisualStudioCode" }
+        @{ Id = "Microsoft.VisualStudioCode"; Scope = "machine" }
         @{ Id = "Notion.Notion" }
         @{ Id = "Appest.Dida" }
         @{ Id = "Obsidian.Obsidian" }

@@ -111,6 +111,7 @@ try {
         @{ Id = "Git.Git" }
         @{ Id = "tree-sitter.tree-sitter-cli"; Version = "0.26" }
         @{ PackageName = "Codex"; Source = "msstore"; Name = "Codex app" }
+        @{ Id = "Microsoft.VisualStudioCode"; Scope = "machine" }
     )
 }
 '@ | Set-Content -LiteralPath $manifestPath -Encoding utf8
@@ -124,10 +125,42 @@ try {
     Assert-Equal $manifestSpecs[2].PackageName "Codex" "Manifest entries should support PackageName installs."
     Assert-Equal $manifestSpecs[2].Source "msstore" "Manifest entries should preserve non-default sources."
     Assert-Equal $manifestSpecs[2].Name "Codex app" "Manifest entries should preserve friendly display names."
+    Assert-Equal $manifestSpecs[3].Scope "machine" "Manifest entries should preserve opt-in install scopes."
 } finally {
     if (Test-Path -LiteralPath $manifestPath) {
         Remove-Item -LiteralPath $manifestPath
     }
+}
+
+$script:wingetInvocations = @()
+function global:winget {
+    $script:wingetInvocations += ,@($args)
+    if ($args[0] -eq "list") {
+        $global:LASTEXITCODE = 1
+        return
+    }
+
+    $global:LASTEXITCODE = 0
+}
+
+try {
+    Install-WinGetPackageSpec -Spec ([pscustomobject]@{
+        Id          = "Microsoft.VisualStudioCode"
+        PackageName = $null
+        Name        = $null
+        Version     = $null
+        VersionMode = "Any"
+        PinVersion  = $null
+        Source      = "winget"
+        Scope       = "machine"
+    })
+
+    $installInvocation = @($script:wingetInvocations | Where-Object { $_[0] -eq "install" })[0]
+    Assert-True ($installInvocation -contains "--scope") "Scoped WinGet package installs should pass --scope."
+    $scopeIndex = [array]::IndexOf($installInvocation, "--scope")
+    Assert-Equal $installInvocation[$scopeIndex + 1] "machine" "Scoped WinGet package installs should pass the requested scope value."
+} finally {
+    Remove-Item -Path Function:\winget -ErrorAction SilentlyContinue
 }
 
 $installSpecText = (Get-Command Install-WinGetPackageSpec).ScriptBlock.ToString()
