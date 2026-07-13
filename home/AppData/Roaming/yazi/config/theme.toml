@@ -1,0 +1,10 @@
+[flavor]
+dark = "kanagawa"
+
+# Personal tweaks on top of Kanagawa:
+# Set terminal background and make symlinks visible
+[app]
+overall = { bg = "#1f1f28" }
+
+[mgr]
+symlink_target = { fg = "#7fb4ca", italic = true }

@@ -1,0 +1,40 @@
+[opener]
+edit = [
+	{ run = 'lvim "%s"', block = true, for = "windows" },
+	{ run = 'lvim "%s"', block = true, for = "unix" },
+]
+
+[open]
+prepend_rules = [
+	{ mime = "text/*", use = "edit" },
+	{ url ="*.json", use = "edit" },
+	{ url ="*.toml", use = "edit" },
+	{ url ="*.yaml", use = "edit" },
+	{ url ="*.yml", use = "edit" },
+	{ url ="*.lua", use = "edit" },
+	{ url ="*.md", use = "edit" },
+	{ url ="*.rs", use = "edit" },
+	{ url ="*.py", use = "edit" },
+	{ url ="*.js", use = "edit" },
+	{ url ="*.ts", use = "edit" },
+	{ url ="*.jsx", use = "edit" },
+	{ url ="*.tsx", use = "edit" },
+	{ url ="*.html", use = "edit" },
+	{ url ="*.css", use = "edit" },
+	{ url ="*.scss", use = "edit" },
+	{ url ="*.sh", use = "edit" },
+	{ url ="*.ps1", use = "edit" },
+	{ url ="*.bat", use = "edit" },
+	{ url ="*.txt", use = "edit" },
+	{ url ="*.log", use = "edit" },
+	{ url ="*.conf", use = "edit" },
+	{ url ="*.ini", use = "edit" },
+	{ url ="*.cfg", use = "edit" },
+	{ url ="*.env", use = "edit" },
+	{ url ="*.gitignore", use = "edit" },
+	{ url ="*.gitattributes", use = "edit" },
+	{ url ="Makefile", use = "edit" },
+	{ url ="Dockerfile", use = "edit" },
+	{ url ="docker-compose.yml", use = "edit" },
+	{ url ="docker-compose.yaml", use = "edit" },
+]
