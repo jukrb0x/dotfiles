@@ -109,6 +109,7 @@ function Parse-WinGetPackageSpec {
         PinVersion  = $pinVersion
         Source      = "winget"
         Scope       = $null
+        InstallerType = $null
     }
 }
 
@@ -166,6 +167,7 @@ function ConvertTo-WinGetPackageSpec {
         PinVersion  = $versionSpec.PinVersion
         Source      = if ($Package.Source) { $Package.Source } else { "winget" }
         Scope       = $Package.Scope
+        InstallerType = $Package.InstallerType
     }
 }
 
@@ -417,6 +419,10 @@ function Install-WinGetPackageSpec {
 
     if ($Spec.Scope) {
         $arguments += @("--scope", $Spec.Scope)
+    }
+
+    if ($Spec.InstallerType) {
+        $arguments += @("--installer-type", $Spec.InstallerType)
     }
 
     if ($Spec.VersionMode -ne "Any") {

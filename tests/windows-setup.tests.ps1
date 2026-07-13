@@ -112,6 +112,7 @@ try {
         @{ Id = "tree-sitter.tree-sitter-cli"; Version = "0.26" }
         @{ PackageName = "Codex"; Source = "msstore"; Name = "Codex app" }
         @{ Id = "Microsoft.VisualStudioCode"; Scope = "machine" }
+        @{ Id = "Microsoft.PowerShell"; InstallerType = "wix" }
     )
 }
 '@ | Set-Content -LiteralPath $manifestPath -Encoding utf8
@@ -126,6 +127,7 @@ try {
     Assert-Equal $manifestSpecs[2].Source "msstore" "Manifest entries should preserve non-default sources."
     Assert-Equal $manifestSpecs[2].Name "Codex app" "Manifest entries should preserve friendly display names."
     Assert-Equal $manifestSpecs[3].Scope "machine" "Manifest entries should preserve opt-in install scopes."
+    Assert-Equal $manifestSpecs[4].InstallerType "wix" "Manifest entries should preserve opt-in installer types."
 } finally {
     if (Test-Path -LiteralPath $manifestPath) {
         Remove-Item -LiteralPath $manifestPath
@@ -153,12 +155,16 @@ try {
         PinVersion  = $null
         Source      = "winget"
         Scope       = "machine"
+        InstallerType = "wix"
     })
 
     $installInvocation = @($script:wingetInvocations | Where-Object { $_[0] -eq "install" })[0]
     Assert-True ($installInvocation -contains "--scope") "Scoped WinGet package installs should pass --scope."
     $scopeIndex = [array]::IndexOf($installInvocation, "--scope")
     Assert-Equal $installInvocation[$scopeIndex + 1] "machine" "Scoped WinGet package installs should pass the requested scope value."
+    Assert-True ($installInvocation -contains "--installer-type") "Installer-typed WinGet package installs should pass --installer-type."
+    $installerTypeIndex = [array]::IndexOf($installInvocation, "--installer-type")
+    Assert-Equal $installInvocation[$installerTypeIndex + 1] "wix" "Installer-typed WinGet package installs should pass the requested installer type value."
 } finally {
     Remove-Item -Path Function:\winget -ErrorAction SilentlyContinue
 }

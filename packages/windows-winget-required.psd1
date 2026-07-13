@@ -2,7 +2,7 @@
     # WinGet packages required for managed Windows dotfiles to work.
     Packages = @(
         @{ Id = "Git.Git" }
-        @{ Id = "Microsoft.PowerShell" }
+        @{ Id = "Microsoft.PowerShell"; InstallerType = "wix" }
         @{ Id = "twpayne.chezmoi" }
         @{ Id = "Nushell.Nushell" }
         @{ Id = "Neovim.Neovim" }
