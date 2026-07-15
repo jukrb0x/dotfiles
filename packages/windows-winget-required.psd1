@@ -5,6 +5,11 @@
         @{ Id = "Microsoft.PowerShell"; InstallerType = "wix" }
         @{ Id = "twpayne.chezmoi" }
         @{ Id = "Nushell.Nushell" }
+
+        # Terminal multiplexers
+        @{ Id = "marlocarlo.psmux" }
+        @{ Id = "Helvesec.RMUX" }
+
         @{ Id = "Neovim.Neovim" }
         @{ Id = "Starship.Starship" }
         @{ Id = "ajeetdsouza.zoxide" }
