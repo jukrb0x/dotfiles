@@ -1,3 +1,4 @@
+{{- if ne .chezmoi.os "windows" -}}
 # : << EOF
 # https://github.com/gpakosz/.tmux
 # (‑●‑●)> dual licensed under the WTFPL v2 license and the MIT license,
@@ -46,23 +47,23 @@ tmux_conf_new_session_prompt=false
 tmux_conf_24b_colour=false
 
 # default theme
-tmux_conf_theme_colour_1="#080808"    # dark gray
-tmux_conf_theme_colour_2="#303030"    # gray
-tmux_conf_theme_colour_3="#8a8a8a"    # light gray
-tmux_conf_theme_colour_4="#00afff"    # light blue
-tmux_conf_theme_colour_5="#ffff00"    # yellow
-tmux_conf_theme_colour_6="#080808"    # dark gray
-tmux_conf_theme_colour_7="#e4e4e4"    # white
-tmux_conf_theme_colour_8="#080808"    # dark gray
-tmux_conf_theme_colour_9="#ffff00"    # yellow
-tmux_conf_theme_colour_10="#ff00af"   # pink
-tmux_conf_theme_colour_11="#5fff00"   # green
-tmux_conf_theme_colour_12="#8a8a8a"   # light gray
-tmux_conf_theme_colour_13="#e4e4e4"   # white
-tmux_conf_theme_colour_14="#080808"   # dark gray
-tmux_conf_theme_colour_15="#080808"   # dark gray
-tmux_conf_theme_colour_16="#d70000"   # red
-tmux_conf_theme_colour_17="#e4e4e4"   # white
+tmux_conf_theme_colour_1="{{ index .tmux.themeColours 0 }}"    # dark gray
+tmux_conf_theme_colour_2="{{ index .tmux.themeColours 1 }}"    # gray
+tmux_conf_theme_colour_3="{{ index .tmux.themeColours 2 }}"    # light gray
+tmux_conf_theme_colour_4="{{ index .tmux.themeColours 3 }}"    # light blue
+tmux_conf_theme_colour_5="{{ index .tmux.themeColours 4 }}"    # yellow
+tmux_conf_theme_colour_6="{{ index .tmux.themeColours 5 }}"    # dark gray
+tmux_conf_theme_colour_7="{{ index .tmux.themeColours 6 }}"    # white
+tmux_conf_theme_colour_8="{{ index .tmux.themeColours 7 }}"    # dark gray
+tmux_conf_theme_colour_9="{{ index .tmux.themeColours 8 }}"    # yellow
+tmux_conf_theme_colour_10="{{ index .tmux.themeColours 9 }}"   # pink
+tmux_conf_theme_colour_11="{{ index .tmux.themeColours 10 }}"   # green
+tmux_conf_theme_colour_12="{{ index .tmux.themeColours 11 }}"   # light gray
+tmux_conf_theme_colour_13="{{ index .tmux.themeColours 12 }}"   # white
+tmux_conf_theme_colour_14="{{ index .tmux.themeColours 13 }}"   # dark gray
+tmux_conf_theme_colour_15="{{ index .tmux.themeColours 14 }}"   # dark gray
+tmux_conf_theme_colour_16="{{ index .tmux.themeColours 15 }}"   # red
+tmux_conf_theme_colour_17="{{ index .tmux.themeColours 16 }}"   # white
 
 # default theme (ansi)
 #tmux_conf_theme_colour_1="colour0"
@@ -153,7 +154,7 @@ tmux_conf_theme_terminal_title="#h ❐ #S ● #I #W"
 tmux_conf_theme_window_status_fg="$tmux_conf_theme_colour_3"
 tmux_conf_theme_window_status_bg="$tmux_conf_theme_colour_1"
 tmux_conf_theme_window_status_attr="none"
-tmux_conf_theme_window_status_format="#I #W"
+tmux_conf_theme_window_status_format="{{ .tmux.windowStatusFormat }}"
 #tmux_conf_theme_window_status_format="#{circled_window_index} #W"
 #tmux_conf_theme_window_status_format="#I #W#{?window_bell_flag,🔔,}#{?window_zoomed_flag,🔍,}"
 
@@ -170,7 +171,7 @@ tmux_conf_theme_window_status_format="#I #W"
 tmux_conf_theme_window_status_current_fg="$tmux_conf_theme_colour_1"
 tmux_conf_theme_window_status_current_bg="$tmux_conf_theme_colour_4"
 tmux_conf_theme_window_status_current_attr="bold"
-tmux_conf_theme_window_status_current_format="#I #W"
+tmux_conf_theme_window_status_current_format="{{ .tmux.windowStatusFormat }}"
 #tmux_conf_theme_window_status_current_format="#{circled_window_index} #W"
 #tmux_conf_theme_window_status_current_format="#I #W#{?window_zoomed_flag,🔍,}"
 
@@ -227,8 +228,8 @@ tmux_conf_theme_right_separator_sub="|"
 #     - #{username}
 #     - #{username_ssh}
 # tmux_conf_theme_status_left=" ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} "
-tmux_conf_theme_status_left=" ❐ #S "
-tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} "
+tmux_conf_theme_status_left="{{ .tmux.statusLeft }}"
+tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , {{ .tmux.timeFormat }} , {{ .tmux.dateFormat }} | #{username}#{root} | #{hostname} "
 
 # status left style
 tmux_conf_theme_status_left_fg="$tmux_conf_theme_colour_6,$tmux_conf_theme_colour_7,$tmux_conf_theme_colour_8"
@@ -241,31 +242,31 @@ tmux_conf_theme_status_right_bg="$tmux_conf_theme_colour_15,$tmux_conf_theme_col
 tmux_conf_theme_status_right_attr="none,none,bold"
 
 # pairing indicator
-tmux_conf_theme_pairing="⚇"                 # U+2687
+tmux_conf_theme_pairing="{{ .tmux.pairingIndicator }}"                 # U+2687
 tmux_conf_theme_pairing_fg="none"
 tmux_conf_theme_pairing_bg="none"
 tmux_conf_theme_pairing_attr="none"
 
 # prefix indicator
-tmux_conf_theme_prefix="⌨"                  # U+2328
+tmux_conf_theme_prefix="{{ .tmux.prefixIndicator }}"                  # U+2328
 tmux_conf_theme_prefix_fg="none"
 tmux_conf_theme_prefix_bg="none"
 tmux_conf_theme_prefix_attr="none"
 
 # mouse indicator
-tmux_conf_theme_mouse="↗"                   # U+2197
+tmux_conf_theme_mouse="{{ .tmux.mouseIndicator }}"                   # U+2197
 tmux_conf_theme_mouse_fg="none"
 tmux_conf_theme_mouse_bg="none"
 tmux_conf_theme_mouse_attr="none"
 
 # root indicator
-tmux_conf_theme_root="!"
+tmux_conf_theme_root="{{ .tmux.rootIndicator }}"
 tmux_conf_theme_root_fg="none"
 tmux_conf_theme_root_bg="none"
 tmux_conf_theme_root_attr="bold,blink"
 
 # synchronized indicator
-tmux_conf_theme_synchronized="⚏"            # U+268F
+tmux_conf_theme_synchronized="{{ .tmux.synchronizedIndicator }}"            # U+268F
 tmux_conf_theme_synchronized_fg="none"
 tmux_conf_theme_synchronized_bg="none"
 tmux_conf_theme_synchronized_attr="none"
@@ -311,7 +312,7 @@ tmux_conf_battery_status_discharging="↓"    # U+2193
 # clock style (when you hit <prefix> + t)
 # you may want to use %I:%M %p in place of %R in tmux_conf_theme_status_right
 tmux_conf_theme_clock_colour="$tmux_conf_theme_colour_4"
-tmux_conf_theme_clock_style="24"
+tmux_conf_theme_clock_style="{{ .tmux.clockStyle }}"
 
 
 # -- clipboard -----------------------------------------------------------------
@@ -417,3 +418,41 @@ tmux_conf_uninstall_plugins_on_reload=true
 #
 # "$@"
 # # /!\ do not remove the previous line
+{{- else -}}
+{{- $c := .tmux.themeColours -}}
+# ~/.tmux.conf.local -- Windows psmux rendering of the shared customization.
+
+set -g window-style "fg=default,bg=default"
+set -g window-active-style "fg=default,bg=default"
+set -g pane-border-style "fg={{ index $c 1 }},bg=default"
+set -g pane-active-border-style "fg={{ index $c 3 }},bg=default"
+
+set -g message-style "fg={{ index $c 0 }},bg={{ index $c 4 }},bold"
+set -g message-command-style "fg={{ index $c 4 }},bg={{ index $c 0 }},bold"
+set -g mode-style "fg={{ index $c 0 }},bg={{ index $c 4 }},bold"
+
+set -g status on
+set -g status-position bottom
+set -g status-justify left
+set -g status-style "fg={{ index $c 2 }},bg={{ index $c 0 }},none"
+set -g status-left-style "fg={{ index $c 2 }},bg={{ index $c 0 }},none"
+set -g status-right-style "fg={{ index $c 2 }},bg={{ index $c 0 }},none"
+set -g status-left-length 1000
+set -g status-right-length 1000
+set -g status-left '#[fg={{ index $c 5 }},bg={{ index $c 8 }},bold]{{ .tmux.statusLeft }}#[none,fg={{ index $c 8 }},bg={{ index $c 7 }}] '
+set -g status-right '#[none,fg={{ index $c 11 }},bg={{ index $c 14 }}] #{?client_prefix,{{ .tmux.prefixIndicator }} ,  }#{?mouse,{{ .tmux.mouseIndicator }} ,  }#{?session_many_attached,{{ .tmux.pairingIndicator }} ,}#{?pane_synchronized,{{ .tmux.synchronizedIndicator }} ,} | {{ .tmux.timeFormat }} | {{ .tmux.dateFormat }} #[none,fg={{ index $c 12 }},bg={{ index $c 15 }}] #{user} #[fg={{ index $c 13 }},bg={{ index $c 16 }},bold] #{host_short} '
+
+set -g window-status-style "fg={{ index $c 2 }},bg={{ index $c 0 }},none"
+set -g window-status-current-style "fg={{ index $c 0 }},bg={{ index $c 3 }},bold"
+set -g window-status-activity-style "fg=default,bg=default,underscore"
+set -g window-status-bell-style "fg={{ index $c 4 }},bg=default,blink,bold"
+set -g window-status-last-style "fg={{ index $c 3 }},bg={{ index $c 1 }},none"
+set -g window-status-separator " "
+
+set -g clock-mode-colour "{{ index $c 3 }}"
+set -g clock-mode-style {{ .tmux.clockStyle }}
+
+# Keep both status edges fixed. Only the window list flexes and scrolls around
+# the active window, with tmux-compatible < / > overflow markers.
+set -g status-format[0] '#[align=left]#[fg={{ index $c 5 }},bg={{ index $c 8 }},bold]{{ .tmux.statusLeft }}#[none,fg={{ index $c 8 }},bg={{ index $c 7 }}] #[list=left-marker]#[fg={{ index $c 8 }},bg={{ index $c 7 }},bold]<#[list=right-marker]>#[list=on]#{W:#[range=window|#{e|-:#{window_index},1}]#{?window_active,#[list=focus]#[fg={{ index $c 0 }},bg={{ index $c 3 }},bold] {{ .tmux.windowStatusFormat }} #[none,fg={{ index $c 2 }},bg={{ index $c 0 }}],#{?window_last_flag,#[none,fg={{ index $c 3 }},bg={{ index $c 1 }}] {{ .tmux.windowStatusFormat }} #[none,fg={{ index $c 2 }},bg={{ index $c 0 }}],#[none,fg={{ index $c 2 }},bg={{ index $c 0 }}]{{ .tmux.windowStatusFormat }}}}#[norange]}#[nolist]#[align=right]#[none,fg={{ index $c 11 }},bg={{ index $c 14 }}] #{?client_prefix,{{ .tmux.prefixIndicator }} ,  }#{?mouse,{{ .tmux.mouseIndicator }} ,  }#{?session_many_attached,{{ .tmux.pairingIndicator }} ,}#{?pane_synchronized,{{ .tmux.synchronizedIndicator }} ,} | {{ .tmux.timeFormat }} | {{ .tmux.dateFormat }} #[none,fg={{ index $c 12 }},bg={{ index $c 15 }}] #{user} #[fg={{ index $c 13 }},bg={{ index $c 16 }},bold] #{host_short} '
+{{- end -}}

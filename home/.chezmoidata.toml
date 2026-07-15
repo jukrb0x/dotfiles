@@ -1,0 +1,30 @@
+[tmux]
+themeColours = [
+    "#080808",
+    "#303030",
+    "#8a8a8a",
+    "#00afff",
+    "#ffff00",
+    "#080808",
+    "#e4e4e4",
+    "#080808",
+    "#ffff00",
+    "#ff00af",
+    "#5fff00",
+    "#8a8a8a",
+    "#e4e4e4",
+    "#080808",
+    "#080808",
+    "#d70000",
+    "#e4e4e4",
+]
+windowStatusFormat = "#I #W"
+statusLeft = " ❐ #S "
+prefixIndicator = "⌨"
+mouseIndicator = "↗"
+pairingIndicator = "⚇"
+synchronizedIndicator = "⚏"
+rootIndicator = "!"
+timeFormat = "%R"
+dateFormat = "%d %b"
+clockStyle = 24

@@ -1,0 +1,5 @@
+{{- if eq .chezmoi.os "windows" -}}
+.psmux/.tmux.conf
+{{- else -}}
+.tmux/.tmux.conf
+{{- end -}}
