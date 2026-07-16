@@ -165,6 +165,8 @@ if ($IsWindows -and (Get-Command psmux -ErrorAction SilentlyContinue) -and (Get-
         Assert-True ($bindings -match 'prefix\s+C-a\s+send-prefix\s+-2') "psmux must retain the standard secondary-prefix passthrough binding."
         Assert-True ($bindings -match 'prefix\s+a\s+send-prefix\s+-2') "psmux must register Prefix+a as the working secondary-prefix passthrough fallback."
         Assert-True ($bindings -match 'prefix\s+b\s+list-buffers') "psmux must retain Prefix+b for buffer listing."
+        Assert-True ($bindings -match 'prefix\s+f\s+command-prompt.*find-window.*%%') "psmux must register Prefix+f with the complete find-window prompt template."
+        Assert-True ($bindings -match 'prefix\s+~\s+show-messages') "psmux must register Prefix+~ for message history."
 
         & psmux -L $serverName send-keys -t "verify:1" -l "INTERRUPT_ME"
         & psmux -L $serverName send-keys -t "verify:1" "0x03"

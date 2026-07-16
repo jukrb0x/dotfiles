@@ -60,6 +60,10 @@ bind C-c new-session
 bind C-f command-prompt -p find-session "switch-client -t %%"
 bind BTab switch-client -l
 
+# tmux defaults omitted by psmux 3.3.6.
+bind f command-prompt -p find-window 'find-window "%%"'
+bind ~ show-messages
+
 bind - split-window -v -c "#{pane_current_path}"
 bind _ split-window -h -c "#{pane_current_path}"
 bind '"' split-window -v -c "#{pane_current_path}"
