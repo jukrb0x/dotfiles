@@ -49,6 +49,7 @@ $stableWindowRangeCount = ([regex]::Matches($config, [regex]::Escape($stableWind
 Assert-True ($stableWindowRangeCount -eq 2) "Both active and inactive status tabs must open a click range for their stable window ID."
 $closedWindowRangeCount = ([regex]::Matches($config, [regex]::Escape('#[norange list=on]'))).Count
 Assert-True ($closedWindowRangeCount -ge 2) "Every clickable status tab must close its range without leaving the flexible list."
+Assert-Contains $config 'bind -n MouseDown1Status select-window -t =' "Status clicks must bypass rmux 0.9's switch-client mouse-target pane-index round trip when pane-base-index is 1."
 
 if ($IsWindows -and (Get-Command rmux -ErrorAction SilentlyContinue) -and (Get-Command nu -ErrorAction SilentlyContinue)) {
     $serverName = "chezmoi-rmux-test-$([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())"
