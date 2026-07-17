@@ -28,6 +28,9 @@ function Assert-Contains {
 
 Assert-Contains $config 'set -g default-command "nu"' "rmux panes must launch native Nushell."
 Assert-True (-not $config.Contains("cmd /c nu")) "The cmd.exe wrapper hides foreground titles and is no longer needed."
+Assert-True (-not $config.Contains('set -as terminal-features')) "Windows Terminal leaves outer TERM empty, so rmux 0.9 skips terminal-features patterns; do not retain a dead truecolor workaround."
+Assert-Contains $config 'set-environment -g CLAUDE_CODE_TMUX_TRUECOLOR 1' "Claude must keep its 24-bit palette when rmux exposes tmux compatibility."
+Assert-Contains $config 'set-environment -g COLORTERM truecolor' "WT-backed rmux panes must advertise their 24-bit colour capability to other applications."
 Assert-Contains $config 'bind -n C-d send-keys -H 04' "Bare Ctrl-D must bypass rmux 0.8.0's Windows Ctrl-D token gate."
 
 Assert-Contains $config 'set-hook -g after-new-session' "New sessions need an attached-client switch hook."
@@ -57,7 +60,11 @@ if ($IsWindows -and (Get-Command rmux -ErrorAction SilentlyContinue) -and (Get-C
         Start-Sleep -Milliseconds 500
 
         $paneCommand = (& rmux -L $serverName list-panes -t eot -F '#{pane_current_command}' 2>&1 | Out-String).Trim()
+        $claudeTruecolor = (& rmux -L $serverName show-environment -g CLAUDE_CODE_TMUX_TRUECOLOR 2>&1 | Out-String).Trim()
+        $colorTerm = (& rmux -L $serverName show-environment -g COLORTERM 2>&1 | Out-String).Trim()
         Assert-True ($paneCommand -eq "nu") "rmux must start native Nu; got '$paneCommand'."
+        Assert-True ($claudeTruecolor -eq "CLAUDE_CODE_TMUX_TRUECOLOR=1") "rmux panes must inherit Claude's tmux truecolor opt-in; got '$claudeTruecolor'."
+        Assert-True ($colorTerm -eq "COLORTERM=truecolor") "rmux panes must inherit the WT truecolor capability; got '$colorTerm'."
 
         $bindings = (& rmux -L $serverName list-keys 2>&1 | Out-String)
         Assert-True ($bindings -match 'root\s+C-d\s+send-keys\s+-H\s+04') "rmux must register the hexadecimal EOT root binding."
