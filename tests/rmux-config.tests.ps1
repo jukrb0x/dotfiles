@@ -43,7 +43,12 @@ Assert-Contains $config '#[none fg=#8a8a8a bg=#080808]#{?window_last_flag,#[fg=#
 Assert-Contains $config '#[list=focus none fg=#080808 bg=#00afff bold]' "The explicit rmux status format must emit the active-window style and list focus together."
 Assert-True (-not $config.Contains('#[#{E:')) "rmux 0.9 copies style clauses atomically, so expanded style options cannot be nested directly inside #[...]."
 $windowRangeCount = ([regex]::Matches($config, [regex]::Escape('range=window|#{window_index}'))).Count
-Assert-True ($windowRangeCount -eq 0) "rmux 0.8.0 window ranges break the explicit status colours and do not enable clicking."
+Assert-True ($windowRangeCount -eq 0) "Clickable status tabs must target stable window IDs, not renumbered window indexes."
+$stableWindowRange = '#{l:#[range=window|}#{s/@//:window_id}]'
+$stableWindowRangeCount = ([regex]::Matches($config, [regex]::Escape($stableWindowRange))).Count
+Assert-True ($stableWindowRangeCount -eq 2) "Both active and inactive status tabs must open a click range for their stable window ID."
+$closedWindowRangeCount = ([regex]::Matches($config, [regex]::Escape('#[norange list=on]'))).Count
+Assert-True ($closedWindowRangeCount -ge 2) "Every clickable status tab must close its range without leaving the flexible list."
 
 if ($IsWindows -and (Get-Command rmux -ErrorAction SilentlyContinue) -and (Get-Command nu -ErrorAction SilentlyContinue)) {
     $serverName = "chezmoi-rmux-test-$([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())"
