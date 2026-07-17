@@ -36,6 +36,9 @@ Assert-Contains $config 'switch-client -t #{session_name}' "The new-session hook
 
 Assert-Contains $config 'set -g automatic-rename-format "#{pane_current_command}"' "rmux must use its standard pane-command window label."
 Assert-True (-not $config.Contains('#{pane_title}')) "rmux must not derive window labels from full terminal titles or paths."
+Assert-Contains $config '#[none fg=#8a8a8a bg=#080808]#{?window_last_flag,#[fg=#00afff bg=#303030],}' "The explicit rmux status format must emit normal and recent-window colours without nested style expansion."
+Assert-Contains $config '#[list=focus none fg=#080808 bg=#00afff bold]' "The explicit rmux status format must emit the active-window style and list focus together."
+Assert-True (-not $config.Contains('#[#{E:')) "rmux 0.9 copies style clauses atomically, so expanded style options cannot be nested directly inside #[...]."
 $windowRangeCount = ([regex]::Matches($config, [regex]::Escape('range=window|#{window_index}'))).Count
 Assert-True ($windowRangeCount -eq 0) "rmux 0.8.0 window ranges break the explicit status colours and do not enable clicking."
 
