@@ -1,0 +1,174 @@
+# ~/.psmux.conf -- native Windows PSMUX configuration.
+# PSMUX intentionally owns this file instead of consuming ~/.tmux.conf.
+# Values from .chezmoidata.toml keep the visible theme aligned with tmux.
+#
+# oh-my-tmux generates its final configuration through POSIX shell. Native
+# Windows PSMUX understands tmux commands and formats, but does not execute that
+# generator, so this Windows-only file is a declarative static port.
+#
+# PSMUX annotation legend:
+# - PSMUX-WORKAROUND: temporary compatibility code with a removal test.
+# - PSMUX-PARITY: explicit binding omitted from PSMUX's tmux-compatible defaults.
+# - PSMUX-STATIC-PORT: declarative replacement for oh-my-tmux's POSIX generator.
+# - WINDOWS-POLICY: intentional Windows behavior, independent of PSMUX fixes.
+# - PSMUX-NATIVE: supported PSMUX behavior that is not a workaround.
+
+# -- shell and general behavior ------------------------------------------------
+
+# WINDOWS-POLICY: Native Windows sessions intentionally start Nushell directly.
+set -g default-shell nu
+set -g default-terminal "screen-256color"
+set -g escape-time 10
+set -g focus-events on
+
+set -g prefix C-b
+set -g prefix2 C-a
+# PSMUX-WORKAROUND-BEGIN: nested-prefix-fallback
+# Why: psmux 3.3.6 intercepts the second C-a before the prefix-table binding
+# can forward it, so C-a a is the working path into a nested WSL tmux.
+# Upstream: https://github.com/psmux/psmux/issues/310
+# Upstream: https://github.com/psmux/psmux/issues/472
+# Remove when: C-a C-a sends exactly one literal C-a into a nested WSL tmux
+# and C-a a is no longer needed; keep the standard C-a binding below.
+bind C-a send-prefix -2
+bind a send-prefix -2
+# PSMUX-WORKAROUND-END
+
+set -g history-limit 5000
+set -g base-index 1
+set -g pane-base-index 1
+# PSMUX-NATIVE: PSMUX polls the foreground process for direct-Nushell panes.
+set -g automatic-rename on
+set -g renumber-windows on
+set -g set-titles on
+set -g set-titles-string "#h ❐ #S ● #I #W"
+
+set -g display-panes-time 800
+set -g display-time 1000
+set -g status-interval 10
+set -g monitor-activity on
+set -g visual-activity off
+
+# Match the tmux default used by the current oh-my-tmux local configuration.
+set -g mouse off
+set -g status-keys vi
+set -g mode-keys vi
+# WINDOWS-POLICY: Keep the Windows Terminal cursor block-shaped and steady.
+set -g cursor-style block
+set -g cursor-blink off
+
+# -- editing and reload --------------------------------------------------------
+
+bind e new-window -n .psmux.conf nvim ~/.psmux.conf
+bind r source-file ~/.psmux.conf \; display-message "~/.psmux.conf sourced"
+
+# -- navigation ---------------------------------------------------------------
+
+# PSMUX-WORKAROUND-BEGIN: root-ctrl-c-dispatch
+# Why: psmux 3.3.6 delivers physical Ctrl-C as both raw ETX and CTRL_C_EVENT,
+# and its root table wins over the prefix table for the same key. This single
+# dispatcher preserves bare interruption and Prefix+C-c new-session semantics.
+# Upstream: https://github.com/psmux/psmux/issues/472
+# Remove when: bare Ctrl-C interrupts Nushell and Windows console children once
+# without a Starship error, while Prefix+C-c still creates a new session.
+bind -n C-c if-shell -F "#{client_prefix}" "new-session" "send-keys 0x03"
+# PSMUX-WORKAROUND-END
+
+bind C-c new-session
+bind C-f command-prompt -p find-session "switch-client -t %%"
+bind BTab switch-client -l
+
+# PSMUX-PARITY: PSMUX 3.3.6 omits these supported tmux default bindings.
+# Reconsider when `psmux -f NUL list-keys` shows equivalent defaults.
+bind f command-prompt -p find-window 'find-window "%%"'
+bind ~ show-messages
+
+bind - split-window -v -c "#{pane_current_path}"
+bind _ split-window -h -c "#{pane_current_path}"
+bind '"' split-window -v -c "#{pane_current_path}"
+bind % split-window -h -c "#{pane_current_path}"
+
+bind -r h select-pane -L
+bind -r j select-pane -D
+bind -r k select-pane -U
+bind -r l select-pane -R
+bind > swap-pane -D
+bind < swap-pane -U
+bind + resize-pane -Z
+
+bind -r H resize-pane -L 2
+bind -r J resize-pane -D 2
+bind -r K resize-pane -U 2
+bind -r L resize-pane -R 2
+
+unbind n
+unbind p
+bind -r C-h previous-window
+bind -r C-l next-window
+bind -r C-S-H swap-window -t -1 \; select-window -t -1
+bind -r C-S-L swap-window -t +1 \; select-window -t +1
+bind Tab last-window
+
+bind m if-shell -F "#{?mouse,1,0}" "set-option -g mouse off" "set-option -g mouse on"
+
+# -- copy mode and buffers -----------------------------------------------------
+
+bind Enter copy-mode
+bind -T copy-mode-vi v send -X begin-selection
+bind -T copy-mode-vi C-v send -X rectangle-toggle
+bind -T copy-mode-vi y send -X copy-selection-and-cancel
+bind -T copy-mode-vi Escape send -X cancel
+bind -T copy-mode-vi H send -X start-of-line
+bind -T copy-mode-vi L send -X end-of-line
+
+# WINDOWS-POLICY: Bridge PSMUX's buffer output to the Windows clipboard.
+bind y run-shell -b "psmux save-buffer - | Set-Clipboard"
+bind b list-buffers
+bind p paste-buffer -p
+bind P choose-buffer
+
+# -- appearance ---------------------------------------------------------------
+
+{{- $c := .tmux.themeColours -}}
+# PSMUX-STATIC-PORT: Emit concrete tmux commands from the shared oh-my-tmux
+# values because native Windows PSMUX cannot run oh-my-tmux's POSIX generator.
+
+set -g window-style "fg=default,bg=default"
+set -g window-active-style "fg=default,bg=default"
+set -g pane-border-style "fg={{ index $c 1 }},bg=default"
+set -g pane-active-border-style "fg={{ index $c 3 }},bg=default"
+
+set -g message-style "fg={{ index $c 0 }},bg={{ index $c 4 }},bold"
+set -g message-command-style "fg={{ index $c 4 }},bg={{ index $c 0 }},bold"
+set -g mode-style "fg={{ index $c 0 }},bg={{ index $c 4 }},bold"
+
+set -g status on
+set -g status-position bottom
+set -g status-justify left
+set -g status-style "fg={{ index $c 2 }},bg={{ index $c 0 }},none"
+set -g status-left-style "fg={{ index $c 2 }},bg={{ index $c 0 }},none"
+set -g status-right-style "fg={{ index $c 2 }},bg={{ index $c 0 }},none"
+set -g status-left-length 1000
+set -g status-right-length 1000
+set -g status-left '#[fg={{ index $c 5 }},bg={{ index $c 8 }},bold]{{ .tmux.statusLeft }}#[none,fg={{ index $c 8 }},bg={{ index $c 7 }}] '
+set -g status-right '#[none,fg={{ index $c 11 }},bg={{ index $c 14 }}] #{?client_prefix,{{ .tmux.prefixIndicator }} ,  }#{?mouse,{{ .tmux.mouseIndicator }} ,  }#{?session_many_attached,{{ .tmux.pairingIndicator }} ,}#{?pane_synchronized,{{ .tmux.synchronizedIndicator }} ,} | {{ .tmux.timeFormat }} | {{ .tmux.dateFormat }} #[none,fg={{ index $c 12 }},bg={{ index $c 15 }}] #{user} #[fg={{ index $c 13 }},bg={{ index $c 16 }},bold] #{host_short} '
+
+set -g window-status-style "fg={{ index $c 2 }},bg={{ index $c 0 }},none"
+set -g window-status-current-style "fg={{ index $c 0 }},bg={{ index $c 3 }},bold"
+set -g window-status-activity-style "fg=default,bg=default,underscore"
+set -g window-status-bell-style "fg={{ index $c 4 }},bg=default,blink,bold"
+set -g window-status-last-style "fg={{ index $c 3 }},bg={{ index $c 1 }},none"
+set -g window-status-separator " "
+
+set -g clock-mode-colour "{{ index $c 3 }}"
+set -g clock-mode-style {{ .tmux.clockStyle }}
+
+# PSMUX-WORKAROUND-BEGIN: status-layout-adapter
+# Why: PSMUX's native status rendering does not reproduce oh-my-tmux's fixed
+# edges and flexible middle list, so one explicit format owns the full row.
+# Remove when: native PSMUX keeps both status edges visible at narrow widths;
+# only the middle window list flexes or scrolls; the active window stays visible;
+# the immediately previous window uses the recent-window style; and clicking a
+# displayed window selects that exact target index without the zero-based offset.
+set -g status-format[0] '#[align=left]#[fg={{ index $c 5 }},bg={{ index $c 8 }},bold]{{ .tmux.statusLeft }}#[none,fg={{ index $c 8 }},bg={{ index $c 7 }}] #[list=left-marker]#[fg={{ index $c 8 }},bg={{ index $c 7 }},bold]<#[list=right-marker]>#[list=on]#{W:#[range=window|#{e|-:#{window_index},1}]#{?window_active,#[list=focus]#[fg={{ index $c 0 }},bg={{ index $c 3 }},bold] {{ .tmux.windowStatusFormat }} #[none,fg={{ index $c 2 }},bg={{ index $c 0 }}],#{?window_last_flag,#[none,fg={{ index $c 3 }},bg={{ index $c 1 }}] {{ .tmux.windowStatusFormat }} #[none,fg={{ index $c 2 }},bg={{ index $c 0 }}],#[none,fg={{ index $c 2 }},bg={{ index $c 0 }}]{{ .tmux.windowStatusFormat }}}}#[norange]}#[nolist]#[align=right]#[none,fg={{ index $c 11 }},bg={{ index $c 14 }}] #{?client_prefix,{{ .tmux.prefixIndicator }} ,  }#{?mouse,{{ .tmux.mouseIndicator }} ,  }#{?session_many_attached,{{ .tmux.pairingIndicator }} ,}#{?pane_synchronized,{{ .tmux.synchronizedIndicator }} ,} | {{ .tmux.timeFormat }} | {{ .tmux.dateFormat }} #[none,fg={{ index $c 12 }},bg={{ index $c 15 }}] #{user} #[fg={{ index $c 13 }},bg={{ index $c 16 }},bold] #{host_short} '
+# PSMUX-WORKAROUND-END
