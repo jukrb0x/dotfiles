@@ -32,6 +32,10 @@ Assert-True (-not $config.Contains('set -as terminal-features')) "Windows Termin
 Assert-Contains $config 'set-environment -g CLAUDE_CODE_TMUX_TRUECOLOR 1' "Claude must keep its 24-bit palette when rmux exposes tmux compatibility."
 Assert-Contains $config 'set-environment -g COLORTERM truecolor' "WT-backed rmux panes must advertise their 24-bit colour capability to other applications."
 Assert-Contains $config 'bind -n C-d send-keys -H 04' "Bare Ctrl-D must bypass rmux 0.8.0's Windows Ctrl-D token gate."
+Assert-Contains $config "set -s copy-command 'clip.exe'" "rmux copy-mode must target the Windows clipboard."
+Assert-Contains $config 'bind -T copy-mode-vi y      send -X copy-pipe-and-cancel' "Copy-mode y must copy directly to the configured clipboard command."
+Assert-Contains $config 'bind -T copy-mode-vi Enter  send -X copy-pipe-and-cancel' "Copy-mode Enter must copy directly to the configured clipboard command."
+Assert-Contains $config 'bind -T copy-mode-vi C-c    send -X copy-pipe-and-cancel' "Copy-mode Ctrl-C must copy directly to the configured clipboard command."
 
 Assert-Contains $config 'set-hook -g after-new-session' "New sessions need an attached-client switch hook."
 Assert-Contains $config '#{client_name}' "The new-session hook must be a no-op for detached CLI callers."
@@ -66,14 +70,20 @@ if ($IsWindows -and (Get-Command rmux -ErrorAction SilentlyContinue) -and (Get-C
         Start-Sleep -Milliseconds 500
 
         $paneCommand = (& rmux -L $serverName list-panes -t eot -F '#{pane_current_command}' 2>&1 | Out-String).Trim()
-        $claudeTruecolor = (& rmux -L $serverName show-environment -g CLAUDE_CODE_TMUX_TRUECOLOR 2>&1 | Out-String).Trim()
-        $colorTerm = (& rmux -L $serverName show-environment -g COLORTERM 2>&1 | Out-String).Trim()
         Assert-True ($paneCommand -eq "nu") "rmux must start native Nu; got '$paneCommand'."
-        Assert-True ($claudeTruecolor -eq "CLAUDE_CODE_TMUX_TRUECOLOR=1") "rmux panes must inherit Claude's tmux truecolor opt-in; got '$claudeTruecolor'."
-        Assert-True ($colorTerm -eq "COLORTERM=truecolor") "rmux panes must inherit the WT truecolor capability; got '$colorTerm'."
 
         $bindings = (& rmux -L $serverName list-keys 2>&1 | Out-String)
+        $copyCommand = (& rmux -L $serverName show-options -s copy-command 2>&1 | Out-String).Trim()
+        $claudeTruecolor = (& rmux -L $serverName show-environment -g CLAUDE_CODE_TMUX_TRUECOLOR 2>&1 | Out-String).Trim()
+        $colorTerm = (& rmux -L $serverName show-environment -g COLORTERM 2>&1 | Out-String).Trim()
         Assert-True ($bindings -match 'root\s+C-d\s+send-keys\s+-H\s+04') "rmux must register the hexadecimal EOT root binding."
+        Assert-True ($bindings -match 'root\s+MouseDown1Status\s+select-window\s+-t\s+=') "rmux must route status clicks directly to select-window; got bindings without the pane-base-index workaround."
+        Assert-True ($copyCommand -eq "copy-command clip.exe") "rmux must load clip.exe as its server-level copy command; got '$copyCommand'."
+        Assert-True ($claudeTruecolor -eq "CLAUDE_CODE_TMUX_TRUECOLOR=1") "rmux panes must inherit Claude's tmux truecolor opt-in; got '$claudeTruecolor'."
+        Assert-True ($colorTerm -eq "COLORTERM=truecolor") "rmux panes must inherit the WT truecolor capability; got '$colorTerm'."
+        Assert-True ($bindings -match 'copy-mode-vi\s+y\s+send-keys\s+-X\s+copy-pipe-and-cancel') "rmux must register copy-mode y for direct clipboard copy."
+        Assert-True ($bindings -match 'copy-mode-vi\s+Enter\s+send-keys\s+-X\s+copy-pipe-and-cancel') "rmux must register copy-mode Enter for direct clipboard copy."
+        Assert-True ($bindings -match 'copy-mode-vi\s+C-c\s+send-keys\s+-X\s+copy-pipe-and-cancel') "rmux must register copy-mode Ctrl-C for direct clipboard copy."
 
         $hooks = (& rmux -L $serverName show-hooks -g after-new-session 2>&1 | Out-String)
         Assert-True ($hooks -match 'after-new-session') "rmux must register the guarded new-session switch hook."
