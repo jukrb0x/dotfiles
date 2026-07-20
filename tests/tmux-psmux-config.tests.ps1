@@ -25,6 +25,37 @@ function Assert-Contains {
     Assert-True $Content.Contains($Expected) "$Message`nMissing: $Expected"
 }
 
+function Assert-PsmuxWorkaroundAnnotations {
+    param(
+        [Parameter(Mandatory)] [string] $PsmuxBaseSource,
+        [Parameter(Mandatory)] [string] $LocalTemplateSource
+    )
+
+    Assert-Contains $PsmuxBaseSource '# PSMUX annotation legend:' "The psmux template must explain its compatibility markers."
+
+    $combinedSource = "$PsmuxBaseSource`n$LocalTemplateSource"
+    $beginCount = ([regex]::Matches($combinedSource, '(?m)^# PSMUX-WORKAROUND-BEGIN:')).Count
+    $endCount = ([regex]::Matches($combinedSource, '(?m)^# PSMUX-WORKAROUND-END$')).Count
+    Assert-True ($beginCount -eq $endCount) "Every psmux workaround marker must have a matching end marker."
+
+    $blocks = [regex]::Matches(
+        $combinedSource,
+        '(?ms)^# PSMUX-WORKAROUND-BEGIN: (?<id>[^\r\n]+)\r?\n(?<body>.*?)^# PSMUX-WORKAROUND-END$'
+    )
+    Assert-True ($blocks.Count -eq 3) "Expected exactly three documented psmux workaround blocks."
+
+    $expectedIds = @('nested-prefix-fallback', 'root-ctrl-c-dispatch', 'status-layout-adapter')
+    foreach ($block in $blocks) {
+        Assert-Contains $block.Groups['body'].Value '# Why:' "Workaround '$($block.Groups['id'].Value)' must explain why it exists."
+        Assert-Contains $block.Groups['body'].Value '# Remove when:' "Workaround '$($block.Groups['id'].Value)' must define its removal test."
+    }
+
+    $blockIds = @($blocks | ForEach-Object { $_.Groups['id'].Value })
+    foreach ($id in $expectedIds) {
+        Assert-True ($blockIds -contains $id) "Missing psmux workaround annotation: $id"
+    }
+}
+
 function Normalize-Newlines {
     param([Parameter(Mandatory)] [string] $Content)
 
@@ -102,6 +133,8 @@ Assert-Contains $windowsLocal '#d70000' "Windows local config must use the share
 Assert-True (-not $windowsLocal.Contains("tmux_conf_theme_colour_1=")) "Windows local config must not emit POSIX assignments."
 
 $localTemplateSource = Get-Content -LiteralPath (Join-Path $sourceRoot "dot_tmux.conf.local.tmpl") -Raw
+$psmuxBaseSource = Get-Content -LiteralPath (Join-Path $sourceRoot "dot_psmux/dot_tmux.conf.tmpl") -Raw
+Assert-PsmuxWorkaroundAnnotations $psmuxBaseSource $localTemplateSource
 Assert-True `
     (([regex]::Matches($localTemplateSource, [regex]::Escape('{{ .tmux.timeFormat }}'))).Count -ge 3) `
     "Both platform renderings must consume the shared status time format."

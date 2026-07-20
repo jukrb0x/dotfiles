@@ -4,9 +4,19 @@
 # Windows psmux understands tmux commands and formats, but does not execute that
 # generator. Keep this Windows-only file declarative and load the platform
 # rendering of the shared customizations from ~/.tmux.conf.local.
+# PSMUX-STATIC-PORT: On Windows, ~/.tmux.conf points to this static rendering;
+# macOS and Linux continue to point to oh-my-tmux's generated configuration.
+#
+# PSMUX annotation legend:
+# - PSMUX-WORKAROUND: temporary compatibility code with a removal test.
+# - PSMUX-PARITY: explicit binding omitted from psmux's tmux-compatible defaults.
+# - PSMUX-STATIC-PORT: declarative replacement for oh-my-tmux's POSIX generator.
+# - WINDOWS-POLICY: intentional Windows behavior, independent of psmux fixes.
+# - PSMUX-NATIVE: supported psmux behavior that is not a workaround.
 
 # -- shell and general behavior ------------------------------------------------
 
+# WINDOWS-POLICY: Native Windows sessions intentionally start Nushell directly.
 set -g default-shell nu
 set -g default-terminal "screen-256color"
 set -g escape-time 10
@@ -14,16 +24,21 @@ set -g focus-events on
 
 set -g prefix C-b
 set -g prefix2 C-a
-# Standard tmux binding for sending the secondary prefix to a nested tmux.
-# psmux 3.3.6 currently intercepts the second C-a before this prefix-table
-# binding. Keep it for future compatibility and provide C-a a as the working
-# fallback for sending C-a to a nested WSL tmux today.
+# PSMUX-WORKAROUND-BEGIN: nested-prefix-fallback
+# Why: psmux 3.3.6 intercepts the second C-a before the prefix-table binding
+# can forward it, so C-a a is the working path into a nested WSL tmux.
+# Upstream: https://github.com/psmux/psmux/issues/310
+# Upstream: https://github.com/psmux/psmux/issues/472
+# Remove when: C-a C-a sends exactly one literal C-a into a nested WSL tmux
+# and C-a a is no longer needed; keep the standard C-a binding below.
 bind C-a send-prefix -2
 bind a send-prefix -2
+# PSMUX-WORKAROUND-END
 
 set -g history-limit 5000
 set -g base-index 1
 set -g pane-base-index 1
+# PSMUX-NATIVE: psmux polls the foreground process for direct-Nushell panes.
 set -g automatic-rename on
 set -g renumber-windows on
 set -g set-titles on
@@ -39,6 +54,7 @@ set -g visual-activity off
 set -g mouse off
 set -g status-keys vi
 set -g mode-keys vi
+# WINDOWS-POLICY: Keep the Windows Terminal cursor block-shaped and steady.
 set -g cursor-style block
 set -g cursor-blink off
 
@@ -49,18 +65,22 @@ bind r source-file ~/.tmux.conf \; display-message "~/.tmux.conf sourced"
 
 # -- navigation ---------------------------------------------------------------
 
-# psmux 3.3.6 delivers physical Ctrl-C twice on Windows: once as raw ETX and
-# once as CTRL_C_EVENT. Sending only ETX preserves shell and child-process
-# interruption without interrupting Nushell's subsequent Starship redraw.
-# Its root table also wins over the prefix table for the same key (issue #472),
-# so this one dispatcher must preserve Prefix+C-c new-session semantics too.
+# PSMUX-WORKAROUND-BEGIN: root-ctrl-c-dispatch
+# Why: psmux 3.3.6 delivers physical Ctrl-C as both raw ETX and CTRL_C_EVENT,
+# and its root table wins over the prefix table for the same key. This single
+# dispatcher preserves bare interruption and Prefix+C-c new-session semantics.
+# Upstream: https://github.com/psmux/psmux/issues/472
+# Remove when: bare Ctrl-C interrupts Nushell and Windows console children once
+# without a Starship error, while Prefix+C-c still creates a new session.
 bind -n C-c if-shell -F "#{client_prefix}" "new-session" "send-keys 0x03"
+# PSMUX-WORKAROUND-END
 
 bind C-c new-session
 bind C-f command-prompt -p find-session "switch-client -t %%"
 bind BTab switch-client -l
 
-# tmux defaults omitted by psmux 3.3.6.
+# PSMUX-PARITY: psmux 3.3.6 omits these supported tmux default bindings.
+# Reconsider when `psmux -f NUL list-keys` shows equivalent defaults.
 bind f command-prompt -p find-window 'find-window "%%"'
 bind ~ show-messages
 
@@ -102,6 +122,7 @@ bind -T copy-mode-vi Escape send -X cancel
 bind -T copy-mode-vi H send -X start-of-line
 bind -T copy-mode-vi L send -X end-of-line
 
+# WINDOWS-POLICY: Bridge psmux's buffer output to the Windows clipboard.
 bind y run-shell -b "psmux save-buffer - | Set-Clipboard"
 bind b list-buffers
 bind p paste-buffer -p
