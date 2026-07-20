@@ -1,0 +1,12 @@
+{{ if eq .chezmoi.os "windows" -}}
+#Requires -Version 7.1
+$ErrorActionPreference = "Stop"
+
+# packages/windows-rmux.psd1 hash: {{ include "../packages/windows-rmux.psd1" | sha256sum }}
+# scripts/install-windows-rmux.ps1 hash: {{ include "../scripts/install-windows-rmux.ps1" | sha256sum }}
+# scripts/lib/RmuxInstaller.psm1 hash: {{ include "../scripts/lib/RmuxInstaller.psm1" | sha256sum }}
+$manifestPath = {{ joinPath .chezmoi.sourceDir ".." "packages" "windows-rmux.psd1" | quote }}
+$installerPath = {{ joinPath .chezmoi.sourceDir ".." "scripts" "install-windows-rmux.ps1" | quote }}
+
+& $installerPath -ManifestPath $manifestPath -HomePath $HOME
+{{ end -}}

@@ -45,12 +45,14 @@ on Windows:
 - `run_after_05-windows-user-environment.ps1.tmpl`
 - `run_after_10-windows-user-path.ps1.tmpl`
 - `run_onchange_after_20-windows-winget-required.ps1.tmpl`
+- `run_onchange_after_25-windows-rmux.ps1.tmpl`
 - `run_onchange_after_30-windows-scoop-required.ps1.tmpl`
 - `run_onchange_after_40-windows-msys2-required.ps1.tmpl`
 
 Required package lists live in `packages/`:
 
 - `windows-winget-required.psd1`
+- `windows-rmux.psd1`
 - `windows-scoop-required.txt`
 - `windows-msys2-required.txt`
 
@@ -178,6 +180,26 @@ The optional WinGet apps manifest uses PowerShell data syntax:
     )
 }
 ```
+
+## Personal RMUX build
+
+RMUX is not installed from Winget. `chezmoi apply` installs the immutable
+`jukrb0x/rmux` Release pinned in `packages/windows-rmux.psd1`; the current pin is
+`v0.9.0-jukrb0x.3`. The manifest records the archive, Git commit, and all three
+Windows executable hashes.
+
+The installer first tries the public GitHub Release URL. If GitHub rejects or
+rate-limits the anonymous request, an installed and authenticated GitHub CLI is
+used automatically. Authenticate it once with:
+
+```powershell
+gh auth login
+```
+
+RMUX's packaged installer updates its shim, full helper, and daemon as one
+transaction. If an RMUX process locks those files, close RMUX and rerun
+`chezmoi apply`; the installer never kills the current session or leaves a
+partially replaced package.
 
 ## Scoop
 

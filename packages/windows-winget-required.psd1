@@ -8,7 +8,6 @@
 
         # Terminal multiplexers
         @{ Id = "marlocarlo.psmux" }
-        @{ Id = "Helvesec.RMUX" }
 
         @{ Id = "Neovim.Neovim" }
         @{ Id = "Starship.Starship" }

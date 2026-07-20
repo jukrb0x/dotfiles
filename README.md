@@ -175,6 +175,10 @@ Upgrade only packages declared in this repo's WinGet manifests with:
 pwsh ./scripts/update-windows-winget.ps1 --managed
 ```
 
+On Windows, RMUX is installed from the immutable personal fork Release pinned in
+`packages/windows-rmux.psd1`, with a public-download path and authenticated `gh`
+fallback. See `docs/windows.md` for update and file-lock behavior.
+
 See [docs/windows.md](docs/windows.md) and
 [docs/toolchains.md](docs/toolchains.md) for the current Windows setup model.
 
