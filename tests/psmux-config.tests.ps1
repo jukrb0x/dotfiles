@@ -125,6 +125,14 @@ foreach ($token in @('.tmux.timeFormat', '.tmux.dateFormat', '.tmux.windowStatus
 $windowsIgnore = Render-SourceTemplate ".chezmoiignore.tmpl" "windows"
 Assert-True (-not ($windowsIgnore -split "`n").Contains(".psmux.conf")) "Windows must manage ~/.psmux.conf."
 
+$windowsRemovalList = Render-SourceTemplate ".chezmoiremove.tmpl" "windows"
+$linuxRemovalList = Render-SourceTemplate ".chezmoiremove.tmpl" "linux"
+Assert-True ($windowsRemovalList.Trim() -eq ".psmux/.tmux.conf") "Windows must remove only the obsolete nested compatibility file."
+Assert-True ([string]::IsNullOrWhiteSpace($linuxRemovalList)) "Non-Windows hosts must not remove PSMUX paths."
+Assert-True (-not $windowsRemovalList.Contains('.psmux/**')) "Migration must never recursively remove ~/.psmux."
+Assert-True (-not (Test-Path (Join-Path $sourceRoot "dot_psmux/dot_tmux.conf.tmpl"))) "The old nested compatibility source must be gone."
+Assert-True (-not (Test-Path (Join-Path $sourceRoot "remove_dot_psmux.conf"))) "The old native-config removal entry must be gone."
+
 if ($IsWindows -and (Get-Command psmux -ErrorAction SilentlyContinue) -and (Get-Command nu -ErrorAction SilentlyContinue)) {
     $runtimeId = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
     $runtimeHome = Join-Path $env:TEMP "chezmoi-psmux-test-$runtimeId"

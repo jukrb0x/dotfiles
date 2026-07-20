@@ -59,13 +59,17 @@ $expectedUnixLocalHash = "132e1377e2ba4f027cf2c7056a96c6d647456f116692c469a0ef59
 
 $linuxEntry = Render-SourceTemplate "symlink_dot_tmux.conf.tmpl" "linux"
 $darwinEntry = Render-SourceTemplate "symlink_dot_tmux.conf.tmpl" "darwin"
+$windowsEntry = Render-SourceTemplate "symlink_dot_tmux.conf.tmpl" "windows"
 Assert-True ($linuxEntry.Trim() -eq ".tmux/.tmux.conf") "Linux ~/.tmux.conf must point to oh-my-tmux."
 Assert-True ($darwinEntry.Trim() -eq ".tmux/.tmux.conf") "macOS ~/.tmux.conf must point to oh-my-tmux."
+Assert-True ([string]::IsNullOrWhiteSpace($windowsEntry)) "Windows must not deploy ~/.tmux.conf."
 
 $linuxLocal = Render-SourceTemplate "dot_tmux.conf.local.tmpl" "linux"
 $darwinLocal = Render-SourceTemplate "dot_tmux.conf.local.tmpl" "darwin"
+$windowsLocal = Render-SourceTemplate "dot_tmux.conf.local.tmpl" "windows"
 Assert-True ((Get-NormalizedSha256 $linuxLocal) -eq $expectedUnixLocalHash) "Linux ~/.tmux.conf.local changed unexpectedly."
 Assert-True ((Get-NormalizedSha256 $darwinLocal) -eq $expectedUnixLocalHash) "macOS ~/.tmux.conf.local changed unexpectedly."
+Assert-True ([string]::IsNullOrWhiteSpace($windowsLocal)) "Windows must not deploy ~/.tmux.conf.local."
 
 $linuxIgnore = Render-SourceTemplate ".chezmoiignore.tmpl" "linux"
 $darwinIgnore = Render-SourceTemplate ".chezmoiignore.tmpl" "darwin"
