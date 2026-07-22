@@ -95,6 +95,12 @@ macOS bootstrap currently installs:
 - Homebrew
 - chezmoi
 
+Linux bootstrap currently installs:
+
+- dnf or apt prerequisites, depending on the entry point
+- Homebrew for Linux
+- chezmoi
+
 ### 2. Required State
 
 `chezmoi apply` owns state that the managed dotfiles need in order to work:
@@ -223,8 +229,25 @@ daily maintenance, and the required-vs-optional Homebrew model.
 Linux uses Homebrew for Linux, sharing the zsh-oriented shell setup with macOS
 while keeping macOS-only paths and apps out of Linux.
 
-See [docs/linux.md](docs/linux.md) for Linuxbrew package sync and shared shell
-notes.
+CentOS-like bootstrap, including CentOS Stream, RHEL, Rocky Linux, AlmaLinux,
+and Fedora-like hosts:
+
+```shell
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/jukrb0x/dotfiles/main/bootstrap/centos.sh)"
+```
+
+To use a fork or another remote, override the repo URL:
+
+```shell
+DOTFILES_REPO_URL=https://github.com/you/dotfiles.git /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/jukrb0x/dotfiles/main/bootstrap/centos.sh)"
+```
+
+The bootstrap uses `dnf` for Linuxbrew prerequisites, installs Homebrew for
+Linux when missing, installs chezmoi through Homebrew, and initializes without
+applying changes.
+
+See [docs/linux.md](docs/linux.md) for Linuxbrew package sync, shared shell
+notes, and the local-run form of the bootstrap.
 
 ## WSL
 

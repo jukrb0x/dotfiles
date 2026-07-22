@@ -28,6 +28,7 @@
 
 ## Linux only
 
+- CentOS-like bootstrap through `bootstrap/centos.sh`
 - required Linuxbrew sync through `packages/Brewfile.required`, `packages/Brewfile.linux.required`, and the Linux chezmoi onchange script
 - optional Linuxbrew setup through `packages/Brewfile.optional`, `packages/Brewfile.toolchains`, `packages/Brewfile.linux.toolchains`, and the matching `scripts/install-linux-*.sh` commands
 

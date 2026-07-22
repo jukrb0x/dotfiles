@@ -11,6 +11,37 @@ Shared shell files are templated so Linux receives the zsh, Oh My Zsh,
 Powerlevel10k, tmux, editor, Git, and CLI-tool configuration while macOS-only
 apps and SDK paths stay on macOS.
 
+## Bootstrap
+
+For CentOS-like distributions with `dnf`, including CentOS Stream, RHEL,
+Rocky Linux, AlmaLinux, and Fedora-like hosts, run:
+
+```shell
+/bin/bash ./bootstrap/centos.sh
+```
+
+The dnf bootstrap installs Linuxbrew prerequisites with:
+
+```shell
+sudo dnf group install 'Development Tools'
+sudo dnf install procps-ng curl file
+```
+
+It also ensures `git` and `zsh` are present for the dotfiles workflow. After the
+system prerequisites are present, it installs Homebrew for Linux when missing,
+installs chezmoi through Homebrew, initializes `~/.local/share/chezmoi`, and
+stops before applying changes.
+
+Review the pending changes before applying them:
+
+```shell
+chezmoi diff
+chezmoi apply
+```
+
+The Ubuntu WSL bootstrap remains separate in `bootstrap/wsl.sh` because it uses
+`apt-get` prerequisites and WSL-specific setup notes.
+
 ## Required Packages
 
 Required Linux packages live in:
