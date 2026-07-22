@@ -49,6 +49,7 @@ end
 
 -- vim config
 vim.opt.relativenumber = true
+vim.opt.timeoutlen = 300
 
 -- general
 lvim.format_on_save.enabled = false
