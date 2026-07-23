@@ -1,6 +1,9 @@
 [merge]
     command = {{ if eq .chezmoi.os "windows" }}"{{ .chezmoi.homeDir }}\\.local\\bin\\lvim.bat"{{ else }}"lvim"{{ end }}
 
+[data]
+    manageShellExternals = true
+
 {{ if eq .chezmoi.os "windows" }}
 [interpreters.ps1]
     command = "pwsh"

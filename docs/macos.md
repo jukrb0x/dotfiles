@@ -150,9 +150,10 @@ These files are intentionally not managed by this repo.
 
 ## External Archives
 
-External shell assets can use chezmoi externals, but they are opt-in. Keep the
-default off on existing machines so `chezmoi diff` and `chezmoi apply` do not
-depend on GitHub archive downloads.
+Fresh chezmoi configurations enable external shell assets, so the first apply
+downloads Oh My Zsh, Powerlevel10k, and the configured plugins. Existing
+configurations remain opt-in so their `chezmoi diff` and `chezmoi apply` do not
+start depending on GitHub archive downloads unexpectedly.
 
 To let chezmoi manage shell externals on a machine, add this to that machine's
 chezmoi config:

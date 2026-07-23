@@ -35,8 +35,23 @@ stops before applying changes.
 Review the pending changes before applying them:
 
 ```shell
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 chezmoi diff
 chezmoi apply
+chsh -s "$(command -v zsh)"
+```
+
+After the first `chezmoi apply`, the managed zsh files add Linuxbrew to shell
+startup and chezmoi downloads Oh My Zsh, Powerlevel10k, and the configured zsh
+plugins. Before that, the `eval` command above makes `brew` and `chezmoi`
+available only in the current shell. The bootstrap deliberately leaves `chsh`
+explicit because it changes an account-level setting and can require an
+interactive password. Start a new login session after it succeeds. If you do
+not want to change the current shell environment, use the absolute path instead:
+
+```shell
+/home/linuxbrew/.linuxbrew/bin/chezmoi diff
+/home/linuxbrew/.linuxbrew/bin/chezmoi apply
 ```
 
 The Ubuntu WSL bootstrap remains separate in `bootstrap/wsl.sh` because it uses
@@ -61,14 +76,6 @@ Use `packages/Brewfile.required` for CLI tools shared with macOS when the
 Homebrew formula name is portable. Keep Linux-only formulae in
 `packages/Brewfile.linux.required` and macOS-only formulae such as
 `pinentry-mac` in the macOS Brewfile.
-
-## Shell
-
-Linux uses zsh as the default shell:
-
-```shell
-chsh -s "$(command -v zsh)"
-```
 
 ## Optional Toolchains
 

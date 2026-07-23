@@ -3,6 +3,7 @@ set -euo pipefail
 
 repo_url="${DOTFILES_REPO_URL:-https://github.com/jukrb0x/dotfiles.git}"
 brew_bin="/home/linuxbrew/.linuxbrew/bin/brew"
+chezmoi_bin="$(dirname -- "$brew_bin")/chezmoi"
 chezmoi_source="$HOME/.local/share/chezmoi"
 
 if [[ "$(uname -s)" != "Linux" ]]; then
@@ -27,6 +28,33 @@ linuxbrew_owner() {
   fi
 
   logname 2>/dev/null || true
+}
+
+ensure_zsh() {
+  if command -v zsh >/dev/null 2>&1; then
+    return
+  fi
+
+  if [[ "$(id -u)" -eq 0 ]]; then
+    dnf -y install zsh
+  elif command -v sudo >/dev/null 2>&1; then
+    sudo dnf -y install zsh
+  else
+    echo "zsh is required. Install it with: dnf -y install zsh" >&2
+    exit 1
+  fi
+}
+
+print_next_steps() {
+  echo "Next step: load Linuxbrew in this shell, then review and apply changes."
+  echo "  eval \"\$($brew_bin shellenv)\""
+  echo "  chezmoi diff"
+  echo "  chezmoi apply"
+  echo "  chsh -s \"$(command -v zsh)\""
+  echo "Then start a new login session to use zsh."
+  echo "If you do not want to change this shell's environment, use:"
+  echo "  \"$chezmoi_bin\" diff"
+  echo "  \"$chezmoi_bin\" apply"
 }
 
 if [[ ! -x "$brew_bin" ]]; then
@@ -59,19 +87,21 @@ fi
 
 eval "$("$brew_bin" shellenv)"
 
-if ! command -v chezmoi >/dev/null 2>&1; then
+ensure_zsh
+
+if [[ ! -x "$chezmoi_bin" ]]; then
   echo "chezmoi is missing; installing chezmoi with Homebrew."
   brew install chezmoi
 fi
 
 if [[ -d "$chezmoi_source/.git" ]]; then
   echo "chezmoi is already initialized at $chezmoi_source."
-  echo "Next step: run chezmoi diff."
+  print_next_steps
   exit 0
 fi
 
 echo "Initializing chezmoi from $repo_url."
-chezmoi init "$repo_url"
+"$chezmoi_bin" init "$repo_url"
 
 echo "chezmoi initialization completed without applying changes."
-echo "Next step: run chezmoi diff before chezmoi apply."
+print_next_steps

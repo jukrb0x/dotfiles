@@ -29,6 +29,28 @@ The bootstrap installs Homebrew for Linux when missing, installs chezmoi through
 Homebrew, initializes a normal Linux chezmoi source at
 `~/.local/share/chezmoi`, and stops before applying changes.
 
+Review and apply the initialized state in the same shell:
+
+```shell
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+chezmoi diff
+chezmoi apply
+chsh -s "$(command -v zsh)"
+```
+
+The first apply downloads Oh My Zsh, Powerlevel10k, and the configured zsh
+plugins through chezmoi externals. Start a new login session after `chsh` to use
+zsh. The bootstrap deliberately does not change the login shell itself because
+that is an account-level operation and can require an interactive password.
+
+If you do not want to change the current shell environment, use the absolute
+chezmoi path instead:
+
+```shell
+/home/linuxbrew/.linuxbrew/bin/chezmoi diff
+/home/linuxbrew/.linuxbrew/bin/chezmoi apply
+```
+
 ## WSL Networking
 
 If WSL can resolve DNS and ping external IPs but TCP connections such as `curl`
@@ -50,13 +72,8 @@ wsl.exe --shutdown
 
 ## Shell
 
-Set zsh after installing `zsh`:
-
-```shell
-chsh -s "$(command -v zsh)"
-```
-
-If `chsh` asks for a password or is unavailable, set the shell from Windows:
+If `chsh` is unavailable or your WSL distribution requires administrator
+rights, set the shell from Windows:
 
 ```powershell
 wsl.exe -d Ubuntu -u root -- chsh -s /usr/bin/zsh jabriel
