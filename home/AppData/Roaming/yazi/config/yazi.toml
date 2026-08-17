@@ -37,4 +37,5 @@ prepend_rules = [
 	{ url ="Dockerfile", use = "edit" },
 	{ url ="docker-compose.yml", use = "edit" },
 	{ url ="docker-compose.yaml", use = "edit" },
+	{ url ="*.cs", use = "edit" },
 ]
