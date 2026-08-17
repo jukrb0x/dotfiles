@@ -52,7 +52,7 @@
 
         # IDEs
         @{ Id = "JetBrains.Toolbox" }
-        @{ Id = "Anysphere.Cursor" }
+        @{ Id = "Anysphere.Cursor"; Scope = "machine" }
 
         # Games
         @{ Id = "Valve.Steam" }
