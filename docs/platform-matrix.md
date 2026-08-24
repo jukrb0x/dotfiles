@@ -8,6 +8,8 @@
 - `~/.ideavimrc`
 - `~/.config/nvim/init.lua`
 - `~/.config/lvim/config.lua`
+- `~/.config/yazi/**` (Windows additionally needs `YAZI_CONFIG_HOME`; see `docs/windows.md`)
+- `~/.config/nushell/config.nu` and `~/.config/nushell/env.nu`
 
 ## macOS only
 
@@ -39,8 +41,6 @@
 ## Windows only
 
 - `~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1`
-- `~/AppData/Roaming/nushell/config.nu`
-- `~/AppData/Roaming/nushell/env.nu`
 - `~/.local/bin/lvim.bat`
 - `~/.local/bin/lvim.ps1`
 - current-user font installation through `scripts/install-windows-fonts.ps1`

@@ -123,11 +123,31 @@ shell startup files. `chezmoi apply` sets:
 - `XDG_DATA_HOME=%APPDATA%`
 - `XDG_STATE_HOME=%LOCALAPPDATA%\state`
 - `XDG_CACHE_HOME=%LOCALAPPDATA%\cache`
+- `YAZI_CONFIG_HOME=%USERPROFILE%\.config\yazi`
 
 This makes XDG-aware tools resolve user data consistently from PowerShell, cmd,
 Nushell, GUI-launched apps, and automation. Tool-specific variables belong to
 the script that installs that toolchain; for example, Bun's `BUN_INSTALL` is set
 only by the optional Windows toolchain script.
+
+`YAZI_CONFIG_HOME` is the one deliberate exception in that list. Yazi does not
+read `XDG_CONFIG_HOME` on any platform; on Windows it hardcodes
+`%APPDATA%\yazi\config`. Since the yazi config is dotfile-managed rather than
+owned by a toolchain installer, the variable lives here so one shared
+`~/.config/yazi` tree works on Windows, macOS, and Linux.
+
+Two constraints worth knowing if you ever edit that value:
+
+- It must be an **absolute** path. Yazi silently ignores relative or
+  `~`-prefixed values and falls back to `%APPDATA%\yazi\config` with no warning.
+- It must name the directory that **directly contains** `yazi.toml`. The extra
+  `config` segment exists only in yazi's default Windows path, not in the
+  override.
+
+After the migration to `~/.config/yazi`, the old `%APPDATA%\yazi\config`
+directory is inert and can be deleted by hand. Delete only that `config`
+subdirectory — **not** `%APPDATA%\yazi` itself, which also holds a live `state`
+directory that `YAZI_CONFIG_HOME` does not relocate.
 
 Run the same logic manually if needed:
 
