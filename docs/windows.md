@@ -222,6 +222,84 @@ transaction. If an RMUX process locks those files, close RMUX and rerun
 `chezmoi apply`; the installer never kills the current session or leaves a
 partially replaced package.
 
+## RMUX session snapshots
+
+RMUX has no session persistence of its own — no resurrect, no continuum, no
+layout files, and no plugin system to host them. Sessions live in the daemon, so
+killing it or rebooting loses them. Two commands fill the gap:
+
+| Command | Effect |
+| --- | --- |
+| `rmux-dump` | Capture every live session to `~/.local/share/rmux/snapshot` |
+| `rmux-load --all` | Recreate every captured session |
+| `rmux-load NAME` | Recreate one |
+| `rmux-load NAME --template` | Build from `~/.config/rmux/templates/NAME.yaml` |
+
+Both work from PowerShell and from Nushell. The PowerShell shims are not a
+convenience: restoring runs before any Nushell exists, because the sessions
+being restored are the ones that host Nushell.
+
+A scheduled task (`rmux-snapshot`) runs `rmux-dump` every 15 minutes, so an
+unexpected reboot has something recent to restore from. Five generations are
+kept; `latest` names the newest. To inspect or remove it:
+
+```powershell
+Get-ScheduledTask -TaskName rmux-snapshot
+pwsh -File scripts/register-windows-rmux-snapshot.ps1 -Unregister
+```
+
+### Nothing is ever replayed
+
+Restored scrollback is inert text, printed by the pane's own shell before it
+becomes interactive. Captured commands are never executed, because
+`pane_current_command` yields only a bare process name — `node`, `git` — with no
+arguments. A dump cannot tell a dev server from a one-shot script, and
+re-running a guessed command line would re-run its side effects: a clone, a
+build, a deletion.
+
+This is deliberate and verified: restoring a session whose history had written a
+file does not recreate that file. `paste-buffer` would have been the obvious
+implementation and is the wrong one — it injects text into the shell's input
+line, so every captured command would run.
+
+Templates are the exception, and only because you write them by hand. Put
+idempotent commands there — editors, git UIs, shells. Never builds, clones, or
+migrations.
+
+### Two limits that cannot be worked around
+
+**Working directories are not restored.** RMUX reports a pane's *start*
+directory, never the directory the shell later `cd`'d into, so snapshot-restored
+panes open in `$HOME`. This is why templates carry an explicit `cwd:` — it is the
+only way to get a pane back in the right place:
+
+```yaml
+session: example
+windows:
+  - name: edit
+    cwd: D:\dev\example
+    panes:
+      - cmd: lvim
+      - {}
+```
+
+**Restored scrollback is not shell history.** It scrolls back, but `Up` will not
+recall it, because Nushell owns its own history file and RMUX cannot write to it.
+
+### Testing a restore without touching live sessions
+
+`rmux-load` skips any session that already exists, and `rmux-dump` is read-only,
+so neither can damage a running session. But a new terminal attaches to the same
+daemon, so `rmux-load --all` there just skips everything. Use a separate socket,
+which is a separate named pipe and fully isolated:
+
+```powershell
+rmux -L test new-session -d -s demo
+rmux-dump
+rmux -L test kill-server    # only the test server dies
+rmux-load demo
+```
+
 ## Scoop
 
 Required Scoop packages are synchronized by chezmoi from

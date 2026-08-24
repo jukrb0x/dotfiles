@@ -1,2 +1,5 @@
 .vscode
 Brewfile.lock.json
+
+# AI
+.claude/worktrees
