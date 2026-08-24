@@ -83,4 +83,69 @@ foreach ($os in @("windows", "linux", "darwin")) {
         "$os must not reference AppData in .chezmoiignore; the source tree is gone."
 }
 
+# --- Windows environment wiring ---
+
+# Assert the whole assignment, not just ".config\yazi": a substring check would
+# still pass if the base changed to $env:APPDATA, which is the exact regression
+# that matters.
+$envAssignment = 'YAZI_CONFIG_HOME = Join-Path $HOME ".config\yazi"'
+
+foreach ($relative in @("scripts/set-windows-user-environment.ps1", "bootstrap/windows.ps1")) {
+    $path = Join-Path $repoRoot $relative
+    Assert-True (Test-Path -LiteralPath $path) "Expected script does not exist: $relative"
+    Assert-Contains `
+        (Get-Content -LiteralPath $path -Raw) `
+        $envAssignment `
+        "$relative must set YAZI_CONFIG_HOME; yazi ignores XDG_CONFIG_HOME on Windows."
+}
+
+# The chezmoiscript delegates rather than duplicating the assignment, so it must
+# NOT carry the literal — that would be a third drift site.
+$chezmoiScript = Join-Path $sourceRoot ".chezmoiscripts/run_after_05-windows-user-environment.ps1.tmpl"
+$chezmoiScriptText = Get-Content -LiteralPath $chezmoiScript -Raw
+Assert-Contains `
+    $chezmoiScriptText `
+    'set-windows-user-environment.ps1' `
+    "The chezmoiscript must keep delegating to the shared environment script."
+Assert-True `
+    (-not $chezmoiScriptText.Contains("YAZI_CONFIG_HOME")) `
+    "The chezmoiscript must delegate, not duplicate, the YAZI_CONFIG_HOME assignment."
+
+# --- Runtime check (Windows only, and only once the variable is persisted) ---
+
+$persisted = [Environment]::GetEnvironmentVariable('YAZI_CONFIG_HOME', 'User')
+
+if ($IsWindows -and (Get-Command yazi -ErrorAction SilentlyContinue) -and $persisted) {
+    Assert-True `
+        ([IO.Path]::IsPathRooted($persisted)) `
+        "YAZI_CONFIG_HOME must be absolute; yazi silently ignores relative values. Actual: $persisted"
+
+    $expected = Join-Path $HOME ".config\yazi"
+    Assert-True `
+        ($persisted -eq $expected) `
+        "Persisted YAZI_CONFIG_HOME must be $expected. Actual: $persisted"
+
+    # Read the persisted User-scope value explicitly rather than trusting the
+    # current session: Set-ManagedUserEnvironment only injects into the calling
+    # session, so a shell started before `chezmoi apply` would report the old path.
+    #
+    # Select-Object -First 1 forces a scalar. Where-Object unwraps zero matches to
+    # $null and one match to a string, but 2+ matches would yield an array, and
+    # `-match` on an array filters instead of returning a bool -- which Assert-True
+    # would then coerce to $true even if only a wrong-path line matched.
+    $debug = & yazi --debug 2>&1 | Out-String
+    $configLine = $debug -split "`n" |
+        Where-Object { $_ -match '^\s+Yazi\s+:' } |
+        Select-Object -First 1
+
+    Assert-True `
+        ($null -ne $configLine) `
+        "yazi --debug must report a resolved Yazi config path."
+    Assert-True `
+        ($configLine -match [regex]::Escape((Join-Path ".config" "yazi"))) `
+        "yazi must resolve its config under .config\yazi. Actual: $($configLine.Trim())"
+} else {
+    Write-Output "Skipping yazi runtime check (not a Windows PowerShell session, yazi missing, or YAZI_CONFIG_HOME not yet persisted)."
+}
+
 Write-Output "Yazi configuration tests passed."

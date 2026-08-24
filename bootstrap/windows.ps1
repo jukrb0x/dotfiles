@@ -26,10 +26,13 @@ function Set-ChezmoiPowerShellInterpreter {
 
 function Set-WindowsUserEnvironment {
     $xdgEnvironment = [ordered]@{
-        XDG_CONFIG_HOME = Join-Path $HOME ".config"
-        XDG_DATA_HOME   = $env:APPDATA
-        XDG_STATE_HOME  = Join-Path $env:LOCALAPPDATA "state"
-        XDG_CACHE_HOME  = Join-Path $env:LOCALAPPDATA "cache"
+        XDG_CONFIG_HOME  = Join-Path $HOME ".config"
+        XDG_DATA_HOME    = $env:APPDATA
+        XDG_STATE_HOME   = Join-Path $env:LOCALAPPDATA "state"
+        XDG_CACHE_HOME   = Join-Path $env:LOCALAPPDATA "cache"
+        # Yazi ignores XDG_CONFIG_HOME on Windows; see
+        # scripts/set-windows-user-environment.ps1 for the full rationale.
+        YAZI_CONFIG_HOME = Join-Path $HOME ".config\yazi"
     }
 
     foreach ($name in $xdgEnvironment.Keys) {
