@@ -1,3 +1,7 @@
+# The banner would scroll away the text that rmux-load reprints into a
+# restored pane, and it costs startup time on every new pane.
+$env.config.show_banner = false
+
 alias lvim = ^nvim -u ($env.LUNARVIM_BASE_DIR | path join init.lua)
 alias nvim = lvim
 
@@ -39,3 +43,14 @@ const local_config = if ("~/.config/nushell/config.local.nu" | path expand | pat
     null
 }
 source $local_config
+
+# rmux session snapshots. The real implementation lives in snapshot.nu and is
+# also reachable from PowerShell via ~/.local/bin/rmux-{dump,load}; these
+# wrappers exist so the commands behave like native Nushell commands here.
+const rmux_snapshot = if ("~/.config/rmux/snapshot.nu" | path expand | path exists) {
+    "~/.config/rmux/snapshot.nu"
+} else {
+    null
+}
+use $rmux_snapshot *
+

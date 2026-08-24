@@ -1,0 +1,47 @@
+# rmux session template.
+#
+# Templates exist because dumps cannot recover two things:
+#
+#   cwd  -- rmux reports a pane's *start* directory, never the directory the
+#           shell later cd'd into. Every pane in the live example session reports
+#           C:\Users\user even though the work happens in D:\dev\example. Only
+#           an explicit cwd: here fixes that.
+#   cmd  -- pane_current_command is a bare process name with no arguments, so a
+#           dump sees "node" and cannot tell a dev server from a one-off
+#           script. Re-running a guessed command line would re-run its side
+#           effects, so dumps never do it.
+#
+# Consequence: only put idempotent, safe-to-relaunch commands here. Editors,
+# git UIs, and shells are fine. Never put builds, clones, migrations, or
+# anything that writes -- launch those by hand once the layout is up.
+#
+#   rmux-load example --template
+#
+# Fields: session, then windows[] with name/cwd/layout and panes[] with cmd/cwd.
+# A pane with no cmd gets a plain shell. Omit layout to keep even splits.
+
+session: example
+
+windows:
+  - name: edit
+    cwd: D:\dev\example
+    panes:
+      - cmd: lvim
+      - {}
+
+  - name: git
+    cwd: D:\dev\example
+    panes:
+      - cmd: lazygit
+
+  - name: server
+    cwd: D:\dev\example
+    # Deliberately a bare shell: `pnpm dev` (or whatever the run target is)
+    # starts a long-lived process, so it stays a manual, deliberate step.
+    panes:
+      - {}
+
+  - name: dots
+    cwd: C:\Users\user\AppData\Roaming\chezmoi
+    panes:
+      - {}
