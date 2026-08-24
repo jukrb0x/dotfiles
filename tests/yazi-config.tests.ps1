@@ -111,11 +111,22 @@ Assert-True `
     (-not $chezmoiScriptText.Contains("YAZI_CONFIG_HOME")) `
     "The chezmoiscript must delegate, not duplicate, the YAZI_CONFIG_HOME assignment."
 
-# --- Runtime check (Windows only, and only once the variable is persisted) ---
+# --- Runtime check (Windows only, and only once the config has been applied) ---
 
+# Gate on the applied config, NOT on $persisted. Gating on the variable would make
+# the single highest-consequence regression invisible: the old
+# %APPDATA%\yazi\config tree is deliberately left in place, so if the variable is
+# missing, yazi loads that stale shadow copy *successfully* -- no error, no missing
+# file -- and edits to ~/.config/yazi silently have no effect. Once the destination
+# exists, the variable is mandatory, so assert it rather than skipping.
 $persisted = [Environment]::GetEnvironmentVariable('YAZI_CONFIG_HOME', 'User')
+$applied = Test-Path -LiteralPath (Join-Path $HOME ".config\yazi\yazi.toml")
 
-if ($IsWindows -and (Get-Command yazi -ErrorAction SilentlyContinue) -and $persisted) {
+if ($IsWindows -and (Get-Command yazi -ErrorAction SilentlyContinue) -and $applied) {
+    Assert-True `
+        ([bool]$persisted) `
+        "~/.config/yazi is applied but YAZI_CONFIG_HOME is not persisted; yazi will silently load the stale %APPDATA%\yazi\config copy instead."
+
     Assert-True `
         ([IO.Path]::IsPathRooted($persisted)) `
         "YAZI_CONFIG_HOME must be absolute; yazi silently ignores relative values. Actual: $persisted"
@@ -145,7 +156,7 @@ if ($IsWindows -and (Get-Command yazi -ErrorAction SilentlyContinue) -and $persi
         ($configLine -match [regex]::Escape((Join-Path ".config" "yazi"))) `
         "yazi must resolve its config under .config\yazi. Actual: $($configLine.Trim())"
 } else {
-    Write-Output "Skipping yazi runtime check (not a Windows PowerShell session, yazi missing, or YAZI_CONFIG_HOME not yet persisted)."
+    Write-Output "Skipping yazi runtime check (not a Windows PowerShell session, yazi missing, or ~/.config/yazi not applied yet)."
 }
 
 Write-Output "Yazi configuration tests passed."

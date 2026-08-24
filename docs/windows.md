@@ -130,11 +130,12 @@ Nushell, GUI-launched apps, and automation. Tool-specific variables belong to
 the script that installs that toolchain; for example, Bun's `BUN_INSTALL` is set
 only by the optional Windows toolchain script.
 
-`YAZI_CONFIG_HOME` is the one deliberate exception in that list. Yazi does not
-read `XDG_CONFIG_HOME` on any platform; on Windows it hardcodes
-`%APPDATA%\yazi\config`. Since the yazi config is dotfile-managed rather than
-owned by a toolchain installer, the variable lives here so one shared
-`~/.config/yazi` tree works on Windows, macOS, and Linux.
+`YAZI_CONFIG_HOME` is the one deliberate exception in that list. On Windows yazi
+ignores `XDG_CONFIG_HOME` and hardcodes `%APPDATA%\yazi\config`; on macOS and
+Linux it does honour `XDG_CONFIG_HOME` and otherwise falls back to
+`~/.config/yazi`, so no variable is needed there. Since the yazi config is
+dotfile-managed rather than owned by a toolchain installer, the variable lives
+here so one shared `~/.config/yazi` tree works on Windows, macOS, and Linux.
 
 Two constraints worth knowing if you ever edit that value:
 
