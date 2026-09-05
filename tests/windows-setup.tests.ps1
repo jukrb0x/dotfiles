@@ -30,6 +30,13 @@ function Assert-True {
     }
 }
 
+$windowsPowerShellOutput = & powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command @"
+Import-Module '$modulePath' -Force -DisableNameChecking
+(Parse-WinGetPackageSpec 'Microsoft.PowerShell').Id
+"@ 2>&1
+Assert-Equal $LASTEXITCODE 0 "Windows PowerShell 5.1 should be able to import the setup module used by bootstrap."
+Assert-True ($windowsPowerShellOutput -contains "Microsoft.PowerShell") "The setup module should work after Windows PowerShell imports it."
+
 $mergedPath = Merge-ManagedPathEntries `
     -ExistingEntries @(
         "C:\UserTools",
@@ -165,6 +172,13 @@ try {
     Assert-True ($installInvocation -contains "--installer-type") "Installer-typed WinGet package installs should pass --installer-type."
     $installerTypeIndex = [array]::IndexOf($installInvocation, "--installer-type")
     Assert-Equal $installInvocation[$installerTypeIndex + 1] "wix" "Installer-typed WinGet package installs should pass the requested installer type value."
+
+    $requiredManifestPath = Join-Path $repoRoot "packages\windows-winget-required.psd1"
+    $powerShellSpec = @(Read-WinGetPackageSpecs -Path $requiredManifestPath | Where-Object Id -eq "Microsoft.PowerShell")[0]
+    Install-WinGetPackageSpec -Spec $powerShellSpec
+    $powerShellInstallInvocation = @($script:wingetInvocations | Where-Object { $_[0] -eq "install" })[-1]
+    Assert-True (-not ($powerShellInstallInvocation -contains "--installer-type")) "Required PowerShell should use WinGet's default installer type."
+    Assert-True (-not ($powerShellInstallInvocation -contains "--scope")) "Required PowerShell should use WinGet's default install scope."
 } finally {
     Remove-Item -Path Function:\winget -ErrorAction SilentlyContinue
 }

@@ -1,5 +1,3 @@
-#Requires -Version 7.1
-
 function Get-ManagedPathKey {
     param([Parameter(Mandatory)] [string] $Path)
 
