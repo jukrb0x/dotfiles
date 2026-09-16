@@ -1,9 +1,0 @@
-{{ if eq .chezmoi.os "windows" -}}
-#Requires -Version 7.1
-$ErrorActionPreference = "Stop"
-
-# scripts/register-windows-rmux-snapshot.ps1 hash: {{ include "../scripts/register-windows-rmux-snapshot.ps1" | sha256sum }}
-$registerPath = {{ joinPath .chezmoi.sourceDir ".." "scripts" "register-windows-rmux-snapshot.ps1" | quote }}
-
-& $registerPath
-{{ end -}}
