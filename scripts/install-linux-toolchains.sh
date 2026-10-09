@@ -8,6 +8,14 @@ brewfiles=(
   "$repo_root/packages/Brewfile.linux.toolchains"
 )
 
+no_lvim=false
+for argument in "$@"; do
+  case "$argument" in
+    --no-lvim) no_lvim=true ;;
+    *) echo "Usage: $0 [--no-lvim]" >&2; exit 1 ;;
+  esac
+done
+
 if ! command -v brew >/dev/null 2>&1; then
   echo "Homebrew is unavailable. Run the Linux bootstrap first." >&2
   exit 1
@@ -21,5 +29,8 @@ if command -v rustup-init >/dev/null 2>&1 && ! command -v rustup >/dev/null 2>&1
   rustup-init -y --no-modify-path
 fi
 
-echo "Installing LunarVim with the official Linux/macOS installer..."
-LV_BRANCH='release-1.4/neovim-0.9' bash <(curl -fsSL https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.4/neovim-0.9/utils/installer/install.sh) --no-install-dependencies
+if [[ "$no_lvim" == false ]]; then
+  bash "$script_dir/install-lunarvim.sh"
+else
+  echo "Skipping LunarVim install."
+fi

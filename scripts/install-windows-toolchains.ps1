@@ -57,8 +57,7 @@ if (Get-Command uv -ErrorAction SilentlyContinue) {
 }
 
 if (-not $NoLvim) {
-    Write-Host "Installing LunarVim from the jukrb0x fork..."
-    pwsh -c "`$LV_REMOTE='jukrb0x/LunarVim.git'; `$LV_BRANCH='codex/nvim-012-modern-treesitter'; iwr https://raw.githubusercontent.com/jukrb0x/LunarVim/codex/nvim-012-modern-treesitter/utils/installer/install.ps1 -UseBasicParsing | iex"
+    & (Join-Path $PSScriptRoot "install-lunarvim.ps1")
 } else {
     Write-Host "Skipping LunarVim install."
 }

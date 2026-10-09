@@ -63,8 +63,8 @@ if ($treeSitter.Version -ne "0.26") {
 }
 
 Assert-Match `
-    -Text $script `
-    -Pattern 'codex/nvim-012-modern-treesitter' `
+    -Text (Get-Content -LiteralPath (Join-Path $repoRoot 'packages/lunarvim.env') -Raw) `
+    -Pattern 'LV_BRANCH=codex/nvim-012-modern-treesitter' `
     -Message "LunarVim should install from the modern Neovim 0.12 branch."
 
 if ($script -match 'Install-TreeSitterCli|tree-sitter-cli-windows-x64|Invoke-WebRequest.+tree-sitter') {

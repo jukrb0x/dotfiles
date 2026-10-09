@@ -1,7 +1,12 @@
 # Optional language and runtime toolchains.
 brew "rustup-init"
 brew "uv"
-brew "n"
+brew "fnm"
 brew "bun"
 brew "go"
 brew "binwalk"
+
+# LunarVim plugin search and parser tools.
+brew "fd"
+brew "ripgrep"
+brew "tree-sitter"

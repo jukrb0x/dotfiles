@@ -91,9 +91,10 @@ chezmoi cd
 bash ./scripts/install-linux-toolchains.sh
 ```
 
-This script also installs LunarVim with the official Linux/macOS installer,
-matching the Windows and macOS model where LunarVim setup is explicit rather
-than part of routine `chezmoi apply`.
+This script also calls `scripts/install-lunarvim.sh`, using the same fork and
+branch as macOS and Windows. Pass `--no-lvim` to install toolchains only.
+LunarVim remains explicit rather than part of routine `chezmoi apply`. See
+[toolchains.md](toolchains.md#lunarvim) for standalone installation.
 
 Docker is intentionally not installed through Linuxbrew. On WSL, install Docker
 Engine through apt and systemd with:

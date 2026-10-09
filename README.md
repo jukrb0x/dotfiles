@@ -128,6 +128,7 @@ explicitly, not as part of every `chezmoi apply`:
 - IDEs
 - optional CLI tools
 - language runtimes/toolchains
+- LunarVim runtime (see [installation commands](docs/toolchains.md#lunarvim))
 
 This is where personal taste belongs when it is useful but not required for the
 dotfiles to function.

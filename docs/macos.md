@@ -124,6 +124,18 @@ chezmoi cd
 ./scripts/install-macos-toolchains.sh
 ```
 
+The toolchain command also installs LunarVim through
+`scripts/install-lunarvim.sh`. Pass `--no-lvim` to install toolchains only.
+To install LunarVim separately after `chezmoi apply`:
+
+```shell
+chezmoi cd
+bash ./scripts/install-lunarvim.sh
+```
+
+See [toolchains.md](toolchains.md#lunarvim) for the shared source manifest,
+installer behavior, and platform commands.
+
 These commands use:
 
 - `packages/Brewfile.optional`

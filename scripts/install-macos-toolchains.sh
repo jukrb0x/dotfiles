@@ -8,6 +8,14 @@ brewfiles=(
   "$repo_root/packages/Brewfile.macos.toolchains"
 )
 
+no_lvim=false
+for argument in "$@"; do
+  case "$argument" in
+    --no-lvim) no_lvim=true ;;
+    *) echo "Usage: $0 [--no-lvim]" >&2; exit 1 ;;
+  esac
+done
+
 if ! command -v brew >/dev/null 2>&1; then
   echo "Homebrew is unavailable. Run bootstrap/macos.sh first." >&2
   exit 1
@@ -17,7 +25,8 @@ for brewfile in "${brewfiles[@]}"; do
   brew bundle install --file="$brewfile"
 done
 
-if [[ ! -x "$HOME/.local/bin/lvim" ]]; then
-  echo "LunarVim is not installed at $HOME/.local/bin/lvim."
-  echo "LunarVim installation remains explicit/manual; check the current upstream instructions before installing."
+if [[ "$no_lvim" == false ]]; then
+  bash "$script_dir/install-lunarvim.sh"
+else
+  echo "Skipping LunarVim install."
 fi

@@ -1,4 +1,4 @@
-# Windows toolchains
+# Toolchains
 
 Toolchains are split by ownership:
 
@@ -66,31 +66,31 @@ pnpm is activated through Corepack after the LTS Node version is installed.
 
 ## LunarVim
 
-On Windows, this repo manages:
+LunarVim installation is explicit on all platforms. `chezmoi apply` manages
+`~/.config/lvim/config.lua` and required editor packages; Windows also gets
+`lvim.bat` and `lvim.ps1`. Runtime installation lives in dedicated scripts:
 
-- LunarVim config
-- `lvim.bat`
-- `lvim.ps1`
-- required compiler/editor dependencies through `chezmoi apply`
+| Platform | Install LunarVim only | Install toolchains and LunarVim |
+| --- | --- | --- |
+| macOS | `bash ./scripts/install-lunarvim.sh` | `bash ./scripts/install-macos-toolchains.sh` |
+| Linux / WSL | `bash ./scripts/install-lunarvim.sh` | `bash ./scripts/install-linux-toolchains.sh` |
+| Windows | `pwsh ./scripts/install-lunarvim.ps1` | `pwsh ./scripts/install-windows-toolchains.ps1` |
 
-The actual LunarVim installation runs at the end of:
+Run these commands from the source repo (`chezmoi cd`) after `chezmoi apply`.
+Every toolchain script accepts `--no-lvim` to install language toolchains only.
+The standalone Unix installer also forwards upstream arguments, such as
+`--no-install-dependencies`. By default it allows upstream dependency prompts.
 
-```powershell
-pwsh ./scripts/install-windows-toolchains.ps1
-```
+All platforms read `packages/lunarvim.env`, which selects the
+`jukrb0x/LunarVim` fork and `codex/nvim-012-modern-treesitter` branch. Change
+that manifest to update the source for all platforms together. This fork carries
+compatibility fixes for modern Neovim and Treesitter. The platform wrappers
+download the matching upstream Bash or PowerShell installer.
 
-To install or refresh the language toolchains without running the LunarVim
-installer, pass `--no-lvim`:
-
-```powershell
-pwsh ./scripts/install-windows-toolchains.ps1 --no-lvim
-```
-
-The script uses the Windows PowerShell installer from the `jukrb0x/LunarVim`
-fork on the `codex/nvim-012-modern-treesitter` branch. This branch keeps
-LunarVim usable on Neovim 0.12 by tracking the modern `nvim-treesitter` branch
-and carrying LunarVim compatibility fixes. The installer can be interactive;
-this repo does not try to invent a silent mode around it.
+The Unix installer creates `~/.local/bin/lvim`; managed zsh already adds that
+directory to PATH. Open a new shell and run `lvim` after installation. Existing
+runtime/cache directories are backed up by upstream before replacement; the
+managed `config.lua` is retained. Plugin downloads require network access.
 
 Some LunarVim plugins compile native Treesitter-related components, so this repo
 installs MSYS2 UCRT64 GCC and exposes `gcc.exe` on the user PATH. The Windows
