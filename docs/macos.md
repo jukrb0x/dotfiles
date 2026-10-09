@@ -183,3 +183,20 @@ Fonts are not managed as chezmoi externals. Install them explicitly with
 
 `setup.sh` is legacy only. Use `bootstrap/macos.sh`, `chezmoi apply`, and the
 explicit optional setup scripts for current macOS setup.
+
+## Loop Keybindings
+
+Loop's exported keybindings are managed at
+`home/dot_config/loop/keybinds.json` and deployed to
+`~/.config/loop/keybinds.json` on macOS. The export includes the Left Globe/Fn
+trigger, arrow shortcuts, Vim H/J/K/L shortcuts, corner combinations, and cycles.
+
+After `chezmoi apply`, open Loop → Advanced → Keybinds → Import and select
+`~/.config/loop/keybinds.json`. Choose Erase to replace existing bindings with
+the saved set; Merge keeps existing bindings too. Loop does not automatically
+load this file.
+
+After changing shortcuts in Loop, export them from the same settings page to
+`home/dot_config/loop/keybinds.json` in this repository, review the diff, and
+commit the updated export. This file stores keybindings and the trigger key,
+not all Loop preferences.
