@@ -10,6 +10,7 @@ cask "vivaldi"
 
 cask "balenaetcher"
 cask "chatgpt"
+cask "clash-verge-rev"
 cask "codex"
 
 tap "deskflow/tap"
