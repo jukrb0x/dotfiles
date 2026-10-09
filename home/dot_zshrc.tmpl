@@ -175,6 +175,11 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 {{- end }}
 export PATH="$PNPM_HOME:$PATH"
 
+# Node version management
+if command -v fnm >/dev/null 2>&1; then
+  eval "$(fnm env --use-on-cd --shell zsh)"
+fi
+
 # Zoxide
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
