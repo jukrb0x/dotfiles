@@ -3,6 +3,10 @@
 The managed `~/.gitconfig` stores Git behavior and aliases only. It does not
 store names, emails, signing keys, company paths, or account-specific settings.
 
+On macOS and Linux, Git uses the Homebrew-installed GitHub CLI (`gh`) as the
+credential helper for GitHub and Gist. macOS uses `/opt/homebrew/bin/gh`; Linux
+uses `/home/linuxbrew/.linuxbrew/bin/gh`. Authentication stays local to `gh`.
+
 Put identity in `~/.gitconfig.local`, which is included by the managed config
 and is not tracked by chezmoi.
 
