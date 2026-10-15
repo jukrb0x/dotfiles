@@ -160,6 +160,67 @@ dotfiles. Use local include and hook files instead:
 
 These files are intentionally not managed by this repo.
 
+### Git Identity by Directory
+
+The shared `~/.gitconfig` keeps common settings and includes a local file:
+
+```gitconfig
+[user]
+    useConfigOnly = true
+
+[include]
+    path = ~/.gitconfig.local
+```
+
+Use `~/.gitconfig.local` to load a default personal identity, then override it
+for repositories under work directories:
+
+```gitconfig
+[include]
+    path = ~/.gitconfig.personal
+
+[includeIf "gitdir:~/work/"]
+    path = ~/.gitconfig.work
+
+[includeIf "gitdir:~/dev/work/"]
+    path = ~/.gitconfig.work
+```
+
+Example `~/.gitconfig.personal` (all identities below are fictional):
+
+```gitconfig
+[user]
+    name = Example Developer
+    email = developer@example.com
+```
+
+Example `~/.gitconfig.work`:
+
+```gitconfig
+[user]
+    name = Example Work Account
+    email = developer@company.example
+```
+
+Repositories under `~/work/` and `~/dev/work/`, including nested directories,
+use the work identity. Other repositories use the personal identity.
+Repository-specific settings in `.git/config` can override these values.
+Work-only settings, such as internal Git service LFS options, can also go in
+`.gitconfig.work`; keep actual internal domains and values local.
+
+Inside a repository, check the effective identity and its source:
+
+```shell
+git config --show-origin --get user.name
+git config --show-origin --get user.email
+```
+
+This selects the identity recorded in commits. Remote authentication is still
+handled by SSH keys or a credential manager.
+
+Keep `~/.gitconfig.local`, `~/.gitconfig.personal`, and `~/.gitconfig.work`
+local to each machine. Do not add them to the chezmoi source repository.
+
 ## External Archives
 
 Fresh chezmoi configurations enable external shell assets, so the first apply
