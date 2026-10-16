@@ -3,3 +3,5 @@ Brewfile.lock.json
 
 # AI
 .claude/worktrees
+/docs/superpowers/
+.superpowers/

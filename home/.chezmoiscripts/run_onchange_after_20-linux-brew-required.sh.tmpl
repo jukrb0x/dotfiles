@@ -2,6 +2,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Shared packages: {{ include "../packages/Brewfile.required" | sha256sum }}
+# Linux packages: {{ include "../packages/Brewfile.linux.required" | sha256sum }}
+
 brewfiles=(
   "{{ .chezmoi.sourceDir }}/../packages/Brewfile.required"
   "{{ .chezmoi.sourceDir }}/../packages/Brewfile.linux.required"

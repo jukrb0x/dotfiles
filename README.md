@@ -27,6 +27,7 @@ point.
 - Neovim/LunarVim configuration
 - Git defaults
 - terminal/editor command shims
+- [Yazi editing and terminal previews](docs/yazi.md)
 - package lists for required and optional tools
 - Windows bootstrap and setup automation
 - macOS Apple Silicon setup through the existing Homebrew flow

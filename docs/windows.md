@@ -124,13 +124,19 @@ shell startup files. `chezmoi apply` sets:
 - `XDG_STATE_HOME=%LOCALAPPDATA%\state`
 - `XDG_CACHE_HOME=%LOCALAPPDATA%\cache`
 - `YAZI_CONFIG_HOME=%USERPROFILE%\.config\yazi`
+- `YAZI_FILE_ONE=<Git installation>\usr\bin\file.exe`
 
 This makes XDG-aware tools resolve user data consistently from PowerShell, cmd,
 Nushell, GUI-launched apps, and automation. Tool-specific variables belong to
 the script that installs that toolchain; for example, Bun's `BUN_INSTALL` is set
 only by the optional Windows toolchain script.
 
-`YAZI_CONFIG_HOME` is the one deliberate exception in that list. On Windows yazi
+Yazi's two variables keep configuration and file-type detection consistent.
+`YAZI_FILE_ONE` is resolved from `git --exec-path` and checked before it is saved;
+Git's bundled `file.exe` handles Unicode filenames. See
+[Yazi editing and previews](yazi.md) for dependencies and terminal requirements.
+
+On Windows yazi
 ignores `XDG_CONFIG_HOME` and hardcodes `%APPDATA%\yazi\config`; on macOS and
 Linux it does honour `XDG_CONFIG_HOME` and otherwise falls back to
 `~/.config/yazi`, so no variable is needed there. Since the yazi config is

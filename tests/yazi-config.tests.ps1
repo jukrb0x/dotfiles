@@ -47,6 +47,7 @@ function Render-SourceTemplate {
 $yaziRoot = Join-Path $sourceRoot "dot_config/yazi"
 foreach ($relative in @(
     "yazi.toml",
+    "keymap.toml",
     "theme.toml",
     "flavors/kanagawa.yazi/flavor.toml",
     "flavors/kanagawa.yazi/tmtheme.xml"
@@ -144,17 +145,22 @@ if ($IsWindows -and (Get-Command yazi -ErrorAction SilentlyContinue) -and $appli
     # $null and one match to a string, but 2+ matches would yield an array, and
     # `-match` on an array filters instead of returning a bool -- which Assert-True
     # would then coerce to $true even if only a wrong-path line matched.
-    $debug = & yazi --debug 2>&1 | Out-String
+    $debug = & ya env 2>&1 | Out-String
+    Assert-True ($LASTEXITCODE -eq 0) "ya env must succeed before checking runtime configuration."
     $configLine = $debug -split "`n" |
         Where-Object { $_ -match '^\s+Yazi\s+:' } |
         Select-Object -First 1
 
     Assert-True `
         ($null -ne $configLine) `
-        "yazi --debug must report a resolved Yazi config path."
+        "ya env must report a resolved Yazi config path."
     Assert-True `
         ($configLine -match [regex]::Escape((Join-Path ".config" "yazi"))) `
         "yazi must resolve its config under .config\yazi. Actual: $($configLine.Trim())"
+
+    $fileOne = [Environment]::GetEnvironmentVariable('YAZI_FILE_ONE', 'User')
+    Assert-True ([bool]$fileOne) "YAZI_FILE_ONE must persist Git for Windows MIME detection."
+    Assert-True (Test-Path -LiteralPath $fileOne -PathType Leaf) "YAZI_FILE_ONE must resolve to an installed file.exe."
 } else {
     Write-Output "Skipping yazi runtime check (not a Windows PowerShell session, yazi missing, or ~/.config/yazi not applied yet)."
 }

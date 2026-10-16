@@ -1,41 +1,27 @@
+#:schema https://yazi-rs.github.io/schemas/yazi.json
+
+[mgr]
+ratio = [1, 3, 4]
+sort_by = "natural"
+
+[preview]
+wrap = "yes"
+tab_size = 4
+max_width = 1200
+max_height = 1600
+
 [opener]
+# Yazi escapes each path in %s; quoting it again breaks spaces/multi-selection.
 edit = [
-	{ run = 'lvim "%s"', block = true, for = "windows" },
-	{ run = 'lvim "%s"', block = true, for = "unix" },
+    { run = 'if command -v lvim >/dev/null 2>&1; then lvim %s; else nvim %s; fi', block = true, desc = "Edit in LunarVim / Neovim", for = "unix" },
+    { run = 'pwsh -NoLogo -NoProfile -File "%USERPROFILE%\.local\bin\lvim.ps1" %s', block = true, desc = "Edit in LunarVim / Neovim", for = "windows" },
 ]
 
 [open]
-prepend_rules = [
-	{ mime = "text/*", use = "edit" },
-	{ url ="*.json", use = "edit" },
-	{ url ="*.toml", use = "edit" },
-	{ url ="*.yaml", use = "edit" },
-	{ url ="*.yml", use = "edit" },
-	{ url ="*.lua", use = "edit" },
-	{ url ="*.md", use = "edit" },
-	{ url ="*.rs", use = "edit" },
-	{ url ="*.py", use = "edit" },
-	{ url ="*.js", use = "edit" },
-	{ url ="*.ts", use = "edit" },
-	{ url ="*.jsx", use = "edit" },
-	{ url ="*.tsx", use = "edit" },
-	{ url ="*.html", use = "edit" },
-	{ url ="*.css", use = "edit" },
-	{ url ="*.scss", use = "edit" },
-	{ url ="*.sh", use = "edit" },
-	{ url ="*.ps1", use = "edit" },
-	{ url ="*.bat", use = "edit" },
-	{ url ="*.txt", use = "edit" },
-	{ url ="*.log", use = "edit" },
-	{ url ="*.conf", use = "edit" },
-	{ url ="*.ini", use = "edit" },
-	{ url ="*.cfg", use = "edit" },
-	{ url ="*.env", use = "edit" },
-	{ url ="*.gitignore", use = "edit" },
-	{ url ="*.gitattributes", use = "edit" },
-	{ url ="Makefile", use = "edit" },
-	{ url ="Dockerfile", use = "edit" },
-	{ url ="docker-compose.yml", use = "edit" },
-	{ url ="docker-compose.yaml", use = "edit" },
-	{ url ="*.cs", use = "edit" },
+# Inherit upstream MIME rules for text, code, media and archives. Unknown types
+# still open in their system app, with Edit available in the O menu.
+append_rules = [
+    { url = "*", use = ["open", "edit", "reveal"] },
 ]
+
+# Inherit native previewers/preloaders; their tools are in required manifests.

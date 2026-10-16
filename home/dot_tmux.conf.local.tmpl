@@ -328,6 +328,11 @@ tmux_conf_copy_to_os_clipboard=false
 # -- user customizations -------------------------------------------------------
 # this is the place to override or undo settings
 
+# Let Yazi send image protocols through tmux and retain terminal detection.
+set -g allow-passthrough on
+set -ga update-environment TERM
+set -ga update-environment TERM_PROGRAM
+
 # increase history size
 #set -g history-limit 10000
 

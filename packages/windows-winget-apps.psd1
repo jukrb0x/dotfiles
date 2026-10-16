@@ -16,7 +16,6 @@
         @{ Id = "Brave.Brave" }
 
         # System utilities
-        @{ Id = "7zip.7zip" }
         @{ Id = "GeekUninstaller.GeekUninstaller" }
         @{ Id = "voidtools.Everything" }
 
@@ -46,7 +45,6 @@
         # Developer tools
         @{ Id = "Kitware.CMake" }
         @{ Id = "Fastfetch-cli.Fastfetch" }
-        @{ Id = "sxyazi.yazi" }
         @{ Id = "Fork.Fork" }
         @{ Id = "GitHub.GitHubDesktop" }
 

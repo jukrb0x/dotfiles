@@ -29,6 +29,17 @@ function Merge-ManagedPathEntries {
     @($managed + $remaining | Select-Object -Unique)
 }
 
+function Get-GitFileOne {
+    param([Parameter(Mandatory)] [string] $ExecPath)
+
+    # Git for Windows: <install>/mingw64/libexec/git-core, including custom installs.
+    $fileOne = [IO.Path]::GetFullPath((Join-Path $ExecPath "../../../usr/bin/file.exe"))
+    if (-not (Test-Path -LiteralPath $fileOne -PathType Leaf)) {
+        throw "Git for Windows file.exe was not found at '$fileOne'. Repair the Git installation before configuring Yazi."
+    }
+    return $fileOne
+}
+
 function Set-ManagedUserEnvironment {
     param(
         [Parameter(Mandatory)] [string] $Name,
@@ -445,6 +456,7 @@ Export-ModuleMember -Function `
     Add-ManagedUserPath, `
     Add-WinGetPackagePin, `
     Get-ManagedPathKey, `
+    Get-GitFileOne, `
     Get-WinGetPackageVersion, `
     Get-WinGetPackageVersionFromListOutput, `
     Install-WinGetPackage, `

@@ -22,4 +22,11 @@ foreach ($name in $xdgEnvironment.Keys) {
     Set-ManagedUserEnvironment -Name $name -Value $xdgEnvironment[$name]
 }
 
+# Use Git's Unicode-capable file.exe without adding its Unix tools to PATH.
+$gitExecPath = & git --exec-path
+if ($LASTEXITCODE -ne 0) {
+    throw "Git for Windows is required for Yazi MIME detection."
+}
+Set-ManagedUserEnvironment -Name "YAZI_FILE_ONE" -Value (Get-GitFileOne -ExecPath $gitExecPath.Trim())
+
 Write-Host "Restart apps and terminals to inherit updated user environment variables."

@@ -14,5 +14,9 @@
         @{ Id = "ajeetdsouza.zoxide" }
         @{ Id = "BurntSushi.ripgrep.MSVC" }
         @{ Id = "MSYS2.MSYS2" }
+
+        # File manager and archive preview/extraction
+        @{ Id = "sxyazi.yazi" }
+        @{ Id = "7zip.7zip" }
     )
 }

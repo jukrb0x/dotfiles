@@ -1,0 +1,7 @@
+#:schema https://yazi-rs.github.io/schemas/keymap.json
+
+[mgr]
+prepend_keymap = [
+    { on = "e", run = 'shell "if command -v lvim >/dev/null 2>&1; then lvim %s; else nvim %s; fi" --block', desc = "Edit selected files", for = "unix" },
+    { on = "e", run = '''shell 'pwsh -NoLogo -NoProfile -File "%USERPROFILE%\.local\bin\lvim.ps1" %s' --block''', desc = "Edit selected files", for = "windows" },
+]

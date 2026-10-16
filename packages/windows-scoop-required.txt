@@ -1,2 +1,11 @@
 # Scoop packages required by managed editor/shell configuration.
 make
+# Yazi native previewers and navigation (resvg is unavailable in WinGet).
+chafa
+fd
+ffmpeg
+fzf
+imagemagick
+jq
+poppler
+resvg

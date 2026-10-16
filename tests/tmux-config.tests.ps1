@@ -55,7 +55,7 @@ function Render-SourceTemplate {
     return ($rendered -join "`n")
 }
 
-$expectedUnixLocalHash = "132e1377e2ba4f027cf2c7056a96c6d647456f116692c469a0ef591028dd5e6b"
+$expectedUnixLocalHash = "556c7efa4b6da3fcc3ac43c88cfef16b3905491509241c2d4090cb37912d3066"
 
 $linuxEntry = Render-SourceTemplate "symlink_dot_tmux.conf.tmpl" "linux"
 $darwinEntry = Render-SourceTemplate "symlink_dot_tmux.conf.tmpl" "darwin"
@@ -70,6 +70,9 @@ $windowsLocal = Render-SourceTemplate "dot_tmux.conf.local.tmpl" "windows"
 Assert-True ((Get-NormalizedSha256 $linuxLocal) -eq $expectedUnixLocalHash) "Linux ~/.tmux.conf.local changed unexpectedly."
 Assert-True ((Get-NormalizedSha256 $darwinLocal) -eq $expectedUnixLocalHash) "macOS ~/.tmux.conf.local changed unexpectedly."
 Assert-True ([string]::IsNullOrWhiteSpace($windowsLocal)) "Windows must not deploy ~/.tmux.conf.local."
+
+Assert-Contains $darwinLocal 'set -g allow-passthrough on' "Yazi image protocols must pass through tmux."
+Assert-Contains $darwinLocal 'set -ga update-environment TERM_PROGRAM' "tmux must retain terminal detection for image previews."
 
 $linuxIgnore = Render-SourceTemplate ".chezmoiignore.tmpl" "linux"
 $darwinIgnore = Render-SourceTemplate ".chezmoiignore.tmpl" "darwin"
