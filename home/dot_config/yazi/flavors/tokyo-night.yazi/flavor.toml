@@ -1,0 +1,121 @@
+#:schema https://yazi-rs.github.io/schemas/theme.json
+# Tokyo Night, refined to match preview C: muted selection and borders.
+# Based on https://github.com/BennyOe/tokyo-night.yazi (MIT).
+# Syntax theme by Kristi Russell / Enkia; see LICENSE-syntax.
+
+[app]
+overall = { fg = "#c0caf5", bg = "#1a1b26" }
+
+[mgr]
+find_keyword = { fg = "#f7768e", bold = true, italic = true, underline = true }
+find_position = { fg = "#bb9af7", bg = "reset", bold = true, italic = true }
+border_symbol = "│"
+count_selected = { fg = "#1a1b26", bg = "#7aa2f7" }
+marker_selected = { fg = "#7aa2f7", bg = "#7aa2f7" }
+marker_marked = { fg = "#bb9af7", bg = "#bb9af7" }
+count_cut = { fg = "#1a1b26", bg = "#f7768e" }
+marker_cut = { fg = "#f7768e", bg = "#f7768e" }
+count_copied = { fg = "#1a1b26", bg = "#9ece6a" }
+marker_copied = { fg = "#9ece6a", bg = "#9ece6a" }
+border_style = { fg = "#343b59" }
+cwd = { fg = "#7aa2f7", bold = true }
+symlink_target = { fg = "#7a88b0", italic = true }
+
+[indicator]
+parent = { fg = "#c0caf5", bg = "#161720" }
+current = { fg = "#c0caf5", bg = "#29375b", bold = true }
+preview = { fg = "#c0caf5", bg = "#161720" }
+padding = { open = "", close = "" }
+
+[tabs]
+active = { fg = "#7aa2f7", bg = "#29375b", bold = true }
+inactive = { fg = "#7a88b0", bg = "#161720" }
+sep_inner = { open = "", close = "" }
+sep_outer = { open = "", close = "" }
+
+[mode]
+normal_main = { fg = "#1a1b26", bg = "#7aa2f7", bold = true }
+normal_alt = { fg = "#7a88b0", bg = "#161720" }
+select_main = { fg = "#1a1b26", bg = "#9ece6a", bold = true }
+select_alt = { fg = "#7a88b0", bg = "#161720" }
+unset_main = { fg = "#1a1b26", bg = "#bb9af7", bold = true }
+unset_alt = { fg = "#7a88b0", bg = "#161720" }
+
+[status]
+overall = { fg = "#7a88b0", bg = "#161720" }
+sep_left = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+progress_label = { fg = "#7aa2f7", bold = true }
+progress_normal = { fg = "#7aa2f7", bg = "#161720" }
+progress_error = { fg = "#f7768e", bg = "#161720" }
+perm_type = { fg = "#7a88b0" }
+perm_read = { fg = "#7a88b0" }
+perm_write = { fg = "#7a88b0" }
+perm_exec = { fg = "#7a88b0" }
+perm_sep = { fg = "#343b59" }
+
+[pick]
+border = { fg = "#7aa2f7" }
+active = { fg = "#bb9af7", bold = true }
+inactive = {  }
+
+[input]
+border = { fg = "#7aa2f7" }
+title = {  }
+value = {  }
+selected = { reversed = true }
+
+[cmp]
+border = { fg = "#7aa2f7" }
+
+[tasks]
+border = { fg = "#7aa2f7" }
+title = {  }
+hovered = { fg = "#bb9af7", underline = true }
+
+[which]
+mask = { bg = "#414868" }
+cand = { fg = "#9ece6a" }
+rest = { fg = "#a9b1d6" }
+desc = { fg = "#bb9af7" }
+separator = "  "
+separator_style = { fg = "#626880" }
+
+[help]
+border = { fg = "#343b59" }
+chord = { fg = "#9ece6a" }
+action = { fg = "#bb9af7" }
+hovered = { fg = "#c0caf5", bg = "#29375b", bold = true }
+
+[confirm]
+border = { fg = "#7aa2f7" }
+title = { fg = "#7aa2f7" }
+btn_yes = { fg = "#c0caf5", bg = "#29375b" }
+
+[spot]
+border = { fg = "#7aa2f7" }
+title = { fg = "#7aa2f7" }
+tbl_col = { fg = "#9ece6a" }
+tbl_cell = { fg = "#bb9af7", bg = "#292e42" }
+
+[notify]
+title_info = { fg = "#9ece6a" }
+title_warn = { fg = "#e0af68" }
+title_error = { fg = "#f7768e" }
+
+[filetype]
+rules = [
+    { mime = "image/*", fg = "#e0af68" },
+    { mime = "{audio,video}/*", fg = "#bb9af7" },
+    { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*}", fg = "#bb9af7" },
+    { url = "*/", fg = "#7aa2f7" },
+    { url = "*", is = "orphan", fg = "#f7768e" },
+    { url = "*", fg = "#c0caf5" },
+]
+
+[icon]
+conds = [
+    { if = "dir", text = "", fg = "#7aa2f7" },
+    { if = "exec", text = "", fg = "#9ece6a" },
+    { if = "!dir", text = "", fg = "#7a88b0" },
+]

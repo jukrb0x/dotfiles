@@ -49,8 +49,8 @@ foreach ($relative in @(
     "yazi.toml",
     "keymap.toml",
     "theme.toml",
-    "flavors/kanagawa.yazi/flavor.toml",
-    "flavors/kanagawa.yazi/tmtheme.xml"
+    "flavors/tokyo-night.yazi/flavor.toml",
+    "flavors/tokyo-night.yazi/tmtheme.xml"
 )) {
     $path = Join-Path $yaziRoot $relative
     Assert-True (Test-Path -LiteralPath $path) "Yazi config must be managed at the shared XDG path: dot_config/yazi/$relative"
@@ -60,8 +60,12 @@ foreach ($relative in @(
 # degrades theming silently instead of failing loudly.
 Assert-Contains `
     (Get-Content -LiteralPath (Join-Path $yaziRoot "theme.toml") -Raw) `
-    'dark = "kanagawa"' `
-    "The theme must still select the bundled kanagawa flavor after the move."
+    'dark = "tokyo-night"' `
+    "The theme must select the bundled Tokyo Night flavor."
+Assert-Contains `
+    (Get-Content -LiteralPath (Join-Path $yaziRoot "theme.toml") -Raw) `
+    'light = "tokyo-night"' `
+    "Tokyo Night must remain selected when terminal background detection changes."
 
 # Assert on home/AppData itself, not home/AppData/Roaming/yazi: `git mv` leaves
 # emptied parent directories behind, and chezmoi walks the source tree on disk,

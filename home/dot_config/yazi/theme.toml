@@ -1,10 +1,5 @@
 [flavor]
-dark = "kanagawa"
-
-# Personal tweaks on top of Kanagawa:
-# Set terminal background and make symlinks visible
-[app]
-overall = { bg = "#1f1f28" }
-
-[mgr]
-symlink_target = { fg = "#7fb4ca", italic = true }
+# Keep the selected dark palette consistent, including through multiplexers
+# whose reported terminal background may differ from the visible background.
+dark = "tokyo-night"
+light = "tokyo-night"

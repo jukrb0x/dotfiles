@@ -10,6 +10,12 @@ macOS, or `winget upgrade --id sxyazi.yazi --exact` on Windows). The required
 Windows manifest installs missing tools; it does not upgrade every installed
 unversioned package during apply.
 
+The selected theme is the bundled Tokyo Night variant in
+`flavors/tokyo-night.yazi`: a blue/purple palette with a muted selection and
+borders, readable fallback icons, and matching syntax highlighting. Both theme
+modes select it so terminal background detection cannot switch the palette.
+The theme and syntax licenses are included with the flavor.
+
 ## Everyday use
 
 - Hover a file to preview it in the right pane. Text/code uses syntax highlighting;
