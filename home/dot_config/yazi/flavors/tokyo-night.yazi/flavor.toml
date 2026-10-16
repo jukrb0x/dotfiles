@@ -25,7 +25,7 @@ symlink_target = { fg = "#7a88b0", italic = true }
 parent = { fg = "#c0caf5", bg = "#161720" }
 current = { fg = "#c0caf5", bg = "#29375b", bold = true }
 preview = { fg = "#c0caf5", bg = "#161720" }
-padding = { open = "", close = "" }
+padding = { open = " ", close = " " }
 
 [tabs]
 active = { fg = "#7aa2f7", bg = "#29375b", bold = true }
