@@ -257,6 +257,34 @@
       ]
     },
     {
+      "direction" : "NextScreen",
+      "keybind" : [
+        37,
+        58
+      ]
+    },
+    {
+      "direction" : "NextScreen",
+      "keybind" : [
+        58,
+        124
+      ]
+    },
+    {
+      "direction" : "PreviousScreen",
+      "keybind" : [
+        38,
+        58
+      ]
+    },
+    {
+      "direction" : "PreviousScreen",
+      "keybind" : [
+        58,
+        123
+      ]
+    },
+    {
       "direction" : "TopLeftQuarter",
       "keybind" : [
         123,
@@ -286,7 +314,8 @@
     }
   ],
   "triggerKey" : [
-    63
+    55,
+    59
   ],
   "version" : "1.4.2"
 }
