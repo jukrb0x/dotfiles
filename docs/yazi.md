@@ -15,6 +15,8 @@ The selected theme is the bundled Tokyo Night variant in
 borders, readable fallback icons, and matching syntax highlighting. Both theme
 modes select it so terminal background detection cannot switch the palette.
 The theme and syntax licenses are included with the flavor.
+The main area and status bar inherit the terminal's background and opacity,
+matching LunarVim's transparent window; selection highlights stay colored.
 
 ## Everyday use
 

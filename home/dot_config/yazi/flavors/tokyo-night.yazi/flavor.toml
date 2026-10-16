@@ -4,7 +4,8 @@
 # Syntax theme by Kristi Russell / Enkia; see LICENSE-syntax.
 
 [app]
-overall = { fg = "#c0caf5", bg = "#1a1b26" }
+# Inherit the terminal background/opacity, like LunarVim's transparent window.
+overall = { fg = "#c0caf5", bg = "reset" }
 
 [mgr]
 find_keyword = { fg = "#f7768e", bold = true, italic = true, underline = true }
@@ -29,25 +30,25 @@ padding = { open = " ", close = " " }
 
 [tabs]
 active = { fg = "#7aa2f7", bg = "#29375b", bold = true }
-inactive = { fg = "#7a88b0", bg = "#161720" }
+inactive = { fg = "#7a88b0", bg = "reset" }
 sep_inner = { open = "", close = "" }
 sep_outer = { open = "", close = "" }
 
 [mode]
 normal_main = { fg = "#1a1b26", bg = "#7aa2f7", bold = true }
-normal_alt = { fg = "#7a88b0", bg = "#161720" }
+normal_alt = { fg = "#7a88b0", bg = "reset" }
 select_main = { fg = "#1a1b26", bg = "#9ece6a", bold = true }
-select_alt = { fg = "#7a88b0", bg = "#161720" }
+select_alt = { fg = "#7a88b0", bg = "reset" }
 unset_main = { fg = "#1a1b26", bg = "#bb9af7", bold = true }
-unset_alt = { fg = "#7a88b0", bg = "#161720" }
+unset_alt = { fg = "#7a88b0", bg = "reset" }
 
 [status]
-overall = { fg = "#7a88b0", bg = "#161720" }
+overall = { fg = "#7a88b0", bg = "reset" }
 sep_left = { open = "", close = "" }
 sep_right = { open = "", close = "" }
 progress_label = { fg = "#7aa2f7", bold = true }
-progress_normal = { fg = "#7aa2f7", bg = "#161720" }
-progress_error = { fg = "#f7768e", bg = "#161720" }
+progress_normal = { fg = "#7aa2f7", bg = "reset" }
+progress_error = { fg = "#f7768e", bg = "reset" }
 perm_type = { fg = "#7a88b0" }
 perm_read = { fg = "#7a88b0" }
 perm_write = { fg = "#7a88b0" }
@@ -74,7 +75,7 @@ title = {  }
 hovered = { fg = "#bb9af7", underline = true }
 
 [which]
-mask = { bg = "#414868" }
+mask = { bg = "reset" }
 cand = { fg = "#9ece6a" }
 rest = { fg = "#a9b1d6" }
 desc = { fg = "#bb9af7" }
