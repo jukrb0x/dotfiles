@@ -249,7 +249,7 @@ explicit optional setup scripts for current macOS setup.
 
 Loop's exported keybindings are managed at
 `home/dot_config/loop/keybinds.json` and deployed to
-`~/.config/loop/keybinds.json` on macOS. The export includes the Left Command + Left Control
+`~/.config/loop/keybinds.json` on macOS. The export includes the Command + Control
 trigger, arrow shortcuts, Vim H/J/K/L shortcuts, corner combinations, cycles,
 and Option-modified screen-switching shortcuts.
 
