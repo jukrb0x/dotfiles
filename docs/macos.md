@@ -251,7 +251,7 @@ Loop's exported keybindings are managed at
 `home/dot_config/loop/keybinds.json` and deployed to
 `~/.config/loop/keybinds.json` on macOS. The export includes the Command + Control
 trigger, arrow shortcuts, Vim H/J/K/L shortcuts, corner combinations, cycles,
-and Option-modified screen-switching shortcuts.
+and Shift-modified screen-switching shortcuts.
 
 After `chezmoi apply`, open Loop → Advanced → Keybinds → Import and select
 `~/.config/loop/keybinds.json`. Choose Erase to replace existing bindings with

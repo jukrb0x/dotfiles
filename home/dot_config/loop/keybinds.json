@@ -257,30 +257,37 @@
       ]
     },
     {
+      "anchor" : 8,
       "direction" : "NextScreen",
+      "height" : 80,
       "keybind" : [
         37,
-        58
-      ]
+        56
+      ],
+      "name" : "",
+      "positionMode" : 0,
+      "sizeMode" : 0,
+      "unit" : 1,
+      "width" : 80
     },
     {
       "direction" : "NextScreen",
       "keybind" : [
-        58,
+        56,
         124
       ]
     },
     {
       "direction" : "PreviousScreen",
       "keybind" : [
-        38,
-        58
+        4,
+        56
       ]
     },
     {
       "direction" : "PreviousScreen",
       "keybind" : [
-        58,
+        56,
         123
       ]
     },
