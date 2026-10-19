@@ -18,6 +18,19 @@ The theme and syntax licenses are included with the flavor.
 The main area and status bar inherit the terminal's background and opacity,
 matching LunarVim's transparent window; selection highlights stay colored.
 
+## Shell directory navigation
+
+Zsh and Nushell provide a `y` wrapper. Run `y` from the current directory or
+`y ~/dev` to start at a specific directory (on Windows, for example,
+`y C:\Users\Example\dev`). Enter the desired folder in Yazi, then press `q`
+to exit and change the calling shell's directory. Press `Q` to exit without
+changing the shell directory. Running `yazi` directly does not change the shell
+directory.
+
+After applying with chezmoi, start a new shell to load the function. Nushell
+must load the managed `~/.config/nushell/config.nu`; check `$nu.config-path`
+if the function is missing on Windows.
+
 ## Everyday use
 
 - Hover a file to preview it in the right pane. Text/code uses syntax highlighting;

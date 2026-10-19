@@ -19,6 +19,17 @@ def --env ccd [] {
     cd (chezmoi source-path | path dirname)
 }
 
+# Yazi: follow its working directory when quitting with q.
+def --env y [...args: string] {
+    let tmp = (mktemp -t "yazi-cwd.XXXXXX")
+    ^yazi ...$args --cwd-file $tmp
+    let cwd = (open --raw $tmp)
+    if ($cwd != $env.PWD) and ($cwd | path exists) {
+        cd $cwd
+    }
+    rm $tmp
+}
+
 # Zoxide
 const zoxide_config = if ("~/.zoxide.nu" | path expand | path exists) {
     "~/.zoxide.nu"

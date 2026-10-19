@@ -180,6 +180,16 @@ if command -v fnm >/dev/null 2>&1; then
   eval "$(fnm env --use-on-cd --shell zsh)"
 fi
 
+# Yazi: follow its working directory when quitting with q.
+function y() {
+  local tmp cwd
+  tmp="$(mktemp -t yazi-cwd.XXXXXX)" || return
+  command yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd < "$tmp"
+  [[ -d "$cwd" && "$cwd" != "$PWD" ]] && builtin cd -- "$cwd"
+  command rm -f -- "$tmp"
+}
+
 # Zoxide
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
