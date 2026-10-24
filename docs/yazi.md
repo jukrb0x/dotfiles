@@ -88,7 +88,14 @@ codecs. See [Yazi's dependency reference](https://yazi-rs.github.io/docs/install
   `TERM_PROGRAM`. Reload with `tmux source-file ~/.tmux.conf.local`; existing
   clients may need to detach and attach again. Sixel additionally requires a
   tmux build with Sixel support.
-- **Other multiplexers (including RMUX/PSMUX):** test Yazi directly in the outer
+- **Windows RMUX:** the pinned personal 0.10 build includes Microsoft's signed
+  ConPTY runtime and enables image passthrough, so Yazi can use Sixel in current
+  Windows Terminal. Save your work, exit all old RMUX sessions, then run
+  `chezmoi apply` from an outer PowerShell and start RMUX again. The native
+  runtime is required: Windows' inbox ConPTY can discard Sixel. If the bundled
+  runtime is unavailable, RMUX clears the Windows Terminal marker in new panes
+  so Yazi selects Chafa automatically.
+- **Other multiplexers (including PSMUX):** test Yazi directly in the outer
   terminal first. Image forwarding is a multiplexer capability; installing
   preview tools cannot supply it. No graphics forwarding is assumed here.
 - In a terminal without a supported graphics protocol, Chafa provides a lower
@@ -115,9 +122,12 @@ ya cache clear
 yazi
 ```
 
-`ya env` shows the loaded config, editor, detected graphics adapter, dependencies,
-and the result of a MIME-detection probe. `yazi --debug` was removed in this
-release; use `ya env`. A `Chafa` adapter means block rendering, while `Kgp`,
+For Yazi 26.5.6, use `yazi --debug` and `yazi --clear-cache` instead of the two
+`ya` commands above.
+
+The diagnostic output shows the loaded config, editor, detected graphics
+adapter, dependencies, and the result of a
+MIME-detection probe. A `Chafa` adapter means block rendering, while `Kgp`,
 `Iip`, or `Sixel` indicates a native graphics protocol.
 
 If text previews fail, check MIME detection first. On Windows:
@@ -126,7 +136,7 @@ If text previews fail, check MIME detection first. On Windows:
 & $env:YAZI_FILE_ONE -bL --mime-type -- 'C:\path with spaces\example.txt'
 ```
 
-If text works but PDF/video/SVG previews do not, check their tools in `ya env`.
-If all graphical previews fail, compare `ya env` inside and outside the
+If text works but PDF/video/SVG previews do not, check their tools in the debug output.
+If all graphical previews fail, compare the debug output inside and outside the
 multiplexer. Clear the preview cache after changing image dimensions or fixing
 the preview tools.

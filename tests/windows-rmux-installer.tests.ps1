@@ -45,6 +45,10 @@ function Copy-FixturePackage {
     Copy-Item -LiteralPath (Join-Path $PackageRoot "rmux.exe") -Destination (Join-Path $InstallDir "rmux.exe") -Force
     Copy-Item -LiteralPath (Join-Path $PackageRoot "libexec\rmux\rmux.exe") -Destination (Join-Path $installRoot "libexec\rmux\rmux.exe") -Force
     Copy-Item -LiteralPath (Join-Path $PackageRoot "rmux-daemon.exe") -Destination (Join-Path $InstallDir "rmux-daemon.exe") -Force
+    foreach ($name in @("conpty.dll", "OpenConsole.exe")) {
+        Copy-Item -LiteralPath (Join-Path $PackageRoot $name) -Destination (Join-Path $InstallDir $name) -Force
+        Copy-Item -LiteralPath (Join-Path $PackageRoot "libexec/rmux/$name") -Destination (Join-Path $installRoot "libexec/rmux/$name") -Force
+    }
 }
 
 function New-RmuxFixture {
@@ -61,6 +65,10 @@ function New-RmuxFixture {
         "rmux.exe" = "public-shim"
         "libexec\rmux\rmux.exe" = "full-helper"
         "rmux-daemon.exe" = "daemon"
+        "conpty.dll" = "conpty"
+        "OpenConsole.exe" = "openconsole"
+        "libexec\rmux\conpty.dll" = "conpty"
+        "libexec\rmux\OpenConsole.exe" = "openconsole"
         "install.ps1" = "Write-Output 'fixture installer'"
     }
     foreach ($entry in $files.GetEnumerator()) {
@@ -79,6 +87,8 @@ function New-RmuxFixture {
     $daemonHash = if (Test-Path (Join-Path $packageRoot "rmux-daemon.exe")) {
         (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $packageRoot "rmux-daemon.exe")).Hash.ToLowerInvariant()
     } else { "0" * 64 }
+    $conptyHash = Get-RmuxSha256 -Path (Join-Path $packageRoot "conpty.dll")
+    $openConsoleHash = Get-RmuxSha256 -Path (Join-Path $packageRoot "OpenConsole.exe")
     $commit = "a" * 40
     [ordered]@{
         schema = 1
@@ -89,6 +99,8 @@ function New-RmuxFixture {
         helper_binary_sha256 = $helperHash
         daemon_binary_path = "rmux-daemon.exe"
         daemon_binary_sha256 = $daemonHash
+        conpty_sha256 = $conptyHash
+        openconsole_sha256 = $openConsoleHash
         rmux_version = "0.9.0"
         git_commit = $commit
         git_dirty = $false
@@ -115,6 +127,8 @@ function New-RmuxFixture {
             PublicBinarySha256 = $publicHash
             HelperBinarySha256 = $helperHash
             DaemonBinarySha256 = $daemonHash
+            ConptySha256 = $conptyHash
+            OpenConsoleSha256 = $openConsoleHash
             InstallRelativePath = ".local/bin"
         }
     }
@@ -139,6 +153,8 @@ try {
     PublicBinarySha256 = "$($fixture.Spec.PublicBinarySha256)"
     HelperBinarySha256 = "$($fixture.Spec.HelperBinarySha256)"
     DaemonBinarySha256 = "$($fixture.Spec.DaemonBinarySha256)"
+    ConptySha256 = "$($fixture.Spec.ConptySha256)"
+    OpenConsoleSha256 = "$($fixture.Spec.OpenConsoleSha256)"
     InstallRelativePath = "$($fixture.Spec.InstallRelativePath)"
 }
 "@ | Set-Content -LiteralPath $manifestPath -Encoding utf8NoBOM
@@ -188,6 +204,14 @@ try {
     Assert-True (-not $noOpResult.Changed) "Matching component hashes should be a no-op."
     Assert-Equal $noOpResult.Source "Current" "No-op source should be Current."
     Assert-Equal $noOpCalls.Count 0 "No-op should not touch the network."
+
+    $installedConpty = Join-Path $directHome ".local/libexec/rmux/conpty.dll"
+    Set-Content -LiteralPath $installedConpty -Value "corrupt-runtime"
+    Assert-True (-not (Test-RmuxInstallationCurrent -Spec $directFixture.Spec -InstallDir (Join-Path $directHome ".local/bin"))) "A damaged helper runtime must require repair."
+    Copy-FixturePackage -PackageRoot $directFixture.PackageRoot -InstallDir (Join-Path $directHome ".local/bin")
+    $runtimeSpec = $directFixture.Spec.PSObject.Copy()
+    $runtimeSpec.ConptySha256 = "0" * 64
+    Assert-ThrowsLike -Action { Assert-RmuxPackage -Spec $runtimeSpec -ExtractRoot $directFixture.Root } -Pattern "conpty.dll.*SHA-256" -Message "A bad runtime must fail before install."
 
     $fallbackRoot = Join-Path $testRoot "fallback"
     $fallbackFixture = New-RmuxFixture -Root (Join-Path $fallbackRoot "fixture")

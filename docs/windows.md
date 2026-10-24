@@ -212,8 +212,8 @@ The optional WinGet apps manifest uses PowerShell data syntax:
 
 RMUX is not installed from Winget. `chezmoi apply` installs the immutable
 `jukrb0x/rmux` Release pinned in `packages/windows-rmux.psd1`; the current pin is
-`v0.9.0-jukrb0x.3`. The manifest records the archive, Git commit, and all three
-Windows executable hashes.
+`v0.10.0-jukrb0x.1`. The manifest records the archive, Git commit, and all three
+Windows executable hashes, plus both signed Microsoft ConPTY runtime hashes.
 
 The installer first tries the public GitHub Release URL. If GitHub rejects or
 rate-limits the anonymous request, an installed and authenticated GitHub CLI is
@@ -223,10 +223,29 @@ used automatically. Authenticate it once with:
 gh auth login
 ```
 
-RMUX's packaged installer updates its shim, full helper, and daemon as one
-transaction. If an RMUX process locks those files, close RMUX and rerun
+RMUX's packaged installer updates its shim, full helper, daemon and ConPTY files
+as one transaction. If an RMUX process locks those files, close RMUX and rerun
 `chezmoi apply`; the installer never kills the current session or leaves a
 partially replaced package.
+
+To update locally, save work and exit all RMUX sessions. From PowerShell outside
+RMUX, run `chezmoi update` to pull the configuration and apply its pinned build;
+if the checkout is already current, run `chezmoi apply`. Confirm `rmux -V` shows
+`rmux 0.10.0`, then launch a new session. A 0.9 daemon cannot use the 0.10 client;
+reloading the configuration alone does not update the running daemon. Pulling
+the RMUX source repository does not rebuild or install the managed binaries.
+
+The managed bindings keep these behaviors distinct:
+
+- Splitting a pane inherits the source pane's working directory. Nushell enables
+  OSC 7 directory reporting so this also works when launched through a shell wrapper.
+- `prefix+c` creates a window in the session's default directory.
+- `prefix+C-c` creates a session and switches the invoking client to it, leaving
+  other clients in their current sessions.
+
+Use `prefix+r` to reload binding changes in an existing RMUX session. Nushell
+configuration changes require a new shell; binary updates require the full
+restart described above.
 
 ## Scoop
 

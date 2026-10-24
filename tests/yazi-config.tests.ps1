@@ -149,15 +149,19 @@ if ($IsWindows -and (Get-Command yazi -ErrorAction SilentlyContinue) -and $appli
     # $null and one match to a string, but 2+ matches would yield an array, and
     # `-match` on an array filters instead of returning a bool -- which Assert-True
     # would then coerce to $true even if only a wrong-path line matched.
-    $debug = & ya env 2>&1 | Out-String
-    Assert-True ($LASTEXITCODE -eq 0) "ya env must succeed before checking runtime configuration."
+    if ((& yazi --help | Out-String).Contains('--debug')) {
+        $debug = & yazi --debug 2>&1 | Out-String
+    } else {
+        $debug = & ya env 2>&1 | Out-String
+    }
+    Assert-True ($LASTEXITCODE -eq 0) "Yazi diagnostics must succeed before checking runtime configuration."
     $configLine = $debug -split "`n" |
         Where-Object { $_ -match '^\s+Yazi\s+:' } |
         Select-Object -First 1
 
     Assert-True `
         ($null -ne $configLine) `
-        "ya env must report a resolved Yazi config path."
+        "Yazi diagnostics must report a resolved Yazi config path."
     Assert-True `
         ($configLine -match [regex]::Escape((Join-Path ".config" "yazi"))) `
         "yazi must resolve its config under .config\yazi. Actual: $($configLine.Trim())"

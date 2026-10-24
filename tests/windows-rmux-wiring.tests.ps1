@@ -14,12 +14,12 @@ function Assert-Contains {
 $manifestPath = Join-Path $repoRoot "packages\windows-rmux.psd1"
 $manifest = Import-PowerShellDataFile -LiteralPath $manifestPath
 Assert-True ($manifest.Repository -eq "jukrb0x/rmux") "RMUX must come from the personal fork."
-Assert-True ($manifest.Tag -eq "v0.9.0-jukrb0x.3") "RMUX must use the immutable personal tag."
-Assert-True ($manifest.Asset -eq "rmux-0.9.0-windows-x86_64.zip") "RMUX must use the supported package archive."
-Assert-True ($manifest.PackageRoot -eq "rmux-0.9.0-windows-x86_64") "RMUX package root must match the archive."
+Assert-True ($manifest.Tag -eq "v0.10.0-jukrb0x.1") "RMUX must use the immutable personal tag."
+Assert-True ($manifest.Asset -eq "rmux-0.10.0-windows-x86_64.zip") "RMUX must use the supported package archive."
+Assert-True ($manifest.PackageRoot -eq "rmux-0.10.0-windows-x86_64") "RMUX package root must match the archive."
 Assert-True ($manifest.InstallRelativePath -eq ".local/bin") "RMUX must install into the managed user PATH."
 Assert-True ($manifest.GitCommit -match '^[0-9a-f]{40}$') "RMUX pin must include its exact Git commit."
-foreach ($name in @("AssetSha256", "PublicBinarySha256", "HelperBinarySha256", "DaemonBinarySha256")) {
+foreach ($name in @("AssetSha256", "PublicBinarySha256", "HelperBinarySha256", "DaemonBinarySha256", "ConptySha256", "OpenConsoleSha256")) {
     Assert-True ([string]$manifest[$name] -match '^[0-9a-f]{64}$') "RMUX $name must be a lowercase SHA-256 digest."
 }
 
@@ -39,7 +39,7 @@ Assert-Contains $wrapper 'RmuxInstaller.psm1' "The wrapper must use the tested i
 Assert-True (-not $wrapper.Contains('releases/latest')) "The wrapper must never resolve a rolling latest release."
 
 $windowsDoc = Get-Content -Raw (Join-Path $repoRoot "docs\windows.md")
-Assert-Contains $windowsDoc 'v0.9.0-jukrb0x.3' "Windows documentation must name the current immutable fork pin."
+Assert-Contains $windowsDoc 'v0.10.0-jukrb0x.1' "Windows documentation must name the current immutable fork pin."
 Assert-Contains $windowsDoc 'gh auth login' "Windows documentation must explain authenticated fallback setup."
 Assert-Contains $windowsDoc 'close RMUX' "Windows documentation must explain locked-binary updates."
 

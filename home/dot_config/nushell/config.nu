@@ -1,6 +1,9 @@
 # The banner costs startup time on every new pane.
 $env.config.show_banner = false
 
+# Report cwd to multiplexers even when Nu runs inside a Windows shell wrapper.
+$env.config.shell_integration.osc7 = true
+
 alias lvim = ^nvim -u ($env.LUNARVIM_BASE_DIR | path join init.lua)
 alias nvim = lvim
 

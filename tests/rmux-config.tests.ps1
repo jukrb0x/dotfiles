@@ -27,6 +27,8 @@ function Assert-Contains {
 }
 
 Assert-Contains $config 'set -g default-command "nu"' "rmux panes must launch native Nushell."
+Assert-Contains $config 'set -g allow-passthrough on' "Yazi image protocols must pass through rmux."
+Assert-True (-not $config.Contains('set-environment -g WT_SESSION ""')) "Native ConPTY must preserve Windows Terminal detection for Sixel previews."
 Assert-True (-not $config.Contains("cmd /c nu")) "The cmd.exe wrapper hides foreground titles and is no longer needed."
 Assert-True (-not $config.Contains('set -as terminal-features')) "Windows Terminal leaves outer TERM empty, so rmux 0.9 skips terminal-features patterns; do not retain a dead truecolor workaround."
 Assert-Contains $config 'set-environment -g CLAUDE_CODE_TMUX_TRUECOLOR 1' "Claude must keep its 24-bit palette when rmux exposes tmux compatibility."
@@ -37,9 +39,9 @@ Assert-Contains $config 'bind -T copy-mode-vi y      send -X copy-pipe-and-cance
 Assert-Contains $config 'bind -T copy-mode-vi Enter  send -X copy-pipe-and-cancel' "Copy-mode Enter must copy directly to the configured clipboard command."
 Assert-Contains $config 'bind -T copy-mode-vi C-c    send -X copy-pipe-and-cancel' "Copy-mode Ctrl-C must copy directly to the configured clipboard command."
 
-Assert-Contains $config 'set-hook -g after-new-session' "New sessions need an attached-client switch hook."
-Assert-Contains $config '#{client_name}' "The new-session hook must be a no-op for detached CLI callers."
-Assert-Contains $config 'switch-client -t #{session_name}' "The new-session hook must switch to its newly created session target."
+Assert-Contains $config 'bind C-c run-shell' "New-session keys must create and switch via the CLI."
+Assert-Contains $config 'new-session -d -P' "The new-session binding must capture the actual created target."
+Assert-Contains $config 'switch-client -c #{client_name}' "Only the client pressing the key should switch sessions."
 
 Assert-Contains $config 'set -g automatic-rename-format "#{pane_current_command}"' "rmux must use its standard pane-command window label."
 Assert-True (-not $config.Contains('#{pane_title}')) "rmux must not derive window labels from full terminal titles or paths."
@@ -63,9 +65,10 @@ if ($IsWindows -and (Get-Command rmux -ErrorAction SilentlyContinue) -and (Get-C
         $env:HOME = $env:USERPROFILE
         # rmux resolves the very first daemon pane before applying default-command,
         # so name Nu explicitly here; static assertions cover subsequent panes.
+        # Skip personal Nu startup hooks so EOT reaches a ready prompt.
         # Do not pipe startup output: the background daemon inherits redirected
         # handles on Windows and would keep Out-String waiting for EOF.
-        & rmux -L $serverName -f $configPath new-session -d -s eot -x 80 -y 24 nu
+        & rmux -L $serverName -f $configPath new-session -d -s eot -x 80 -y 24 nu --no-config-file
         Assert-True ($LASTEXITCODE -eq 0) "rmux must load the managed configuration."
         Start-Sleep -Milliseconds 500
 
@@ -78,15 +81,13 @@ if ($IsWindows -and (Get-Command rmux -ErrorAction SilentlyContinue) -and (Get-C
         $colorTerm = (& rmux -L $serverName show-environment -g COLORTERM 2>&1 | Out-String).Trim()
         Assert-True ($bindings -match 'root\s+C-d\s+send-keys\s+-H\s+04') "rmux must register the hexadecimal EOT root binding."
         Assert-True ($bindings -match 'root\s+MouseDown1Status\s+select-window\s+-t\s+=') "rmux must route status clicks directly to select-window; got bindings without the pane-base-index workaround."
+        Assert-True ($bindings -match 'prefix\s+C-c\s+run-shell') "rmux must load the create-and-switch session binding."
         Assert-True ($copyCommand -eq "copy-command clip.exe") "rmux must load clip.exe as its server-level copy command; got '$copyCommand'."
         Assert-True ($claudeTruecolor -eq "CLAUDE_CODE_TMUX_TRUECOLOR=1") "rmux panes must inherit Claude's tmux truecolor opt-in; got '$claudeTruecolor'."
         Assert-True ($colorTerm -eq "COLORTERM=truecolor") "rmux panes must inherit the WT truecolor capability; got '$colorTerm'."
         Assert-True ($bindings -match 'copy-mode-vi\s+y\s+send-keys\s+-X\s+copy-pipe-and-cancel') "rmux must register copy-mode y for direct clipboard copy."
         Assert-True ($bindings -match 'copy-mode-vi\s+Enter\s+send-keys\s+-X\s+copy-pipe-and-cancel') "rmux must register copy-mode Enter for direct clipboard copy."
         Assert-True ($bindings -match 'copy-mode-vi\s+C-c\s+send-keys\s+-X\s+copy-pipe-and-cancel') "rmux must register copy-mode Ctrl-C for direct clipboard copy."
-
-        $hooks = (& rmux -L $serverName show-hooks -g after-new-session 2>&1 | Out-String)
-        Assert-True ($hooks -match 'after-new-session') "rmux must register the guarded new-session switch hook."
 
         & rmux -L $serverName send-keys -t eot -H 04
         $stopwatch = [Diagnostics.Stopwatch]::StartNew()

@@ -24,7 +24,7 @@ function Read-RmuxReleaseSpec {
     $required = @(
         "Repository", "Tag", "GitCommit", "Version", "Asset", "AssetSha256",
         "PackageRoot", "PublicBinarySha256", "HelperBinarySha256",
-        "DaemonBinarySha256", "InstallRelativePath"
+        "DaemonBinarySha256", "ConptySha256", "OpenConsoleSha256", "InstallRelativePath"
     )
     foreach ($name in $required) {
         if (-not $data.ContainsKey($name) -or [string]::IsNullOrWhiteSpace([string]$data[$name])) {
@@ -49,7 +49,7 @@ function Read-RmuxReleaseSpec {
             throw "RMUX $name must be a single file or directory name: $value"
         }
     }
-    foreach ($name in @("AssetSha256", "PublicBinarySha256", "HelperBinarySha256", "DaemonBinarySha256")) {
+    foreach ($name in @("AssetSha256", "PublicBinarySha256", "HelperBinarySha256", "DaemonBinarySha256", "ConptySha256", "OpenConsoleSha256")) {
         if ([string]$data[$name] -notmatch '^[0-9a-fA-F]{64}$') {
             throw "RMUX $name is not a SHA-256 digest"
         }
@@ -70,6 +70,8 @@ function Read-RmuxReleaseSpec {
         PublicBinarySha256 = ([string]$data.PublicBinarySha256).ToLowerInvariant()
         HelperBinarySha256 = ([string]$data.HelperBinarySha256).ToLowerInvariant()
         DaemonBinarySha256 = ([string]$data.DaemonBinarySha256).ToLowerInvariant()
+        ConptySha256 = ([string]$data.ConptySha256).ToLowerInvariant()
+        OpenConsoleSha256 = ([string]$data.OpenConsoleSha256).ToLowerInvariant()
         InstallRelativePath = $relative
     }
 }
@@ -81,6 +83,10 @@ function Get-RmuxInstallationPaths {
         Public = Join-Path $InstallDir "rmux.exe"
         Helper = Join-Path $installRoot "libexec\rmux\rmux.exe"
         Daemon = Join-Path $InstallDir "rmux-daemon.exe"
+        Conpty = Join-Path $InstallDir "conpty.dll"
+        OpenConsole = Join-Path $InstallDir "OpenConsole.exe"
+        HelperConpty = Join-Path $installRoot "libexec\rmux\conpty.dll"
+        HelperOpenConsole = Join-Path $installRoot "libexec\rmux\OpenConsole.exe"
     }
 }
 
@@ -94,6 +100,10 @@ function Test-RmuxInstallationCurrent {
         Public = $Spec.PublicBinarySha256
         Helper = $Spec.HelperBinarySha256
         Daemon = $Spec.DaemonBinarySha256
+        Conpty = $Spec.ConptySha256
+        OpenConsole = $Spec.OpenConsoleSha256
+        HelperConpty = $Spec.ConptySha256
+        HelperOpenConsole = $Spec.OpenConsoleSha256
     }
     foreach ($name in $expected.Keys) {
         $path = $paths[$name]
@@ -186,6 +196,8 @@ function Assert-RmuxPackage {
         "rmux.exe",
         "libexec\rmux\rmux.exe",
         "rmux-daemon.exe",
+        "conpty.dll", "OpenConsole.exe",
+        "libexec\rmux\conpty.dll", "libexec\rmux\OpenConsole.exe",
         "install.ps1",
         "share\rmux\artifact-metadata.json"
     )
@@ -198,6 +210,11 @@ function Assert-RmuxPackage {
     Assert-RmuxSha256 -Path (Join-Path $packageRoot "rmux.exe") -Expected $Spec.PublicBinarySha256 -Label "rmux.exe"
     Assert-RmuxSha256 -Path (Join-Path $packageRoot "libexec\rmux\rmux.exe") -Expected $Spec.HelperBinarySha256 -Label "full helper"
     Assert-RmuxSha256 -Path (Join-Path $packageRoot "rmux-daemon.exe") -Expected $Spec.DaemonBinarySha256 -Label "rmux-daemon.exe"
+
+    foreach ($directory in @($packageRoot, (Join-Path $packageRoot "libexec/rmux"))) {
+        Assert-RmuxSha256 -Path (Join-Path $directory "conpty.dll") -Expected $Spec.ConptySha256 -Label "conpty.dll"
+        Assert-RmuxSha256 -Path (Join-Path $directory "OpenConsole.exe") -Expected $Spec.OpenConsoleSha256 -Label "OpenConsole.exe"
+    }
 
     $metadataPath = Join-Path $packageRoot "share\rmux\artifact-metadata.json"
     $metadata = Get-Content -LiteralPath $metadataPath -Raw -Encoding utf8 | ConvertFrom-Json
@@ -213,6 +230,8 @@ function Assert-RmuxPackage {
         binary_sha256 = $Spec.PublicBinarySha256
         helper_binary_sha256 = $Spec.HelperBinarySha256
         daemon_binary_sha256 = $Spec.DaemonBinarySha256
+        conpty_sha256 = $Spec.ConptySha256
+        openconsole_sha256 = $Spec.OpenConsoleSha256
     }
     foreach ($name in $checks.Keys) {
         if ([string]$metadata.$name -ne [string]$checks[$name]) {
