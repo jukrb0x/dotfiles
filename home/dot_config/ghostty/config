@@ -6,7 +6,9 @@ background-opacity = 0.8
 background-blur-radius = 20
 
 font-size = 14
-font-family = MesloLGS Nerd Font, JetBrains Mono
+font-family = MesloLGS Nerd Font
+font-family = JetBrains Mono
+font-codepoint-map = U+4E00-U+9FFF=PingFang SC
 
 cursor-style = block
 cursor-style-blink = false
