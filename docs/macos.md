@@ -262,3 +262,22 @@ After changing shortcuts in Loop, export them from the same settings page to
 `home/dot_config/loop/keybinds.json` in this repository, review the diff, and
 commit the updated export. This file stores keybindings and the trigger key,
 not all Loop preferences.
+
+## Kensington Konnect Trackball Settings
+
+The Kensington Konnect local backup for the SlimBlade Pro trackball is stored
+in `home/dot_config/kensington-konnect/settings.db`. Chezmoi deploys it to
+`~/.config/kensington-konnect/settings.db` on macOS.
+
+To restore on another Mac, run `chezmoi apply`, then open Konnect and choose
+**Application Settings → Restore from local → Restore**. Select
+`~/.config/kensington-konnect/settings.db` in the file picker.
+
+To update the backup, use **Application Settings → Backup to local → Backup**
+and save to the same path. Review the SQLite dump for private data such as
+macro text or app-specific settings before adding it to this public repo.
+
+```shell
+sqlite3 -readonly ~/.config/kensington-konnect/settings.db .dump
+chezmoi add ~/.config/kensington-konnect/settings.db
+```
